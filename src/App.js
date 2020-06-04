@@ -6,7 +6,7 @@ import CardSources from './CardSources';
 
 function getDeck() {
   let deck = [];
-  for (let i = 0; i < 11; i++) {
+  for (let i = 0; i < 54; i++) {
     let frontImageSource = CardSources.fronts[i];
     deck.push({'id': i, shouldShowFront: true, frontImageSource, backImageSource: CardSources.backs[0]});
   }
@@ -31,7 +31,7 @@ class App extends Component {
   render() { 
     return ( <div className="App">
       {/* {console.log('App',this.state)} */}
-      <UserCards cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked}/>
+      <UserCards cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked} useFanStyle={false}/>
     </div> );
   }
 }
