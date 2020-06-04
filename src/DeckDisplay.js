@@ -1,26 +1,16 @@
 import React from 'react';
 import './App.css';
-import CardSources from './CardSources';
 
-function DeckDisplay({onCardClicked, cards}) {
-    let deck = [];
-
-    for (let i = 0; i < 54; i++) {
-        let imgSrc = CardSources.fronts[i];
-        deck.push({'name': i, imgSrc});
-    }
-
-    deck.push({'name': 55, 'imgSrc': CardSources.backs[0]});
-
+function DeckDisplay({onCardClicked, cardsInDeck}) {
     return (<div className='container'>
-        { deck.map((card) => <Card key={card.name} name={card.name} imgSrc={card.imgSrc}></Card>) }
+        { cardsInDeck.map((card) => <Card key={card.name} onCardClicked={onCardClicked} {...card}></Card>) }
     </div>);
 }
 
-function Card({name, imgSrc, onCardClicked}){
+function Card(props){
     return(
-    <div className='Card col-6' onClick={onCardClicked}>
-        <img className='CardImage' src={imgSrc} alt='name'/>
+    <div className='Card col-6' onClick={() => {props.onCardClicked(props.name)}}>
+        <img className='CardImage' src={props.shouldShowFront ? props.frontImageSource : props.backImageSource} alt='name'/>
     </div>
     )
 }
