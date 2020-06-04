@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import UserCards from './UserCards';
 import './App.css';
 import CardSources from './CardSources';
-import './bootstrap.min.css';
-
 
 
 function getDeck() {
