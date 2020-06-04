@@ -8,9 +8,9 @@ import './bootstrap.min.css';
 
 function getDeck() {
   let deck = [];
-  for (let i = 0; i < 54; i++) {
+  for (let i = 0; i < 11; i++) {
     let frontImageSource = CardSources.fronts[i];
-    deck.push({'id': i, shouldShowFront: false, frontImageSource, backImageSource: CardSources.backs[0]});
+    deck.push({'id': i, shouldShowFront: true, frontImageSource, backImageSource: CardSources.backs[0]});
   }
   return deck;
 }

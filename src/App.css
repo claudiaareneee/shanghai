@@ -1,6 +1,13 @@
+body, html {
+  height: 100%;
+  background-color: #282c34;
+}
+
 .App {
   text-align: center;
   background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
 }
 
 .App-logo {
@@ -38,8 +45,12 @@
   }
 }
 
+.UserCardsWrapper{
+  width: 50%;
+}
+
 .UserCards{
-  /* display: inline-block; */
+  
 }
 
 .Card {
@@ -56,5 +67,5 @@
   height: 100%;
   border-radius: 4%;
   /* box-shadow: #282c34; */
-  box-shadow: 1rem 1rem 2rem yellow;
+  box-shadow: 1rem 1rem 2rem black;
 }
