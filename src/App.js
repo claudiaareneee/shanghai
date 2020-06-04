@@ -9,7 +9,7 @@ function getDeck() {
   let deck = [];
   for (let i = 0; i < 54; i++) {
     let frontImageSource = CardSources.fronts[i];
-    deck.push({'name': i, shouldShowFront: true, frontImageSource, backImageSource: CardSources.backs[0]});
+    deck.push({'id': i, shouldShowFront: false, frontImageSource, backImageSource: CardSources.backs[0]});
   }
   return deck;
 }
@@ -22,11 +22,8 @@ class App extends Component {
   }
 
   handleCardClicked (cardName) {
-    const card = this.state.cardsInDeck.find(card => card.name  === cardName);
+    const card = this.state.cardsInDeck.find(card => card.id  === cardName);
     card.shouldShowFront = !card.shouldShowFront;
-
-    console.log('app', card);
-    console.log('app', this.state.cardsInDeck);
 
     // TODO: find a better way to do this that feels less hacky
     this.setState(Object.assign({}, this.state.cardsInDeck));
