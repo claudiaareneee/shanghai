@@ -45,6 +45,7 @@ body, html {
 }
 
 .UserCardsWrapper{
+  margin-left: 200px;
   width: 10%;
   padding: 2rem;
 }
@@ -56,7 +57,6 @@ body, html {
 .Card {
   /* position: absolute; */
   height: 10rem;
-  box-shadow: #282c34;
   transform-origin: 'center';
   /* -ms-transform: rotate(7deg); IE 9 */
   /* -webkit-transform: rotate(7deg); Safari */
@@ -68,5 +68,5 @@ body, html {
   height: 100%;
   border-radius: 4%;
   /* box-shadow: #282c34; */
-  box-shadow: 1rem 1rem 2rem #28284d;
+  box-shadow: .5rem .5rem 1rem #282c34bb;
 }
