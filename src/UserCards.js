@@ -14,7 +14,9 @@ function UserCards({onCardClicked, cardsInDeck}) {
 function Card(props){
     return(
     <div className='Card col' style={{
-        transform: `rotate(${props.rotation}deg)`
+        WebkitTransition: 'all', // note the capital 'W' here
+        msTransition: 'all', // 'ms' is the only lowercase vendor prefix
+        transform: `rotate(${props.rotation}deg) translateY(${props.rotation}rem)`,
     }}>
         <img className='CardImage' src={props.shouldShowFront ? props.frontImageSource : props.backImageSource} alt={props.id}  onClick={() => {props.onCardClicked(props.id)}}/>
     </div>
