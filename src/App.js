@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserCards from './UserCards';
+import CardSet from './CardSet';
 import './App.css';
 import CardSources from './CardSources';
 
@@ -31,7 +31,7 @@ class App extends Component {
   render() { 
     return ( <div className="App">
       {/* {console.log('App',this.state)} */}
-      <UserCards cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked} useFanStyle={false}/>
+      {/* <CardSet cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked} useFanStyle={false}/> */}
     </div> );
   }
 }

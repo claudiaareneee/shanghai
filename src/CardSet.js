@@ -2,10 +2,10 @@ import React from 'react';
 import './App.css';
 import {Col, Row, Container} from 'react-bootstrap';
 
-function UserCards({onCardClicked, cardsInDeck, useFanStyle}) {
+function CardSet({onCardClicked, cardsInDeck, useFanStyle}) {
     const offset = Math.floor(cardsInDeck.length / 2.0);
 
-    return (<div className='UserCardsWrapper'><Row className='UserCards'>
+    return (<div className='CardSetWrapper'><Row className='CardSet'>
         { cardsInDeck.map((card) => <Card key={card.id} onCardClicked={onCardClicked} offset={card.id - offset} useFanStyle={useFanStyle} {...card}></Card>) }
     </Row></div>);
 }
@@ -41,4 +41,4 @@ function Card(props){
     )
 }
 
-export default UserCards;
+export default CardSet;
