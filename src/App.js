@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Deck from './DeckDisplay';
+import UserCards from './UserCards';
 import './App.css';
 import CardSources from './CardSources';
 
@@ -32,7 +32,7 @@ class App extends Component {
   render() { 
     return ( <div className="App">
       {/* {console.log('App',this.state)} */}
-      <Deck cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked}/>
+      <UserCards cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked}/>
     </div> );
   }
 }

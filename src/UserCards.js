@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 
-function DeckDisplay({onCardClicked, cardsInDeck}) {
+function UserCards({onCardClicked, cardsInDeck}) {
     return (<div className='container'>
         { cardsInDeck.map((card) => <Card key={card.id} onCardClicked={onCardClicked} {...card}></Card>) }
     </div>);
@@ -15,4 +15,4 @@ function Card(props){
     )
 }
 
-export default DeckDisplay;
+export default UserCards;
