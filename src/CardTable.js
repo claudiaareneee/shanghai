@@ -1,5 +1,5 @@
 import React from 'react';
-import './CardTable.css';
+import './css/CardTable.css';
 import { Row, Col } from 'react-bootstrap';
 import CardSet from './CardSet';
 import CardSources from './CardSources';
