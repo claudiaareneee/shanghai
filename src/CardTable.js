@@ -18,7 +18,7 @@ function getDiscard() {
 }
 
 function getDraw() {
-    return getDeck(20, false);
+    return getDeck(100, false);
 }
 
 function getHand() {
@@ -45,7 +45,7 @@ function BuyBlock() {
 
 function DiscardPile() {
     return <Col>
-        <CardSet onCardClicked={() => {}} cardsInDeck={getDiscard()} useStyle='pinwheelStyle'/>
+        <CardSet onCardClicked={() => {}} cardsInDeck={getDiscard()} useStyle='discardStyle'/>
     </Col>;
 }
 

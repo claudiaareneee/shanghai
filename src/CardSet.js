@@ -33,7 +33,13 @@ function Card(props){
         transform: `rotate(${10 * rotation}deg)`,
     };
 
-    const style = (props.useStyle === 'fanStyle') ? fanStyle : (props.useStyle === 'slideStyle')? slideStyle : pinwheelStyle;
+    const discardStyle = {
+        WebkitTransition: 'all', // note the capital 'W' here
+        msTransition: 'all', // 'ms' is the only lowercase vendor prefix
+        transform: `rotate(${10 * Math.floor(Math.random()* 36)}deg)`,
+    };
+
+    const style = (props.useStyle === 'fanStyle') ? fanStyle : (props.useStyle === 'slideStyle')? slideStyle : discardStyle;
 
     return(
     // <Col className='Card' style={props.useStyle ? fanStyle : slideStyle }>
