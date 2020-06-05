@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import CardSet from './CardSet';
 import './App.css';
 import CardSources from './CardSources';
+import CardTable from './CardTable';
+import { Container } from 'react-bootstrap';
 
 
 function getDeck() {
@@ -17,22 +19,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = { cardsInDeck: getDeck() }
-    this.handleCardClicked = this.handleCardClicked.bind(this);
-  }
-
-  handleCardClicked (cardName) {
-    const card = this.state.cardsInDeck.find(card => card.id  === cardName);
-    card.shouldShowFront = !card.shouldShowFront;
-
-    // TODO: find a better way to do this that feels less hacky
-    this.setState(Object.assign({}, this.state.cardsInDeck));
+    // this.handleCardClicked = this.handleCardClicked.bind(this);
   }
 
   render() { 
-    return ( <div className="App">
-      {/* {console.log('App',this.state)} */}
-      {/* <CardSet cardsInDeck={this.state.cardsInDeck} onCardClicked={this.handleCardClicked} useFanStyle={false}/> */}
-    </div> );
+    return ( <Container className="App">
+      <CardTable/>
+    </Container> );
   }
 }
 

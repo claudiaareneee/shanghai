@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import {Col, Row, Container} from 'react-bootstrap';
+import {Col, Row} from 'react-bootstrap';
 
-function CardSet({onCardClicked, cardsInDeck, useFanStyle}) {
+function CardSet({onCardClicked, cardsInDeck, useStyle}) {
     const offset = Math.floor(cardsInDeck.length / 2.0);
 
     return (<div className='CardSetWrapper'><Row className='CardSet'>
-        { cardsInDeck.map((card) => <Card key={card.id} onCardClicked={onCardClicked} offset={card.id - offset} useFanStyle={useFanStyle} {...card}></Card>) }
+        { cardsInDeck.map((card) => <Card key={card.id} onCardClicked={onCardClicked} offset={card.id - offset} useStyle={useStyle} {...card}></Card>) }
     </Row></div>);
 }
 
@@ -31,11 +31,11 @@ function Card(props){
         transform: `rotate(${10 * rotation}deg)`,
     };
 
-
+    const style = (props.useStyle === 'fanStyle') ? fanStyle : (props.useStyle === 'slideStyle')? slideStyle : pinwheelStyle;
 
     return(
-    // <Col className='Card' style={props.useFanStyle ? fanStyle : slideStyle }>
-    <Col className='Card' style={pinwheelStyle }>
+    // <Col className='Card' style={props.useStyle ? fanStyle : slideStyle }>
+    <Col className='Card' style={style }>
         <img className='CardImage' src={props.shouldShowFront ? props.frontImageSource : props.backImageSource} alt={props.id}  onClick={() => {props.onCardClicked(props.id)}}/>
     </Col>
     )
