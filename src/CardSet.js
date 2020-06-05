@@ -6,9 +6,9 @@ function CardSet({onCardClicked, cardsInDeck, useStyle}) {
     const offset = Math.floor(cardsInDeck.length / 2.0);
     const className = `CardSet ${useStyle}`
 
-    return (<div className='CardSetWrapper' ><div className={className}>
+    return (<div className={className}><Row>
         { cardsInDeck.map((card) => <Card key={card.id} onCardClicked={onCardClicked} offset={card.id - offset} useStyle={useStyle} {...card}></Card>) }
-    </div></div>);
+    </Row></div>);
 }
 
 function Card(props){

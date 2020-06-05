@@ -1,6 +1,6 @@
 import React from 'react';
 import './css/CardTable.css';
-import { Row, Col } from 'react-bootstrap';
+import { Row, Col, Button } from 'react-bootstrap';
 import CardSet from './CardSet';
 import CardSources from './CardSources';
 
@@ -14,11 +14,11 @@ function getDeck(numberOfCards, shouldShowFront) {
 }
 
 function getDiscard() {
-    return getDeck(100, true);
+    return getDeck(50, true);
 }
 
 function getDraw() {
-    return getDeck(100, false);
+    return getDeck(50, false);
 }
 
 function getHand() {
@@ -26,7 +26,10 @@ function getHand() {
 }
 
 function GameInformationBlock() {
-    return <Row className='GameInformationBlock'>Game Information</Row>;
+    return <Row className='GameInformationBlock'>
+        <Col>Score: 120<br/> Hand: 1 run, 2 books</Col>
+
+    </Row>;
 }
 
 function PilesBlock() {
@@ -40,7 +43,7 @@ function HandBlock() {
 }
 
 function BuyBlock() {
-    return <Row className='BuyBlock'>Buy Block</Row>;
+    return <Row className='BuyBlock'><Button variant="outline-success" size="lg">BUYYY</Button></Row>;
 }
 
 function DiscardPile() {
