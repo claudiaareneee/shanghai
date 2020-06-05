@@ -14,7 +14,7 @@ function getDeck(numberOfCards, shouldShowFront) {
 }
 
 function getDiscard() {
-    return getDeck(30, true);
+    return getDeck(100, true);
 }
 
 function getDraw() {

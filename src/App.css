@@ -68,3 +68,12 @@ body, html {
   /* box-shadow: #282c34; */
   box-shadow: .5rem .5rem 1rem #282c34bb;
 }
+
+.slideStyle {
+  padding-right: 5rem;
+}
+
+.pinwheelStyle{
+  padding-left: 5rem;
+  padding-right: 5rem;
+}
