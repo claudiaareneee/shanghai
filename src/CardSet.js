@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './CardSet.css';
 import {Col, Row} from 'react-bootstrap';
 
 function CardSet({onCardClicked, cardsInDeck, useStyle}) {
