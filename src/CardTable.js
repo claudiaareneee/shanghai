@@ -26,21 +26,21 @@ function getHand() {
 }
 
 function GameInformationBlock() {
-    return <Row className='PlaceHolder GameInformationBlock'>Game Information</Row>;
+    return <Row className='GameInformationBlock'>Game Information</Row>;
 }
 
 function PilesBlock() {
-    return <Row className='PlaceHolder PilesBlock'><DiscardPile /><DrawPile /></Row>;
+    return <Row className='PilesBlock'><DiscardPile /><DrawPile /></Row>;
 }
 
 function HandBlock() {
-    return <Row className='PlaceHolder HandBlock'>
+    return <Row className='HandBlock'>
         <CardSet onCardClicked={() => {}} cardsInDeck={getHand()} useStyle='fanStyle'/>
     </Row>;
 }
 
 function BuyBlock() {
-    return <Row className='PlaceHolder BuyBlock'>Buy Block</Row>;
+    return <Row className='BuyBlock'>Buy Block</Row>;
 }
 
 function DiscardPile() {
@@ -57,10 +57,10 @@ function DrawPile() {
 
 function CardTable(params) {
     return <div className='CardTable'>
-        <GameInformationBlock />
-        <PilesBlock />
-        <HandBlock />
-        <BuyBlock />
+        <GameInformationBlock/>
+        <PilesBlock/>
+        <HandBlock/>
+        <BuyBlock/>
     </div>;
 };
 
