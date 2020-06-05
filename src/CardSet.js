@@ -6,17 +6,15 @@ function CardSet({onCardClicked, cardsInDeck, useStyle}) {
     const offset = Math.floor(cardsInDeck.length / 2.0);
     const className = `CardSet ${useStyle}`
 
-    return (<div className='CardSetWrapper'><Row className={className}>
+    return (<div className='CardSetWrapper' ><div className={className}>
         { cardsInDeck.map((card) => <Card key={card.id} onCardClicked={onCardClicked} offset={card.id - offset} useStyle={useStyle} {...card}></Card>) }
-    </Row></div>);
+    </div></div>);
 }
 
 function Card(props){
     const absOffset = Math.abs(props.offset);
     const yTranslation = absOffset*absOffset*(1/10.0);
     const rotation = props.offset *2;
-
-    console.log(yTranslation);
 
     const fanStyle = {
         WebkitTransition: 'all', // note the capital 'W' here

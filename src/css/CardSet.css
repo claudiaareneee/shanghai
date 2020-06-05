@@ -1,8 +1,8 @@
-.CardSetWrapper {
-    padding: 2rem;
+.CardSet {
+    margin: 0 auto;
+    float: none;
+    display: inline-flex;
 }
-
-.CardSet {}
 
 .Card {
     /* position: absolute; */
