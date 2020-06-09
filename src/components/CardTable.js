@@ -1,34 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getGameById } from "../api/gameApi";
+import PlayerHand from "./PlayerHand";
+import DiscardPile from "./DiscardPile";
+import DrawPile from "./DrawPile";
 import "../styles/CardTable.css";
 import { Row, Col, Button } from "react-bootstrap";
-import CardSet from "./CardSet";
-import CardSources from "./CardSources";
-
-function getDeck(numberOfCards, shouldShowFront) {
-  let deck = [];
-  for (let i = 0; i < numberOfCards; i++) {
-    let frontImageSource = CardSources.fronts[i % 54];
-    deck.push({
-      id: i,
-      shouldShowFront,
-      frontImageSource,
-      backImageSource: CardSources.backs[0],
-    });
-  }
-  return deck;
-}
-
-function getDiscard() {
-  return getDeck(50, true);
-}
-
-function getDraw() {
-  return getDeck(50, false);
-}
-
-function getHand() {
-  return getDeck(17, true);
-}
 
 function GameInformationBlock() {
   return (
@@ -37,27 +13,6 @@ function GameInformationBlock() {
         Score: 120
         <br /> Hand: 1 run, 2 books
       </Col>
-    </Row>
-  );
-}
-
-function PilesBlock() {
-  return (
-    <Row className="PilesBlock">
-      <DiscardPile />
-      <DrawPile />
-    </Row>
-  );
-}
-
-function HandBlock() {
-  return (
-    <Row className="HandBlock">
-      <CardSet
-        onCardClicked={() => {}}
-        cardsInDeck={getHand()}
-        useStyle="fanStyle"
-      />
     </Row>
   );
 }
@@ -72,36 +27,26 @@ function BuyBlock() {
   );
 }
 
-function DiscardPile() {
-  return (
-    <Col>
-      <CardSet
-        onCardClicked={() => {}}
-        cardsInDeck={getDiscard()}
-        useStyle="discardStyle"
-      />
-    </Col>
-  );
-}
-
-function DrawPile() {
-  return (
-    <Col>
-      <CardSet
-        onCardClicked={() => {}}
-        cardsInDeck={getDraw()}
-        useStyle="slideStyle"
-      />
-    </Col>
-  );
-}
-
 function CardTable(params) {
+  const [game, setGame] = useState({
+    discard: [],
+    draw: [],
+  });
+
+  useEffect(() => {
+    getGameById(23421).then((_game) => {
+      setGame(_game);
+    });
+  }, []);
+
   return (
     <div className="CardTable">
       <GameInformationBlock />
-      <PilesBlock />
-      <HandBlock />
+      <Row className="PilesBlock">
+        <DiscardPile cards={game.discard} />
+        <DrawPile cards={game.draw} />
+      </Row>
+      <PlayerHand />
       <BuyBlock />
     </div>
   );
