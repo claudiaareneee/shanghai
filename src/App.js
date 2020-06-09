@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CardSet from "./CardSet";
-import "./css/App.css";
+import "./styles/App.css";
 import CardSources from "./CardSources";
 import CardTable from "./CardTable";
 import Sidebar from "./Sidebar";
