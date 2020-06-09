@@ -1,5 +1,6 @@
 .CardTable{
     width: 100%;
+    padding: 1rem;
 }
 
 .PlaceHolder {
@@ -8,4 +9,5 @@
 
 .GameInformationBlock {
     color: whitesmoke;
+    padding-bottom: 2rem;
 }

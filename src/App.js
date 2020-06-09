@@ -3,14 +3,14 @@ import CardSet from './CardSet';
 import './css/App.css';
 import CardSources from './CardSources';
 import CardTable from './CardTable';
-import { Container } from 'react-bootstrap';
-
+import Sidebar from './Sidebar';
+import { Container, Row, Col } from 'react-bootstrap';
 
 function getDeck() {
   let deck = [];
   for (let i = 0; i < 54; i++) {
     let frontImageSource = CardSources.fronts[i];
-    deck.push({'id': i, shouldShowFront: true, frontImageSource, backImageSource: CardSources.backs[0]});
+    deck.push({ 'id': i, shouldShowFront: true, frontImageSource, backImageSource: CardSources.backs[0] });
   }
   return deck;
 }
@@ -22,10 +22,15 @@ class App extends Component {
     // this.handleCardClicked = this.handleCardClicked.bind(this);
   }
 
-  render() { 
-    return ( <Container className="App">
-      <CardTable/>
-    </Container> );
+  render() {
+    return (
+      <div className="App">
+        <Row style={{width: '100%'}}>
+          <Col ><CardTable/></Col>
+          <Col style={{backgroundColor: "blue"}} xs lg="5"><Sidebar/></Col>
+        </Row>
+      </div>
+    );
   }
 }
 
