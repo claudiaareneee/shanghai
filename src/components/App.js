@@ -20,27 +20,19 @@ function getDeck() {
   return deck;
 }
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { cardsInDeck: getDeck() };
-    // this.handleCardClicked = this.handleCardClicked.bind(this);
-  }
-
-  render() {
-    return (
-      <div className="App">
-        <Row style={{ width: "100%" }}>
-          <Col>
-            <CardTable />
-          </Col>
-          <Col style={{ backgroundColor: "blue" }} xs lg="5">
-            <Sidebar />
-          </Col>
-        </Row>
-      </div>
-    );
-  }
+function App(props) {
+  return (
+    <div className="App">
+      <Row style={{ width: "100%" }}>
+        <Col>
+          <CardTable />
+        </Col>
+        <Col style={{ backgroundColor: "blue" }} xs lg="5">
+          <Sidebar />
+        </Col>
+      </Row>
+    </div>
+  );
 }
 
 export default App;
