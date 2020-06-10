@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles/CardSet.css";
 import PlayingCard from "./PlayingCard";
-import { Col, Row } from "react-bootstrap";
+import { Row } from "react-bootstrap";
 
 function CardSet({ onCardClicked, cardsInDeck, useStyle }) {
   const offset = Math.floor(cardsInDeck.length / 2.0);

@@ -1,24 +1,8 @@
-import React, { Component } from "react";
-import CardSet from "./CardSet";
+import React from "react";
 import "../styles/App.css";
-import CardSources from "./CardSources";
 import CardTable from "./CardTable";
 import Sidebar from "./Sidebar";
-import { Container, Row, Col } from "react-bootstrap";
-
-function getDeck() {
-  let deck = [];
-  for (let i = 0; i < 54; i++) {
-    let frontImageSource = CardSources.fronts[i];
-    deck.push({
-      id: i,
-      shouldShowFront: true,
-      frontImageSource,
-      backImageSource: CardSources.backs[0],
-    });
-  }
-  return deck;
-}
+import { Row, Col } from "react-bootstrap";
 
 function App(props) {
   return (
