@@ -5,7 +5,7 @@
     /* -ms-transform: rotate(7deg); IE 9 */
     /* -webkit-transform: rotate(7deg); Safari */
     /* transform: rotate(7deg); */
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .CardImage {
@@ -16,8 +16,8 @@
 }
 
 .slideStyle {
-    /* padding-right: 5rem; */
-    width: 2rem;
+    padding-right: 5rem;
+    /* width: 2rem; */
 }
 
 .pinwheelStyle, .discardStyle {
