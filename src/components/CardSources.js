@@ -117,7 +117,7 @@ let CardSources = {
     j1,
     j2,
   ],
-  backs: [b6, b7, b10, b3],
+  backs: [b6, b7, b10, b3, b18],
   placeholder: [p1],
 };
 
