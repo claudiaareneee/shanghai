@@ -2,6 +2,7 @@ import React from "react";
 import { Col } from "react-bootstrap";
 import CardSources from "./CardSources";
 import "../styles/PlayingCard.css";
+import PropTypes from "prop-types";
 
 function PlayingCard(props) {
   const absOffset = Math.abs(props.offset);
@@ -41,5 +42,11 @@ function PlayingCard(props) {
     </Col>
   );
 }
+
+PlayingCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  useStyle: PropTypes.string.isRequired,
+  offset: PropTypes.number.isRequired,
+};
 
 export default PlayingCard;

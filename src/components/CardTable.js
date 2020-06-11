@@ -1,37 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { getGameById } from "../api/gameApi";
-import PlayerHand from "./PlayerHand";
-import DiscardPile from "./DiscardPile";
-import DrawPile from "./DrawPile";
+import { getPlayerById } from "../api/playerApi";
 import "../styles/CardTable.css";
 import { Row, Col, Button } from "react-bootstrap";
+import CardSet from "./CardSet";
 
-function GameInformationBlock() {
-  return (
-    <Row className="GameInformationBlock">
-      <Col>
-        Score: 120
-        <br /> Hand: 1 run, 2 books
-      </Col>
-    </Row>
-  );
-}
-
-function BuyBlock() {
-  return (
-    <Row className="BuyBlock">
-      <Button variant="outline-success" size="lg">
-        BUYYY
-      </Button>
-    </Row>
-  );
-}
-
-function CardTable(params) {
+function CardTable(props) {
   const [game, setGame] = useState({
     discard: [],
     draw: [],
   });
+
+  const [player, setPlayer] = useState({ cards: [] });
 
   useEffect(() => {
     getGameById(23421).then((_game) => {
@@ -39,15 +19,36 @@ function CardTable(params) {
     });
   }, []);
 
+  useEffect(() => {
+    getPlayerById(43521).then((_player) => setPlayer(_player));
+  }, []);
+
   return (
     <div className="CardTable">
-      <GameInformationBlock />
-      <Row className="PilesBlock">
-        <DiscardPile cards={game.discard} />
-        <DrawPile cards={game.draw} />
+      <Row className="GameInformationBlock">
+        <Col>
+          Score: 120
+          <br /> Hand: 1 run, 2 books
+        </Col>
       </Row>
-      <PlayerHand />
-      <BuyBlock />
+      <Row className="PilesBlock">
+        <Col>
+          <CardSet cards={game.discard} useStyle="discardStyle" />
+        </Col>
+        <Col>
+          <CardSet cards={game.draw} useStyle="drawStyle" />
+        </Col>
+      </Row>
+
+      <Row className="PlayerHand">
+        <CardSet cards={player.cards} useStyle="fanStyle" />
+      </Row>
+
+      <Row className="BuyBlock">
+        <Button variant="outline-success" size="lg">
+          BUYYY
+        </Button>
+      </Row>
     </div>
   );
 }

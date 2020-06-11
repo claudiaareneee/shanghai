@@ -6,14 +6,14 @@ import CardSet from "./CardSet";
 const cards = {
   43521: [],
   52342: [
-    [26, 0, 54],
-    [14, 15, 16, 17],
-    [10, 36, 64],
+    [80, 54, 53],
+    [14, 15, 70, 71],
+    [10, 90, 64],
   ],
   43563: [],
   97655: [
-    [45, 6, 19],
-    [39, 40, 41, 53, 43],
+    [99, 60, 19],
+    [93, 94, 95, 107, 97],
     [21, 34, 8],
   ],
 };
@@ -21,12 +21,12 @@ const cards = {
 function CardsLaid(props) {
   return (
     <Row style={{ paddingRight: "1rem" }}>
-      {props.cards.map((set) => {
+      {props.cards.map((set, index) => {
         return (
-          <Col>
+          <Col key={index}>
             <CardSet
               onCardClicked={() => {}}
-              cardsInDeck={set}
+              cards={set}
               useStyle="slideStyle"
             />
           </Col>
