@@ -11,7 +11,7 @@ function App(props) {
         <Col>
           <CardTable />
         </Col>
-        <Col style={{ backgroundColor: "blue" }} xs lg="5">
+        <Col className="SidebarCol" xs lg="5">
           <Sidebar />
         </Col>
       </Row>

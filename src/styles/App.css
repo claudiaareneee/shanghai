@@ -43,3 +43,7 @@ body, html {
     transform: rotate(360deg);
   }
 }
+
+.SidebarCol {
+  background-color: #737d92;
+}
