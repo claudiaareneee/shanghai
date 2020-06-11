@@ -2,30 +2,18 @@ import React from "react";
 import "../styles/Sidebar.css";
 import { Container, Row, Col } from "react-bootstrap";
 import CardSet from "./CardSet";
-
-const cards = {
-  43521: [],
-  52342: [
-    [80, 54, 53],
-    [14, 15, 70, 71],
-    [10, 90, 64],
-  ],
-  43563: [],
-  97655: [
-    [99, 60, 19],
-    [93, 94, 95, 107, 97],
-    [21, 34, 8],
-  ],
-};
+import PlayingCard from "./PlayingCard";
 
 function CardsLaid(props) {
-  return (
+  return props.cards.length === 0 ? (
+    <PlayingCard id={0} useStyle={"placeholderStyle"} />
+  ) : (
     <Row style={{ paddingRight: "1rem" }}>
       {props.cards.map((set, index) => {
         return (
           <Col key={index}>
             <CardSet
-              onCardClicked={() => {}}
+              onCardClicked={props.onCardClicked}
               cards={set}
               useStyle="slideStyle"
             />
@@ -37,12 +25,17 @@ function CardsLaid(props) {
 }
 
 function Sidebar(props) {
-  console.log(cards);
   return (
     <Container className="Sidebar">
       <p>Cards Played</p>
-      {Object.keys(cards).map((key) => {
-        return <CardsLaid key={key} cards={cards[key]} />;
+      {Object.keys(props.cardsLaid).map((key) => {
+        return (
+          <CardsLaid
+            key={key}
+            cards={props.cardsLaid[key]}
+            onCardClicked={props.onCardClicked}
+          />
+        );
       })}
     </Container>
   );

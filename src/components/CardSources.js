@@ -53,7 +53,12 @@ import d12 from "../cardImages/d12.svg"; // 51
 import d13 from "../cardImages/d13.svg"; // 52
 import j1 from "../cardImages/j1.svg"; // 53
 import j2 from "../cardImages/j2.svg"; // 54
-import b6 from "../cardImages/b6.svg"; // 54
+import b3 from "../cardImages/b3.svg";
+import b6 from "../cardImages/b6.svg";
+import b7 from "../cardImages/b7.svg";
+import b10 from "../cardImages/b10.svg";
+import b18 from "../cardImages/b18.svg";
+import p1 from "../cardImages/p1.svg";
 
 let CardSources = {
   fronts: [
@@ -112,7 +117,8 @@ let CardSources = {
     j1,
     j2,
   ],
-  backs: [b6],
+  backs: [b6, b7, b10, b3],
+  placeholder: [p1],
 };
 
 export default CardSources;

@@ -1,28 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { getGameById } from "../api/gameApi";
-import { getPlayerById } from "../api/playerApi";
+import React from "react";
 import "../styles/CardTable.css";
 import { Row, Col, Button } from "react-bootstrap";
 import CardSet from "./CardSet";
+import PropTypes from "prop-types";
 
 function CardTable(props) {
-  const [game, setGame] = useState({
-    discard: [],
-    draw: [],
-  });
-
-  const [player, setPlayer] = useState({ cards: [] });
-
-  useEffect(() => {
-    getGameById(23421).then((_game) => {
-      setGame(_game);
-    });
-  }, []);
-
-  useEffect(() => {
-    getPlayerById(43521).then((_player) => setPlayer(_player));
-  }, []);
-
   return (
     <div className="CardTable">
       <Row className="GameInformationBlock">
@@ -33,15 +15,15 @@ function CardTable(props) {
       </Row>
       <Row className="PilesBlock">
         <Col>
-          <CardSet cards={game.discard} useStyle="discardStyle" />
+          <CardSet cards={props.game.discard} useStyle="discardStyle" />
         </Col>
         <Col>
-          <CardSet cards={game.draw} useStyle="drawStyle" />
+          <CardSet cards={props.game.draw} useStyle="drawStyle" />
         </Col>
       </Row>
 
       <Row className="PlayerHand">
-        <CardSet cards={player.cards} useStyle="fanStyle" />
+        <CardSet cards={props.player.cards} useStyle="fanStyle" />
       </Row>
 
       <Row className="BuyBlock">
@@ -52,5 +34,11 @@ function CardTable(props) {
     </div>
   );
 }
+
+CardTable.propTypes = {
+  game: PropTypes.shape({ discard: PropTypes.array, draw: PropTypes.array })
+    .isRequired,
+  player: PropTypes.shape({ cards: PropTypes.array }).isRequired,
+};
 
 export default CardTable;

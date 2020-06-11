@@ -24,7 +24,15 @@ function PlayingCard(props) {
     discardStyle: {
       transform: `rotate(${10 * Math.floor(Math.random() * 36)}deg)`,
     },
+    placeholderStyle: {},
   };
+
+  const src =
+    props.useStyle === "placeholderStyle"
+      ? CardSources.placeholder[0]
+      : props.showBack
+      ? CardSources.backs[Math.floor(props.id / 54)]
+      : CardSources.fronts[props.id % 54];
 
   return (
     <Col
@@ -33,7 +41,7 @@ function PlayingCard(props) {
     >
       <img
         className="CardImage"
-        src={CardSources.fronts[props.id % 54]}
+        src={src}
         alt={props.id}
         onClick={() => {
           props.onCardClicked(props.id);
@@ -46,7 +54,13 @@ function PlayingCard(props) {
 PlayingCard.propTypes = {
   id: PropTypes.number.isRequired,
   useStyle: PropTypes.string.isRequired,
-  offset: PropTypes.number.isRequired,
+  offset: PropTypes.number,
+  showBack: PropTypes.bool,
+};
+
+PlayingCard.defaultProps = {
+  offset: 0,
+  showBack: false,
 };
 
 export default PlayingCard;
