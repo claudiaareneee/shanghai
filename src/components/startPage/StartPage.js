@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./StartPage.css";
 import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
-import { Jumbotron } from "react-bootstrap";
+import Header from "../common/Header";
 
 function StartPage(props) {
   const [errors, setErrors] = useState({});
@@ -45,9 +45,7 @@ function StartPage(props) {
 
   return (
     <div className="">
-      <Jumbotron className="Header">
-        <h1>Shanghai</h1>
-      </Jumbotron>
+      <Header />
       <div className="d-flex justify-content-center">
         <div className="GameSelection">
           <StartSelection onSelection={handleSelection} />

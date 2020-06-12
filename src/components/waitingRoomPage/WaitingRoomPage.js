@@ -1,12 +1,13 @@
 import React from "react";
 import { Jumbotron } from "react-bootstrap";
+import Header from "../common/Header";
 
 function WaitingRoomPage(props) {
   return (
-    <Jumbotron className="Header">
-      <h1>Shanghai</h1>
-      <p>Waiting for other players to join....</p>
-    </Jumbotron>
+    <>
+      <Header />
+      <p>Waiting for others to join...</p>
+    </>
   );
 }
 
