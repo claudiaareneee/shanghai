@@ -1,8 +1,8 @@
 import React from "react";
-import "../styles/Sidebar.css";
+import "./Sidebar.css";
 import { Container, Row, Col } from "react-bootstrap";
-import CardSet from "./CardSet";
-import PlayingCard from "./PlayingCard";
+import CardSet from "../common/CardSet";
+import PlayingCard from "../common/PlayingCard";
 
 function CardsLaid(props) {
   return props.cards.length === 0 ? (

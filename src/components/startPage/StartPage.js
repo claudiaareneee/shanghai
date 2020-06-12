@@ -1,7 +1,7 @@
 import React from "react";
 
-function StartScreen(props) {
+function StartPage(props) {
   return <div>Welcome</div>;
 }
 
-export default StartScreen;
+export default StartPage;

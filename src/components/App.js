@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { getGameById } from "../api/gameApi";
 import { getPlayerById } from "../api/playerApi";
-import "../styles/App.css";
-import CardTable from "./CardTable";
-import Sidebar from "./Sidebar";
+import "./App.css";
+import CardTable from "./gamePage/CardTable";
+import Sidebar from "./gamePage/Sidebar";
 import { Row, Col } from "react-bootstrap";
 
 function App(props) {
