@@ -1,7 +1,7 @@
 import React from "react";
 import { Col } from "react-bootstrap";
 import CardSources from "./CardSources";
-import "../styles/PlayingCard.css";
+import "./PlayingCard.css";
 import PropTypes from "prop-types";
 
 function PlayingCard(props) {

@@ -1,0 +1,10 @@
+.GamePage {
+    text-align: center;
+    /* background-color: #282c34; */
+    min-height: 100vh;
+    display: flex;
+}
+
+.SidebarCol {
+    background-color: #737d92;
+}

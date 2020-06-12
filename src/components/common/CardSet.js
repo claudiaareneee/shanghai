@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/CardSet.css";
+import "./CardSet.css";
 import PlayingCard from "./PlayingCard";
 import { Row } from "react-bootstrap";
 import PropTypes from "prop-types";
