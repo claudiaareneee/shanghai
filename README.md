@@ -69,6 +69,8 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 # Liscense
 
-LGPL 3.0, images from https://totalnonsense.com/download/download-vector-playing-cards/ 
+LGPL 3.0, images from https://totalnonsense.com/download/download-vector-playing-cards/
 
 https://github.com/deck-of-cards/deck-of-cards
+
+Use useState and useEffect

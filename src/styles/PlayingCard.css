@@ -1,0 +1,27 @@
+.PlayingCard {
+    /* position: absolute; */
+    height: 10rem;
+    /* transform-origin: 'center'; */
+    /* -ms-transform: rotate(7deg); IE 9 */
+    /* -webkit-transform: rotate(7deg); Safari */
+    /* transform: rotate(7deg); */
+    padding: 1.5rem;
+}
+
+.CardImage {
+    height: 100%;
+    border-radius: 4%;
+    /* box-shadow: #282c34; */
+    box-shadow: .5rem .5rem 1rem #282c34bb;
+}
+
+.slideStyle {
+    padding-right: 5rem;
+    /* width: 2rem; */
+}
+
+.pinwheelStyle, .discardStyle {
+    padding-left: 5rem;
+    padding-right: 5rem;
+    width: 2rem;
+}
