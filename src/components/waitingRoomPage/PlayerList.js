@@ -14,7 +14,9 @@ function PlayerList(props) {
   return (
     <ListGroup>
       {players.map((player) => (
-        <ListGroup.Item variant="info">{player.name}</ListGroup.Item>
+        <ListGroup.Item key={player.name} variant="info">
+          {player.name}
+        </ListGroup.Item>
       ))}
     </ListGroup>
   );
