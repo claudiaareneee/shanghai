@@ -41,11 +41,10 @@ function PlayingCard(props) {
     >
       <img
         className="CardImage"
+        id={props.id}
         src={src}
         alt={props.id}
-        onClick={() => {
-          props.onCardClicked(props.id);
-        }}
+        onClick={props.onCardClicked}
       />
     </Col>
   );
@@ -56,11 +55,13 @@ PlayingCard.propTypes = {
   useStyle: PropTypes.string.isRequired,
   offset: PropTypes.number,
   showBack: PropTypes.bool,
+  onCardClicked: PropTypes.func,
 };
 
 PlayingCard.defaultProps = {
   offset: 0,
   showBack: false,
+  onCardClicked: () => {},
 };
 
 export default PlayingCard;

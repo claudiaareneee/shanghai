@@ -25,11 +25,19 @@ function GamePage(props) {
     getPlayerById(43521).then((_player) => setPlayer(_player));
   }, []);
 
+  function handleCardClicked({ target }) {
+    debugger;
+  }
+
   return (
     <div className="GamePage">
       <Row style={{ width: "100%" }}>
         <Col>
-          <CardTable game={game} player={player} />
+          <CardTable
+            game={game}
+            player={player}
+            onCardClicked={handleCardClicked}
+          />
         </Col>
         <Col className="SidebarCol" xs lg="5">
           <Sidebar cardsLaid={game.players} />

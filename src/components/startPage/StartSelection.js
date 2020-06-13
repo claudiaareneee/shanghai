@@ -20,7 +20,7 @@ function StartSelection(props) {
 }
 
 StartSelection.propTypes = {
-  onChange: PropTypes.func.isRequired,
+  onSelection: PropTypes.func.isRequired,
 };
 
 export default StartSelection;
