@@ -15,15 +15,27 @@ function CardTable(props) {
       </Row>
       <Row className="PilesBlock">
         <Col>
-          <CardSet cards={props.game.discard} useStyle="discardStyle" />
+          <CardSet
+            cards={props.game.discard}
+            useStyle="discardStyle"
+            onCardClicked={props.onCardClicked}
+          />
         </Col>
         <Col>
-          <CardSet cards={props.game.draw} useStyle="drawStyle" />
+          <CardSet
+            cards={props.game.draw}
+            useStyle="drawStyle"
+            onCardClicked={props.onCardClicked}
+          />
         </Col>
       </Row>
 
       <Row className="PlayerHand">
-        <CardSet cards={props.player.cards} useStyle="fanStyle" />
+        <CardSet
+          cards={props.player.cards}
+          useStyle="fanStyle"
+          onCardClicked={props.onCardClicked}
+        />
       </Row>
 
       <Row className="BuyBlock">
@@ -39,6 +51,11 @@ CardTable.propTypes = {
   game: PropTypes.shape({ discard: PropTypes.array, draw: PropTypes.array })
     .isRequired,
   player: PropTypes.shape({ cards: PropTypes.array }).isRequired,
+  onCardClicked: PropTypes.func,
+};
+
+CardTable.defaultProps = {
+  onCardClicked: () => {},
 };
 
 export default CardTable;

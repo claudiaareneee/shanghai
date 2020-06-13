@@ -41,11 +41,10 @@ function PlayingCard(props) {
     >
       <img
         className="CardImage"
+        id={props.id}
         src={src}
         alt={props.id}
-        onClick={() => {
-          props.onCardClicked(props.id);
-        }}
+        onClick={props.onCardClicked}
       />
     </Col>
   );
