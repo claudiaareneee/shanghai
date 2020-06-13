@@ -11,6 +11,10 @@ function WaitingRoomPage(props) {
     localStorage.setItem("room", room);
   }, [room]);
 
+  function handleClick() {
+    props.history.push("/play");
+  }
+
   return (
     <div className="WaitingRoom">
       <Header />
@@ -20,7 +24,9 @@ function WaitingRoomPage(props) {
           <h4>Players</h4>
           <PlayerList />
           <p>Waiting for others to join...</p>
-          <Button className="float-right">Everybody's in!</Button>
+          <Button className="float-right" onClick={handleClick}>
+            Everybody's in!
+          </Button>
         </Col>
       </Row>
     </div>
