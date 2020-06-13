@@ -7,8 +7,8 @@ import Header from "../common/Header";
 function StartPage(props) {
   const [errors, setErrors] = useState({});
   const [game, setGame] = useState({
-    name: "",
-    room: "",
+    name: localStorage.getItem("name") || "",
+    room: localStorage.getItem("room") || "",
     selection: "",
   });
 
@@ -17,6 +17,8 @@ function StartPage(props) {
       ...game,
       [target.name]: target.value,
     });
+
+    localStorage.setItem(target.name, target.value);
   }
 
   function handleSelection({ target }) {
@@ -41,6 +43,8 @@ function StartPage(props) {
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
+
+    props.history.push("/WaitingRoom");
   }
 
   return (
