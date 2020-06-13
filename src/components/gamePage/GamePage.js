@@ -26,7 +26,10 @@ function GamePage(props) {
   }, []);
 
   function handleCardClicked({ target }) {
-    debugger;
+    setGame({
+      ...game,
+      discard: game.discard.filter((card) => card !== parseInt(target.id, 10)),
+    });
   }
 
   return (
