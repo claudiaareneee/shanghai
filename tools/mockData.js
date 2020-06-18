@@ -1,92 +1,94 @@
-const courses = [
+const games = [
   {
-    id: 1,
-    title: "Securing React Apps with Auth0",
-    slug: "react-auth0-authentication-security",
-    authorId: 1,
-    category: "JavaScript"
+    id: 23421,
+    discard: [52, 35, 9, 24, 41, 12, 66, 6, 45, 18, 20, 38, 48, 3],
+    draw: [
+      16,
+      49,
+      7,
+      39,
+      31,
+      26,
+      43,
+      44,
+      37,
+      5,
+      32,
+      46,
+      17,
+      22,
+      91,
+      2,
+      42,
+      56,
+      96,
+      47,
+      76,
+      100,
+      61,
+      0,
+      1,
+      98,
+      40,
+      13,
+      51,
+      106,
+      36,
+    ],
+    players: {
+      43521: [],
+      52342: [
+        [80, 54, 53],
+        [14, 15, 70, 71],
+        [10, 90, 64],
+      ],
+      43563: [],
+      97655: [
+        [99, 60, 19],
+        [93, 94, 95, 107, 97],
+        [21, 34, 8],
+      ],
+    },
+    turn: 2,
+    hand: 4,
   },
-  {
-    id: 2,
-    title: "React: The Big Picture",
-    slug: "react-big-picture",
-    authorId: 1,
-    category: "JavaScript"
-  },
-  {
-    id: 3,
-    title: "Creating Reusable React Components",
-    slug: "react-creating-reusable-components",
-    authorId: 1,
-    category: "JavaScript"
-  },
-  {
-    id: 4,
-    title: "Building a JavaScript Development Environment",
-    slug: "javascript-development-environment",
-    authorId: 1,
-    category: "JavaScript"
-  },
-  {
-    id: 5,
-    title: "Building Applications with React and Redux",
-    slug: "react-redux-react-router-es6",
-    authorId: 1,
-    category: "JavaScript"
-  },
-  {
-    id: 6,
-    title: "Building Applications in React and Flux",
-    slug: "react-flux-building-applications",
-    authorId: 1,
-    category: "JavaScript"
-  },
-  {
-    id: 7,
-    title: "Clean Code: Writing Code for Humans",
-    slug: "writing-clean-code-humans",
-    authorId: 1,
-    category: "Software Practices"
-  },
-  {
-    id: 8,
-    title: "Architecting Applications for the Real World",
-    slug: "architecting-applications-dotnet",
-    authorId: 1,
-    category: "Software Architecture"
-  },
-  {
-    id: 9,
-    title: "Becoming an Outlier: Reprogramming the Developer Mind",
-    slug: "career-reboot-for-developer-mind",
-    authorId: 1,
-    category: "Career"
-  },
-  {
-    id: 10,
-    title: "Web Component Fundamentals",
-    slug: "web-components-shadow-dom",
-    authorId: 1,
-    category: "HTML5"
-  }
 ];
 
-const authors = [
-  { id: 1, name: "Cory House" },
-  { id: 2, name: "Scott Allen" },
-  { id: 3, name: "Dan Wahlin" }
+const players = [
+  {
+    id: 43521,
+    gameId: 23421,
+    cards: [
+      78,
+      69,
+      4,
+      89,
+      30,
+      23,
+      62,
+      57,
+      63,
+      28,
+      67,
+      68,
+      101,
+      88,
+      72,
+      60,
+      105,
+    ],
+  },
+  { id: 52342, gameId: 23421, cards: [55, 103, 102, 75, 50, 33, 84] },
+  {
+    id: 43563,
+    gameId: 23421,
+    cards: [74, 77, 59, 85, 73, 29, 92, 11, 27, 82, 25],
+  },
+  { id: 97655, gameId: 23421, cards: [81, 87, 65, 79, 83, 104] },
 ];
-
-const newCourse = {
-  id: null,
-  title: "",
-  authorId: null,
-  category: ""
-};
 
 // Using CommonJS style export so we can consume via Node (without using Babel-node)
 module.exports = {
-  newCourse,
-  courses,
-  authors
+  games,
+  players,
 };

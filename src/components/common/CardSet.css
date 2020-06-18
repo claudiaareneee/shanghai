@@ -1,0 +1,10 @@
+.CardSetWrapper {
+    width: 100%;
+}
+
+.CardSet {
+    margin: 0 auto;
+    float: none;
+    display: inline-flex;
+    margin-right: 2rem;
+}
