@@ -1,5 +1,5 @@
 import { handleResponse, handleError } from "./apiUtils";
-const baseUrl = process.env.REACT_APP_API_URL + "/games/";
+const baseUrl = process.env.API_URL + "/games/";
 
 export function getGames() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
