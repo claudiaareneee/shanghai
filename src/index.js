@@ -1,13 +1,19 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./components/App";
-import "./custom.scss";
+import { render } from "react-dom";
 import { BrowserRouter as Router } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import App from "./components/App";
+import "./index.css";
+import configureStore from "./redux/configureStore";
+import { Provider as ReduxProvider } from "react-redux";
 
-ReactDOM.render(
-  <Router>
-    <App />
-  </Router>,
-  document.getElementById("root")
+const store = configureStore(); //pass in default values, this is good for localstorage and server rendered app
+
+render(
+  <ReduxProvider store={store}>
+    <Router>
+      <App />
+    </Router>
+  </ReduxProvider>,
+  document.getElementById("app")
 );
