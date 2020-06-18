@@ -3,6 +3,7 @@ import { getGameById } from "../../api/gameApi";
 import { getPlayerById } from "../../api/playerApi";
 import "./GamePage.css";
 import CardTable from "./CardTable";
+import CardStack from "../common/CardStack";
 import Sidebar from "./Sidebar";
 import { Row, Col } from "react-bootstrap";
 
@@ -33,7 +34,14 @@ function GamePage(props) {
 
   return (
     <div className="GamePage">
-      <Row style={{ width: "100%" }}>
+      <CardStack
+        numberOfCards={25}
+        source="back"
+        onTopCardClicked={() => {
+          console.log("Top Card Clicked");
+        }}
+      />
+      {/* <Row style={{ width: "100%" }}>
         <Col>
           <CardTable
             game={game}
@@ -44,7 +52,7 @@ function GamePage(props) {
         <Col className="SidebarCol" xs lg="5">
           <Sidebar cardsLaid={game.players} />
         </Col>
-      </Row>
+      </Row> */}
     </div>
   );
 }

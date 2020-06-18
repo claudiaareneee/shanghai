@@ -4,63 +4,57 @@ import CardSources from "./CardSources";
 import "./PlayingCard.css";
 import PropTypes from "prop-types";
 
-function PlayingCard(props) {
-  const absOffset = Math.abs(props.offset);
-  const yTranslation = absOffset * absOffset * (1 / 10.0);
-  const rotation = props.offset * 2;
-
-  const setUpStyle = {
+function PlayingCard({
+  id,
+  rotation,
+  xTranslation,
+  yTranslation,
+  source,
+  onCardClicked,
+}) {
+  const style = {
     WebkitTransition: "all", // note the capital 'W' here
     msTransition: "all", // 'ms' is the only lowercase vendor prefix
-  };
-
-  const styles = {
-    fanStyle: {
-      transform: `rotate(${rotation}deg) translateY(${yTranslation}rem)`,
-      marginBottom: `${yTranslation}rem`,
-    },
-    slideStyle: {},
-    pinwheelStyle: { transform: `rotate(${10 * rotation}deg)` },
-    discardStyle: {
-      transform: `rotate(${10 * Math.floor(Math.random() * 36)}deg)`,
-    },
-    placeholderStyle: {},
+    height: "10rem",
+    // transformOrigin: "50% 100%",
+    transform: `rotate(${rotation}deg) translateX(${xTranslation}rem) translateY(${yTranslation}rem)`,
   };
 
   const src =
-    props.useStyle === "placeholderStyle"
+    source === "placeholder"
       ? CardSources.placeholder[0]
-      : props.showBack
-      ? CardSources.backs[Math.floor(props.id / 54)]
-      : CardSources.fronts[props.id % 54];
+      : source === "back"
+      ? CardSources.backs[Math.floor(id / 54)]
+      : CardSources.fronts[id % 54];
 
   return (
-    <Col
-      className="PlayingCard"
-      style={{ ...setUpStyle, ...styles[props.useStyle] }}
-    >
+    <div className="PlayingCard" style={style}>
       <img
         className="CardImage"
-        id={props.id}
+        id={id}
         src={src}
-        alt={props.id}
-        onClick={props.onCardClicked}
+        alt={id}
+        onClick={onCardClicked}
       />
-    </Col>
+    </div>
   );
 }
 
 PlayingCard.propTypes = {
-  id: PropTypes.number.isRequired,
-  useStyle: PropTypes.string.isRequired,
-  offset: PropTypes.number,
-  showBack: PropTypes.bool,
+  id: PropTypes.number,
+  rotation: PropTypes.number,
+  xTranslation: PropTypes.number,
+  yTranslation: PropTypes.number,
+  source: PropTypes.string,
   onCardClicked: PropTypes.func,
 };
 
 PlayingCard.defaultProps = {
-  offset: 0,
-  showBack: false,
+  id: 0,
+  rotation: 0,
+  xTranslation: 0,
+  yTranslation: 0,
+  source: "front",
   onCardClicked: () => {},
 };
 
