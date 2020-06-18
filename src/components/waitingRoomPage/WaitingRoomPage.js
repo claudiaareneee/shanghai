@@ -25,7 +25,7 @@ function WaitingRoomPage(props) {
           <PlayerList />
           <p>Waiting for others to join...</p>
           <Button className="float-right" onClick={handleClick}>
-            Everybody's in!
+            {"Everybody's in!"}
           </Button>
         </Col>
       </Row>

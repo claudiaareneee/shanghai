@@ -16,9 +16,11 @@ function GamePage(props) {
   const [player, setPlayer] = useState({ cards: [] });
 
   useEffect(() => {
-    getGameById(23421).then((_game) => {
-      setGame(_game);
-    });
+    getGameById(23421)
+      .then((_game) => {
+        setGame(_game);
+      })
+      .catch((error) => {});
   }, []);
 
   useEffect(() => {
