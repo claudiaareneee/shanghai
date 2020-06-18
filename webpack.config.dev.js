@@ -43,8 +43,15 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.(svg)$/,
-        use: ["babel-loader", "react-svg-loader"],
+        test: /\.(png|jp(e*)g|svg|gif)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {
+              name: "images/[hash]-[name].[ext]",
+            },
+          },
+        ],
       },
       {
         test: /\.s[ac]ss$/i,
