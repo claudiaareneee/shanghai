@@ -11,8 +11,7 @@ function CardTable({ discard, numberOfDrawCards, playerCards }) {
     <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
         <Col>
-          Score: 120
-          <br /> Hand: 1 run, 2 books
+          <h5>Hand: 1 run, 2 books</h5>
         </Col>
       </Row>
       <Row className="PilesBlock">
@@ -25,7 +24,7 @@ function CardTable({ discard, numberOfDrawCards, playerCards }) {
             }}
           />
         </Col>
-        <Col>
+        <Col className="justify-content-center align-self-center">
           <CardStack
             numberOfCards={numberOfDrawCards}
             source="back"
