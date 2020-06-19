@@ -7,20 +7,26 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 
-const players = {
-  43521: [],
-  52342: [
-    [80, 54, 53],
-    [14, 15, 70, 71, 14, 15, 70, 71, 14, 15, 70, 71],
-    [10, 90, 64],
-  ],
-  43563: [],
-  97655: [
-    [99, 60, 19],
-    [93, 94, 95, 107, 97],
-    [21, 34, 8],
-  ],
-};
+const players = [
+  { id: 43521, cards: [] },
+  {
+    id: 52342,
+    cards: [
+      [80, 54, 53],
+      [14, 15, 70, 71],
+      [10, 90, 64],
+    ],
+  },
+  { id: 43563, cards: [] },
+  {
+    id: 97655,
+    cards: [
+      [99, 60, 19],
+      [93, 94, 95, 107, 97],
+      [21, 34, 8],
+    ],
+  },
+];
 
 function getDiscard(cards) {
   const newCards = cards.map((card) => ({
@@ -67,7 +73,7 @@ function GamePage() {
         </Col>
 
         <Col className="SidebarCol" xs lg="5">
-          <Sidebar cardsLaid={players} />
+          <Sidebar players={players} />
         </Col>
       </Row>
     </div>

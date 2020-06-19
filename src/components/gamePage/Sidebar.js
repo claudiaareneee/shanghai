@@ -1,6 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container } from "react-bootstrap";
 import CardSlide from "../common/CardSlide";
 import PropTypes from "prop-types";
 import CardPlaceholder from "../common/CardPlaceholder";
@@ -11,22 +11,18 @@ function CardsLaid({ cards, onCardClicked }) {
       <CardPlaceholder source={"placeholder"} />
     </div>
   ) : (
-    // <Row>
     <div>
       {cards.map((set, index) => {
         return (
-          // <Col key={index}>
           <CardSlide
             key={index}
             onCardClicked={onCardClicked}
             cards={set}
             useStyle="slideStyle"
           />
-          // </Col>
         );
       })}
     </div>
-    // </Row>
   );
 }
 
@@ -35,15 +31,15 @@ CardsLaid.propTypes = {
   onCardClicked: PropTypes.func.isRequired,
 };
 
-function Sidebar({ cardsLaid, onCardClicked }) {
+function Sidebar({ players, onCardClicked }) {
   return (
     <Container className="Sidebar">
       <p>Cards Played</p>
-      {Object.keys(cardsLaid).map((key) => {
+      {players.map((player) => {
         return (
           <CardsLaid
-            key={key}
-            cards={cardsLaid[key]}
+            key={player.id}
+            cards={player.cards}
             onCardClicked={onCardClicked}
           />
         );
@@ -53,7 +49,7 @@ function Sidebar({ cardsLaid, onCardClicked }) {
 }
 
 Sidebar.propTypes = {
-  cardsLaid: PropTypes.object.isRequired,
+  players: PropTypes.array.isRequired,
   onCardClicked: PropTypes.func,
 };
 

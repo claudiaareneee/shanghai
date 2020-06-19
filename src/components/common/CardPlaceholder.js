@@ -18,7 +18,7 @@ function CardPlaceholder() {
 
   return (
     <div style={style}>
-      <PlayingCard id={"placeholder"} source={"placeholder"} />
+      <PlayingCard id={0} source={"placeholder"} />
     </div>
   );
 }
