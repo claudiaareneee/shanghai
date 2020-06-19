@@ -1,13 +1,13 @@
 .CardTable {
-    width: 100%;
-    padding: 1rem;
+  width: 100%;
+  padding: 1rem;
 }
 
 .PlaceHolder {
-    background-color: red;
+  background-color: red;
 }
 
 .GameInformationBlock {
-    color: whitesmoke;
-    padding-bottom: 2rem;
+  color: whitesmoke;
+  padding-bottom: 2rem;
 }

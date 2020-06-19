@@ -10,7 +10,7 @@ const players = [
   { name: "Vanessa" },
 ];
 
-function PlayerList(props) {
+function PlayerList() {
   return (
     <ListGroup>
       {players.map((player) => (

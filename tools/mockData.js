@@ -35,20 +35,44 @@ const games = [
       106,
       36,
     ],
-    players: {
-      43521: [],
-      52342: [
-        [80, 54, 53],
-        [14, 15, 70, 71],
-        [10, 90, 64],
-      ],
-      43563: [],
-      97655: [
-        [99, 60, 19],
-        [93, 94, 95, 107, 97],
-        [21, 34, 8],
-      ],
-    },
+    players: [
+      {
+        id: 43521,
+        name: "Aang",
+        score: 0,
+        cards: [],
+        numberOfRemainingCards: 17,
+      },
+      {
+        id: 52342,
+        name: "Katara",
+        score: 120,
+        cards: [
+          [80, 54, 53],
+          [14, 15, 70, 71],
+          [10, 90, 64],
+        ],
+        numberOfRemainingCards: 7,
+      },
+      {
+        id: 43563,
+        name: "Roku",
+        score: 300,
+        cards: [],
+        numberOfRemainingCards: 11,
+      },
+      {
+        id: 97655,
+        name: "The Phenox King and Former Fire Lord Ozai",
+        score: 20,
+        cards: [
+          [99, 60, 19],
+          [93, 94, 95, 107, 97],
+          [21, 34, 8],
+        ],
+        numberOfRemainingCards: 6,
+      },
+    ],
     turn: 2,
     hand: 4,
   },

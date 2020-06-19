@@ -1,44 +1,31 @@
 import React from "react";
 import "./Sidebar.css";
-import { Container, Row, Col } from "react-bootstrap";
-import CardSet from "../common/CardSet";
-import PlayingCard from "../common/PlayingCard";
+import { Container } from "react-bootstrap";
+import PropTypes from "prop-types";
+import PlayerBucket from "./PlayerBucket";
 
-function CardsLaid(props) {
-  return props.cards.length === 0 ? (
-    <PlayingCard id={0} useStyle={"placeholderStyle"} />
-  ) : (
-    <Row style={{ paddingRight: "1rem" }}>
-      {props.cards.map((set, index) => {
-        return (
-          <Col key={index}>
-            <CardSet
-              onCardClicked={props.onCardClicked}
-              cards={set}
-              useStyle="slideStyle"
-            />
-          </Col>
-        );
-      })}
-    </Row>
-  );
-}
-
-function Sidebar(props) {
+function Sidebar({ players, onCardClicked }) {
   return (
-    <Container className="Sidebar">
-      <p>Cards Played</p>
-      {Object.keys(props.cardsLaid).map((key) => {
-        return (
-          <CardsLaid
-            key={key}
-            cards={props.cardsLaid[key]}
-            onCardClicked={props.onCardClicked}
-          />
-        );
-      })}
-    </Container>
+    <div className="Sidebar">
+      <h3 className="Title">Players</h3>
+      {players.map((player) => (
+        <PlayerBucket
+          key={player.id}
+          player={player}
+          onCardClicked={onCardClicked}
+        />
+      ))}
+    </div>
   );
 }
+
+Sidebar.propTypes = {
+  players: PropTypes.array.isRequired,
+  onCardClicked: PropTypes.func,
+};
+
+Sidebar.defaultProps = {
+  onCardClicked: () => {},
+};
 
 export default Sidebar;

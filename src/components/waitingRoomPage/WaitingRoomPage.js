@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Header from "../common/Header";
 import PlayerList from "./PlayerList";
+import PropTypes from "prop-types";
 import { Button, Col, Row } from "react-bootstrap";
 import "./WaitingRoomPage.css";
 
 function WaitingRoomPage(props) {
-  const [room, setRoom] = useState(localStorage.getItem("room") || "");
+  const [room] = useState(localStorage.getItem("room") || "");
 
   useEffect(() => {
     localStorage.setItem("room", room);
@@ -32,5 +33,9 @@ function WaitingRoomPage(props) {
     </div>
   );
 }
+
+WaitingRoomPage.propTypes = {
+  history: PropTypes.array.isRequired,
+};
 
 export default WaitingRoomPage;

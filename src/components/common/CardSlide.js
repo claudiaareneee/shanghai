@@ -3,10 +3,9 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardSet({ cards, source, onCardClicked }) {
+function CardSlide({ cards, source, onCardClicked }) {
   const offset = -1 * Math.floor(cards.length / 2.0);
-  const containerHeight =
-    0.5 * constants.CARD_WIDTH + constants.CARD_HEIGHT + 1;
+  const containerHeight = constants.CARD_HEIGHT;
 
   const style = {
     width: "100%",
@@ -25,10 +24,7 @@ function CardSet({ cards, source, onCardClicked }) {
         <PlayingCard
           key={card}
           id={card}
-          xTranslation={constants.CARDSET_STRETCH_X * (index + offset)}
-          yTranslation={1}
-          rotation={(180 / cards.length) * (index + offset)}
-          transformOrigin="50% 100%"
+          xTranslation={constants.CARDSLIDE_STRETCH_X * (index + offset)}
           source={source}
           onCardClicked={onCardClicked}
         />
@@ -37,16 +33,16 @@ function CardSet({ cards, source, onCardClicked }) {
   );
 }
 
-CardSet.propTypes = {
+CardSlide.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: PropTypes.func,
   source: PropTypes.string,
 };
 
-CardSet.defaultProps = {
+CardSlide.defaultProps = {
   cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: () => {},
   source: "front",
 };
 
-export default CardSet;
+export default CardSlide;
