@@ -1,10 +1,12 @@
 import React from "react";
 import "./CardTable.css";
 import { Row, Col, Button } from "react-bootstrap";
-import CardSet from "../common/CardSet";
 import PropTypes from "prop-types";
+import CardSet from "../common/CardSet";
+import CardDiscard from "../common/CardDiscard";
+import CardStack from "../common/CardStack";
 
-function CardTable(props) {
+function CardTable({ discard, numberOfDrawCards, playerCards }) {
   return (
     <div className="CardTable">
       <Row className="GameInformationBlock">
@@ -15,26 +17,32 @@ function CardTable(props) {
       </Row>
       <Row className="PilesBlock">
         <Col>
-          <CardSet
-            cards={props.game.discard}
-            useStyle="discardStyle"
-            onCardClicked={props.onCardClicked}
+          <CardDiscard
+            cards={discard}
+            source="front"
+            onCardClicked={() => {
+              console.log("yay!");
+            }}
           />
         </Col>
         <Col>
-          <CardSet
-            cards={props.game.draw}
-            useStyle="drawStyle"
-            onCardClicked={props.onCardClicked}
+          <CardStack
+            numberOfCards={numberOfDrawCards}
+            source="back"
+            onTopCardClicked={() => {
+              console.log("Top Card Clicked");
+            }}
           />
         </Col>
       </Row>
 
       <Row className="PlayerHand">
         <CardSet
-          cards={props.player.cards}
-          useStyle="fanStyle"
-          onCardClicked={props.onCardClicked}
+          cards={playerCards}
+          source="front"
+          onCardClicked={() => {
+            console.log("yay!");
+          }}
         />
       </Row>
 
@@ -48,10 +56,9 @@ function CardTable(props) {
 }
 
 CardTable.propTypes = {
-  game: PropTypes.shape({ discard: PropTypes.array, draw: PropTypes.array })
-    .isRequired,
-  player: PropTypes.shape({ cards: PropTypes.array }).isRequired,
-  onCardClicked: PropTypes.func,
+  discard: PropTypes.array.isRequired,
+  numberOfDrawCards: PropTypes.number.isRequired,
+  playerCards: PropTypes.array.isRequired,
 };
 
 CardTable.defaultProps = {

@@ -3,13 +3,24 @@ import React from "react";
 // import { getGameById } from "../../api/gameApi";
 // import { getPlayerById } from "../../api/playerApi";
 import "./GamePage.css";
-// import CardTable from "./CardTable";
-import CardStack from "../common/CardStack";
-// import Sidebar from "./Sidebar";
-// import { Row, Col } from "react-bootstrap";
-import CardSet from "../common/CardSet";
-import CardDiscard from "../common/CardDiscard";
-import CardSlide from "../common/CardSlide";
+import CardTable from "./CardTable";
+import { Row, Col } from "react-bootstrap";
+import Sidebar from "./Sidebar";
+
+const players = {
+  43521: [],
+  52342: [
+    [80, 54, 53],
+    [14, 15, 70, 71, 14, 15, 70, 71, 14, 15, 70, 71],
+    [10, 90, 64],
+  ],
+  43563: [],
+  97655: [
+    [99, 60, 19],
+    [93, 94, 95, 107, 97],
+    [21, 34, 8],
+  ],
+};
 
 function getDiscard(cards) {
   const newCards = cards.map((card) => ({
@@ -46,48 +57,19 @@ function GamePage() {
 
   return (
     <div className="GamePage">
-      <div className="CardStacks">
-        <CardDiscard
-          cards={getDiscard([...Array(30).keys()])}
-          source="front"
-          onCardClicked={() => {
-            console.log("yay!");
-          }}
-        />
-        <CardStack
-          numberOfCards={25}
-          source="back"
-          onTopCardClicked={() => {
-            console.log("Top Card Clicked");
-          }}
-        />
-      </div>
-      <CardSet
-        cards={[...Array(17).keys()]}
-        source="front"
-        onCardClicked={() => {
-          console.log("yay!");
-        }}
-      />
-      <CardSlide
-        cards={[...Array(17).keys()]}
-        source="front"
-        onCardClicked={() => {
-          console.log("yay!");
-        }}
-      />
-      {/* <Row style={{ width: "100%" }}>
+      <Row>
         <Col>
           <CardTable
-            game={game}
-            player={player}
-            onCardClicked={handleCardClicked}
+            discard={getDiscard([...Array(17).keys()])}
+            numberOfDrawCards={30}
+            playerCards={[...Array(17).keys()]}
           />
         </Col>
+
         <Col className="SidebarCol" xs lg="5">
-          <Sidebar cardsLaid={game.players} />
+          <Sidebar cardsLaid={players} />
         </Col>
-      </Row> */}
+      </Row>
     </div>
   );
 }
