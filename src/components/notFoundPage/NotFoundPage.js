@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Header from "../common/Header";
 
-function NotFoundPage(props) {
+function NotFoundPage() {
   return (
     <div>
       <Header />

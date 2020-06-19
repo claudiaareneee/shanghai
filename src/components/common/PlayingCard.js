@@ -1,5 +1,4 @@
 import React from "react";
-import { Col } from "react-bootstrap";
 import CardSources from "./CardSources";
 import "./PlayingCard.css";
 import PropTypes from "prop-types";
@@ -10,6 +9,7 @@ function PlayingCard({
   rotation,
   xTranslation,
   yTranslation,
+  transformOrigin,
   source,
   onCardClicked,
 }) {
@@ -17,8 +17,8 @@ function PlayingCard({
     WebkitTransition: "all", // note the capital 'W' here
     msTransition: "all", // 'ms' is the only lowercase vendor prefix
     height: `${constants.CARD_HEIGHT}`,
-    transformOrigin: "50% 100%",
-    transform: `rotate(${rotation}deg) translateX(${xTranslation}rem) translateY(${yTranslation}rem)`,
+    transformOrigin: `${transformOrigin}`,
+    transform: `translateX(${xTranslation}rem) translateY(${yTranslation}rem) rotate(${rotation}deg) `,
   };
 
   const src =
@@ -46,6 +46,7 @@ PlayingCard.propTypes = {
   rotation: PropTypes.number,
   xTranslation: PropTypes.number,
   yTranslation: PropTypes.number,
+  transformOrigin: PropTypes.string,
   source: PropTypes.string,
   onCardClicked: PropTypes.func,
 };
@@ -55,6 +56,7 @@ PlayingCard.defaultProps = {
   rotation: 0,
   xTranslation: 0,
   yTranslation: 0,
+  transformOrigin: "0% 0%",
   source: "front",
   onCardClicked: () => {},
 };

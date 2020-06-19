@@ -1,46 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { getGameById } from "../../api/gameApi";
-import { getPlayerById } from "../../api/playerApi";
+// import React, { useState, useEffect } from "react";
+import React from "react";
+// import { getGameById } from "../../api/gameApi";
+// import { getPlayerById } from "../../api/playerApi";
 import "./GamePage.css";
-import CardTable from "./CardTable";
+// import CardTable from "./CardTable";
 import CardStack from "../common/CardStack";
-import Sidebar from "./Sidebar";
-import { Row, Col } from "react-bootstrap";
+// import Sidebar from "./Sidebar";
+// import { Row, Col } from "react-bootstrap";
 import CardSet from "../common/CardSet";
+import CardDiscard from "../common/CardDiscard";
 
-function GamePage(props) {
-  const [game, setGame] = useState({
-    discard: [],
-    draw: [],
-    players: [],
-  });
+function getDiscard(cards) {
+  const newCards = cards.map((card) => ({
+    id: card,
+    rotation: Math.floor(360 * Math.random()),
+  }));
 
-  const [player, setPlayer] = useState({ cards: [] });
+  return newCards;
+}
 
-  useEffect(() => {
-    getGameById(23421)
-      .then((_game) => {
-        setGame(_game);
-      })
-      .catch((error) => {});
-  }, []);
+function GamePage() {
+  // const [game, setGame] = useState({
+  //   draw: [],
+  //   players: [],
+  // });
 
-  useEffect(() => {
-    getPlayerById(43521).then((_player) => setPlayer(_player));
-  }, []);
+  // const [player, setPlayer] = useState({ cards: [] });
 
-  function handleCardClicked({ target }) {
-    debugger;
-  }
+  // useEffect(() => {
+  //   getGameById(23421)
+  //     .then((_game) => {
+  //       setGame({ ..._game, discard: getDiscard });
+  //     })
+  //     .catch((error) => {});
+  // }, []);
+
+  // useEffect(() => {
+  //   getPlayerById(43521).then((_player) => setPlayer(_player));
+  // }, []);
+
+  // function handleCardClicked({ target }) {
+  //   debugger;
+  // }
 
   return (
     <div className="GamePage">
       <div className="CardStacks">
-        <CardStack
-          numberOfCards={25}
-          source="back"
-          onTopCardClicked={() => {
-            console.log("Top Card Clicked");
+        <CardDiscard
+          cards={getDiscard([...Array(30).keys()])}
+          source="front"
+          onCardClicked={() => {
+            console.log("yay!");
           }}
         />
         <CardStack

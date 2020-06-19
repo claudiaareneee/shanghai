@@ -3,6 +3,7 @@ import "./StartPage.css";
 import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
 import Header from "../common/Header";
+import PropTypes from "prop-types";
 
 function StartPage(props) {
   const [errors, setErrors] = useState({});
@@ -64,5 +65,9 @@ function StartPage(props) {
     </div>
   );
 }
+
+StartPage.propTypes = {
+  history: PropTypes.array.isRequired,
+};
 
 export default StartPage;

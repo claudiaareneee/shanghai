@@ -26,7 +26,8 @@ function CardSet({ cards, source, onCardClicked }) {
           id={card}
           xTranslation={constants.CARDSET_STRETCH_X * (index + offset)}
           yTranslation={1}
-          rotation={10 * (index + offset)}
+          rotation={(180 / cards.length) * (index + offset)}
+          transformOrigin="50% 100%"
           source={source}
           onCardClicked={onCardClicked}
         />

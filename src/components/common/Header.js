@@ -2,7 +2,7 @@ import React from "react";
 import { Jumbotron } from "react-bootstrap";
 import "./Header.css";
 
-function Header(props) {
+function Header() {
   return (
     <Jumbotron className="Header">
       <h1>Shanghai</h1>
