@@ -1,42 +1,49 @@
 import React from "react";
-import "./CardSet.css";
 import PlayingCard from "./PlayingCard";
-import { Row } from "react-bootstrap";
 import PropTypes from "prop-types";
+import * as constants from "./Constants";
 
-function CardSet(props) {
-  const offset = Math.floor(props.cards.length / 2.0);
-  const className = `CardSet ${props.useStyle}`;
+function CardSet({ cards, source, onCardClicked }) {
+  const offset = -1 * Math.floor(cards.length / 2.0);
+  const containerHeight = 2 * constants.CARD_HEIGHT;
+
+  const style = {
+    width: "100%",
+    height: `${containerHeight}rem`,
+    display: "flex",
+    justifyContent: "center",
+    overflow: "hidden",
+    position: "relative",
+    margin: "1rem",
+  };
 
   return (
-    <div className={className}>
-      <Row>
-        {props.cards.map((card, index) => (
-          <PlayingCard
-            key={card}
-            id={card}
-            onCardClicked={props.onCardClicked}
-            offset={index - offset}
-            useStyle={props.useStyle}
-            showBack={props.showBack}
-          />
-        ))}
-      </Row>
+    <div style={style}>
+      {cards.map((card, index) => (
+        <PlayingCard
+          key={card}
+          id={card}
+          xTranslation={constants.CARDSET_STRETCH_X * (index + offset)}
+          yTranslation={1}
+          rotation={10 * (index + offset)}
+          source={source}
+          onCardClicked={onCardClicked}
+        />
+      ))}
     </div>
   );
 }
 
 CardSet.propTypes = {
+  cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: PropTypes.func,
-  cards: PropTypes.arrayOf(PropTypes.number).isRequired,
-  useStyle: PropTypes.string,
-  showBack: PropTypes.bool,
+  source: PropTypes.string,
 };
 
 CardSet.defaultProps = {
+  cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: () => {},
-  useStyle: "fanStyle",
-  showBack: false,
+  source: "front",
 };
 
 export default CardSet;

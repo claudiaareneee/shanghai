@@ -6,6 +6,7 @@ import CardTable from "./CardTable";
 import CardStack from "../common/CardStack";
 import Sidebar from "./Sidebar";
 import { Row, Col } from "react-bootstrap";
+import CardSet from "../common/CardSet";
 
 function GamePage(props) {
   const [game, setGame] = useState({
@@ -34,11 +35,27 @@ function GamePage(props) {
 
   return (
     <div className="GamePage">
-      <CardStack
-        numberOfCards={25}
-        source="back"
-        onTopCardClicked={() => {
-          console.log("Top Card Clicked");
+      <div className="CardStacks">
+        <CardStack
+          numberOfCards={25}
+          source="back"
+          onTopCardClicked={() => {
+            console.log("Top Card Clicked");
+          }}
+        />
+        <CardStack
+          numberOfCards={25}
+          source="back"
+          onTopCardClicked={() => {
+            console.log("Top Card Clicked");
+          }}
+        />
+      </div>
+      <CardSet
+        cards={[...Array(17).keys()]}
+        source="front"
+        onCardClicked={() => {
+          console.log("yay!");
         }}
       />
       {/* <Row style={{ width: "100%" }}>

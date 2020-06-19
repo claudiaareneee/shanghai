@@ -3,6 +3,7 @@ import { Col } from "react-bootstrap";
 import CardSources from "./CardSources";
 import "./PlayingCard.css";
 import PropTypes from "prop-types";
+import * as constants from "./Constants";
 
 function PlayingCard({
   id,
@@ -15,8 +16,8 @@ function PlayingCard({
   const style = {
     WebkitTransition: "all", // note the capital 'W' here
     msTransition: "all", // 'ms' is the only lowercase vendor prefix
-    height: "10rem",
-    // transformOrigin: "50% 100%",
+    height: `${constants.CARD_HEIGHT}`,
+    transformOrigin: "50% 100%",
     transform: `rotate(${rotation}deg) translateX(${xTranslation}rem) translateY(${yTranslation}rem)`,
   };
 

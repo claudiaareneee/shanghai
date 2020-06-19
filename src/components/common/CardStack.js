@@ -1,11 +1,13 @@
 import React from "react";
 import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
+import * as constants from "./Constants";
 
 function CardStack({ numberOfCards, source, onTopCardClicked }) {
   const offset = -1 * Math.floor(numberOfCards / 2.0);
   const numberOfBottomCards = numberOfCards - 1;
-  const containerHeight = 0.1 * numberOfBottomCards + 10;
+  const containerHeight =
+    constants.CARDSTACK_STRETCH_Y * numberOfBottomCards + 10;
 
   const style = {
     width: "100%",
@@ -14,7 +16,7 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
     justifyContent: "center",
     overflow: "hidden",
     position: "relative",
-    perspective: "1000px",
+    margin: "1rem",
   };
 
   return (
@@ -23,16 +25,18 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
         <PlayingCard
           key={index}
           id={index}
-          xTranslation={0.1 * (index + offset)}
-          yTranslation={0.05 * index}
+          xTranslation={constants.CARDSTACK_STRETCH_X * (index + offset)}
+          yTranslation={constants.CARDSTACK_STRETCH_Y * index}
           source={source}
         />
       ))}
       <PlayingCard
         key={numberOfBottomCards}
         id={numberOfBottomCards}
-        xTranslation={0.1 * (numberOfBottomCards + offset)}
-        yTranslation={0.05 * numberOfBottomCards}
+        xTranslation={
+          constants.CARDSTACK_STRETCH_X * (numberOfBottomCards + offset)
+        }
+        yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
         source={source}
         onCardClicked={onTopCardClicked}
       />
@@ -43,13 +47,13 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
 CardStack.propTypes = {
   numberOfCards: PropTypes.number,
   onTopCardClicked: PropTypes.func,
-  source: PropTypes.bool,
+  source: PropTypes.string,
 };
 
 CardStack.defaultProps = {
   numberOfCards: PropTypes.number,
   onTopCardClicked: () => {},
-  source: false,
+  source: "front",
 };
 
 export default CardStack;
