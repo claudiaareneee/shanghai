@@ -5,7 +5,8 @@ import * as constants from "./Constants";
 
 function CardSet({ cards, source, onCardClicked }) {
   const offset = -1 * Math.floor(cards.length / 2.0);
-  const containerHeight = 2 * constants.CARD_HEIGHT;
+  const containerHeight =
+    0.5 * constants.CARD_WIDTH + constants.CARD_HEIGHT + 1;
 
   const style = {
     width: "100%",
