@@ -24,6 +24,7 @@ function CardDiscard({ cards, source, onCardClicked }) {
           key={card.id}
           id={card.id}
           yTranslation={0.5 * constants.CARD_WIDTH}
+          xTranslation={0.5 * constants.CARD_WIDTH}
           rotation={card.rotation}
           transformOrigin="0% 50%"
           source={source}
