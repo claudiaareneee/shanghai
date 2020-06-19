@@ -27,6 +27,11 @@ function CardsPlayed({ cards, onCardClicked }) {
   );
 }
 
+CardsPlayed.propTypes = {
+  cards: PropTypes.array.isRequired,
+  onCardClicked: PropTypes.func.isRequired,
+};
+
 function PlayerBucket({ player, onCardClicked }) {
   return (
     <Container>

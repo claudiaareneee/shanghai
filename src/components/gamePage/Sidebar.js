@@ -1,6 +1,5 @@
 import React from "react";
 import "./Sidebar.css";
-import { Container } from "react-bootstrap";
 import PropTypes from "prop-types";
 import PlayerBucket from "./PlayerBucket";
 
