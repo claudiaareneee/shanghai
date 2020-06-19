@@ -9,6 +9,7 @@ import CardStack from "../common/CardStack";
 // import { Row, Col } from "react-bootstrap";
 import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
+import CardSlide from "../common/CardSlide";
 
 function getDiscard(cards) {
   const newCards = cards.map((card) => ({
@@ -62,6 +63,13 @@ function GamePage() {
         />
       </div>
       <CardSet
+        cards={[...Array(17).keys()]}
+        source="front"
+        onCardClicked={() => {
+          console.log("yay!");
+        }}
+      />
+      <CardSlide
         cards={[...Array(17).keys()]}
         source="front"
         onCardClicked={() => {

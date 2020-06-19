@@ -16,7 +16,8 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
     justifyContent: "center",
     overflow: "hidden",
     position: "relative",
-    margin: "1rem",
+    marginTop: "1rem",
+    marginBottom: "1rem",
   };
 
   return (

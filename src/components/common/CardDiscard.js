@@ -13,7 +13,8 @@ function CardDiscard({ cards, source, onCardClicked }) {
     justifyContent: "center",
     overflow: "hidden",
     position: "relative",
-    margin: "1rem",
+    marginTop: "1rem",
+    marginBottom: "1rem",
   };
 
   return (
