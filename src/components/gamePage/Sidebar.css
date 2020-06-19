@@ -1,4 +1,10 @@
 .Sidebar {
-    color: whitesmoke;
-    padding: 1rem;
+  color: whitesmoke;
+  /* padding: 1rem; */
+}
+
+.Title {
+  background-color: black;
+  padding: 1rem;
+  margin-bottom: 0rem;
 }

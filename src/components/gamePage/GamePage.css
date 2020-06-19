@@ -6,9 +6,10 @@
 }
 
 .CardStacks {
-  display: flex;
+  /* display: flex; */
+  height: 100%;
 }
 
 .SidebarCol {
-  background-color: #737d92;
+  background-color: #181a1f;
 }

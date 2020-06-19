@@ -8,7 +8,7 @@ import CardStack from "../common/CardStack";
 
 function CardTable({ discard, numberOfDrawCards, playerCards }) {
   return (
-    <div className="CardTable">
+    <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
         <Col>
           Score: 120

@@ -1,0 +1,22 @@
+.name {
+  text-align: left;
+}
+
+.player {
+  background-color: #181a1f;
+  padding: 1rem 1rem 0rem 1rem;
+  border-bottom: 5px solid black;
+}
+
+.playerInfo {
+  display: flex;
+}
+
+p {
+  padding-right: 1rem;
+}
+
+.cards {
+  padding: 1rem;
+  background-color: #505764;
+}
