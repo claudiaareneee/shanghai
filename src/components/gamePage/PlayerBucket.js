@@ -2,7 +2,7 @@ import React from "react";
 import CardSlide from "../common/CardSlide";
 import PropTypes from "prop-types";
 import CardPlaceholder from "../common/CardPlaceholder";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import "./PlayerBucket.css";
 
 function CardsPlayed({ cards, onCardClicked }) {
@@ -29,7 +29,7 @@ function CardsPlayed({ cards, onCardClicked }) {
 
 function PlayerBucket({ player, onCardClicked }) {
   return (
-    <>
+    <Container>
       <Row className="player">
         <Col>
           <h5 className="name">{player.name}</h5>
@@ -51,7 +51,7 @@ function PlayerBucket({ player, onCardClicked }) {
       ) : (
         <></>
       )}
-    </>
+    </Container>
   );
 }
 

@@ -6,7 +6,7 @@ import PlayerBucket from "./PlayerBucket";
 
 function Sidebar({ players, onCardClicked }) {
   return (
-    <Container className="Sidebar">
+    <div className="Sidebar">
       <h3 className="Title">Players</h3>
       {players.map((player) => (
         <PlayerBucket
@@ -15,7 +15,7 @@ function Sidebar({ players, onCardClicked }) {
           onCardClicked={onCardClicked}
         />
       ))}
-    </Container>
+    </div>
   );
 }
 

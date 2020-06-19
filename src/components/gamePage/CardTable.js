@@ -15,7 +15,7 @@ function CardTable({ discard, numberOfDrawCards, playerCards }) {
         </Col>
       </Row>
       <Row className="PilesBlock">
-        <Col>
+        <Col sm>
           <CardDiscard
             cards={discard}
             source="front"
