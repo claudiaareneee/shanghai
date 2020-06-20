@@ -1,15 +1,10 @@
 const express = require("express");
 const router = express.Router();
-// Firebase App (the core Firebase SDK) is always required and
-// must be listed before other Firebase SDKs
-const firebase = require("firebase/app");
-const firebaseConfig = require("../tools/firebase.config");
+const firebase = require("../tools/firebase.config");
 require("firebase/database");
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
 const database = firebase.database();
+const baseUrl = "/games/";
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -19,7 +14,7 @@ router.use(function timeLog(req, res, next) {
 
 router.get("/", function (req, res) {
   return database
-    .ref("/games/")
+    .ref(baseUrl)
     .once("value")
     .then(function (snapshot) {
       const data = snapshot.val() || {};
@@ -28,8 +23,8 @@ router.get("/", function (req, res) {
 });
 
 router.post("/", function (req, res) {
-  const newGameKey = firebase.database().ref().child("games").push().key;
-  database.ref("games/" + newGameKey).set({
+  const newGameKey = firebase.database().ref().child(baseUrl).push().key;
+  database.ref(baseUrl + newGameKey).set({
     ...req.body,
     id: newGameKey,
   });
@@ -38,7 +33,7 @@ router.post("/", function (req, res) {
 
 router.get("/:gameId", function (req, res) {
   return database
-    .ref("/games/" + req.params.gameId)
+    .ref(baseUrl + req.params.gameId)
     .once("value")
     .then(function (snapshot) {
       const data = snapshot.val() || {};
@@ -47,15 +42,14 @@ router.get("/:gameId", function (req, res) {
 });
 
 router.put("/:gameId", function (req, res) {
-  console.log(req.body);
-  database.ref("games/" + req.params.gameId).update(req.body);
+  database.ref(baseUrl + req.params.gameId).update(req.body);
   res.json(req.body);
 });
 
 router.get("/:gameId/shuffle", function (req, res) {
   // TODO
   return database
-    .ref("/games/" + req.params.gameId)
+    .ref(baseUrl + req.params.gameId)
     .once("value")
     .then(function (snapshot) {
       const data = snapshot.val() || {};
@@ -66,7 +60,7 @@ router.get("/:gameId/shuffle", function (req, res) {
 router.get("/:gameId/getCardFromDrawPile", function (req, res) {
   // TODO
   return database
-    .ref("/games/" + req.params.gameId)
+    .ref(baseUrl + req.params.gameId)
     .once("value")
     .then(function (snapshot) {
       const data = snapshot.val() || {};

@@ -6,9 +6,10 @@ import App from "./components/App";
 import "./index.css";
 import configureStore from "./redux/configureStore";
 import { Provider as ReduxProvider } from "react-redux";
-import { testGameApi } from "./api/testApi";
+import { testGameApi, testPlayerApi } from "./api/testApi";
 
 testGameApi();
+testPlayerApi();
 
 const store = configureStore(); //pass in default values, this is good for localstorage and server rendered app
 

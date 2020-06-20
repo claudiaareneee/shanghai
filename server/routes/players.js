@@ -1,14 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const data = require("../tools/mockData");
-// Firebase App (the core Firebase SDK) is always required and
-// must be listed before other Firebase SDKs
-const firebase = require("firebase/app");
-const firebaseConfig = require("../tools/firebase.config");
+const firebase = require("../tools/firebase.config");
 require("firebase/database");
-
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 const baseUrl = "/players/";
@@ -21,7 +15,7 @@ router.use(function timeLog(req, res, next) {
 
 router.get("/", function (req, res) {
   return database
-    .ref("/players/")
+    .ref(baseUrl)
     .once("value")
     .then(function (snapshot) {
       const data = snapshot.val() || {};
@@ -30,8 +24,8 @@ router.get("/", function (req, res) {
 });
 
 router.post("/", function (req, res) {
-  const newPlayer = firebase.database().ref().child("players").push().key;
-  database.ref("players/" + newPlayer).set({
+  const newPlayer = firebase.database().ref().child(baseUrl).push().key;
+  database.ref(baseUrl + newPlayer).set({
     ...req.body,
     id: newPlayer,
   });
