@@ -1,5 +1,5 @@
 import { handleResponse, handleError } from "./apiUtils";
-const baseUrl = process.env.API_URL + "/games/";
+const baseUrl = "/api/games/";
 
 export function getGames() {
   return fetch(baseUrl).then(handleResponse).catch(handleError);
@@ -18,6 +18,22 @@ export function getGameById(id) {
 }
 
 export function saveGame(game) {
+  return fetch(baseUrl + (game.id || ""), {
+    method: game.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
+    headers: { "content-type": "application/json" },
+    mode: "cors",
+    body: JSON.stringify({
+      name: "hello",
+      abc: "xyz",
+      // Parse authorId to a number (in case it was sent as a string).
+      // authorId: parseInt(game.authorId, 10),
+    }),
+  })
+    .then(handleResponse)
+    .catch(handleError);
+}
+
+export function saveGame2(game) {
   return fetch(baseUrl + (game.id || ""), {
     method: game.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: { "content-type": "application/json" },
