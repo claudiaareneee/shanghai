@@ -19,32 +19,32 @@ router.use(function timeLog(req, res, next) {
 });
 
 router.get("/", function (req, res) {
-  res.json(data.games);
+  return database
+    .ref("/games/")
+    .once("value")
+    .then(function (snapshot) {
+      const data = snapshot.val() || {};
+      res.json(data);
+    });
 });
 
-router.put("/", function (req, res) {
-  console.log(req.body);
-  // database()
-  //   .ref("games/" + req.body.)
-  //   .set({
-  //     username: name,
-  //     email: email,
-  //     profile_picture: imageUrl,
-  //   });
-  res.json(req.body);
-});
-
-router.put("/:gameId", function (req, res) {
-  console.log(req.body);
-  firebase
-    .database()
-    .ref("games/" + req.params.gameId)
-    .update(req.body);
+router.post("/", function (req, res) {
+  const newGameKey = firebase.database().ref().child("games").push().key;
+  database.ref("games/" + newGameKey).set({
+    ...req.body,
+    id: newGameKey,
+  });
   res.json(req.body);
 });
 
 router.get("/:gameId", function (req, res) {
   res.json(data.games[req.params.gameId]);
+});
+
+router.put("/:gameId", function (req, res) {
+  console.log(req.body);
+  database.ref("games/" + req.params.gameId).update(req.body);
+  res.json(req.body);
 });
 
 module.exports = router;

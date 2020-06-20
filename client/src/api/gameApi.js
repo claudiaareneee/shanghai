@@ -23,8 +23,7 @@ export function saveGame(game) {
     headers: { "content-type": "application/json" },
     mode: "cors",
     body: JSON.stringify({
-      name: "hello",
-      abc: "xyz",
+      ...game,
       // Parse authorId to a number (in case it was sent as a string).
       // authorId: parseInt(game.authorId, 10),
     }),

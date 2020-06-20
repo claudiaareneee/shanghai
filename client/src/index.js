@@ -8,12 +8,12 @@ import configureStore from "./redux/configureStore";
 import { Provider as ReduxProvider } from "react-redux";
 import * as gameApi from "./api/gameApi";
 
-// gameApi
-//   .getGames()
-//   .then((res) => console.log(res))
-//   .catch((error) => console.log(error));
 gameApi
-  .saveGame({ id: 23421, test: 35 })
+  .getGames()
+  .then((res) => console.log(res))
+  .catch((error) => console.log(error));
+gameApi
+  .saveGame({ id: "-MAH6Lq0p77MX2MPGzGM", test: 0 })
   .then((data) => console.log(data))
   .catch((error) => console.log(error));
 
