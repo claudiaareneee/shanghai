@@ -6,6 +6,7 @@ require("firebase/database");
 
 const database = firebase.database();
 const baseUrl = "/players/";
+const baseUrlGames = "/games/";
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -25,11 +26,21 @@ router.get("/", function (req, res) {
 
 router.post("/", function (req, res) {
   const newPlayer = firebase.database().ref().child(baseUrl).push().key;
-  database.ref(baseUrl + newPlayer).set({
-    ...req.body,
+  const player = {
+    ...req.body.player,
     id: newPlayer,
-  });
-  res.json(req.body);
+  };
+
+  database.ref(baseUrl + newPlayer).set(player);
+  database
+    .ref(baseUrlGames + req.body.gameId)
+    .child("opponents")
+    .push()
+    .set({
+      id: newPlayer,
+    });
+
+  res.json(player);
 });
 
 router.get("/:playerId", function (req, res) {

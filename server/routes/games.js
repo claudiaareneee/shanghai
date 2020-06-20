@@ -24,11 +24,12 @@ router.get("/", function (req, res) {
 
 router.post("/", function (req, res) {
   const newGameKey = firebase.database().ref().child(baseUrl).push().key;
-  database.ref(baseUrl + newGameKey).set({
+  const newGame = {
     ...req.body,
     id: newGameKey,
-  });
-  res.json(req.body);
+  };
+  database.ref(baseUrl + newGameKey).set(newGame);
+  res.json(newGame);
 });
 
 router.get("/:gameId", function (req, res) {

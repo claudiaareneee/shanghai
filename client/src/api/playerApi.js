@@ -17,11 +17,11 @@ export function getPlayerById(id) {
     .catch(handleError);
 }
 
-export function savePlayer(player) {
+export function savePlayer(player, gameId) {
   return fetch(baseUrl + (player.id || ""), {
     method: player.id ? "PUT" : "POST", // POST for create, PUT to update when id already exists.
     headers: { "content-type": "application/json" },
-    body: JSON.stringify(player),
+    body: JSON.stringify({ player, gameId }),
   })
     .then(handleResponse)
     .catch(handleError);

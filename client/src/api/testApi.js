@@ -21,7 +21,23 @@ export function testPlayerApi() {
     .then((res) => console.log(res))
     .catch((error) => console.log(error));
   playerApi
-    .savePlayer({ name: "Korra", gameId: "32412423" })
+    .savePlayer({
+      player: { name: "Korra", gameId: "32412423" },
+      gameId: "-MAH6Lq0p77MX2MPGzGM",
+    })
     .then((data) => console.log(data))
     .catch((error) => console.log(error));
+}
+
+export async function createGame() {
+  let game = await gameApi.saveGame({
+    roomCode: "placeHolder",
+    hand: { books: 0, runs: 0 },
+  });
+
+  let player = await playerApi.savePlayer(
+    { name: "Merlin", score: 0 },
+    game.id
+  );
+  return player;
 }
