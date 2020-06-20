@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const data = require("../tools/mockData");
 // Firebase App (the core Firebase SDK) is always required and
 // must be listed before other Firebase SDKs
 const firebase = require("firebase/app");
@@ -38,13 +37,41 @@ router.post("/", function (req, res) {
 });
 
 router.get("/:gameId", function (req, res) {
-  res.json(data.games[req.params.gameId]);
+  return database
+    .ref("/games/" + req.params.gameId)
+    .once("value")
+    .then(function (snapshot) {
+      const data = snapshot.val() || {};
+      res.json(data);
+    });
 });
 
 router.put("/:gameId", function (req, res) {
   console.log(req.body);
   database.ref("games/" + req.params.gameId).update(req.body);
   res.json(req.body);
+});
+
+router.get("/:gameId/shuffle", function (req, res) {
+  // TODO
+  return database
+    .ref("/games/" + req.params.gameId)
+    .once("value")
+    .then(function (snapshot) {
+      const data = snapshot.val() || {};
+      res.json(data);
+    });
+});
+
+router.get("/:gameId/getCardFromDrawPile", function (req, res) {
+  // TODO
+  return database
+    .ref("/games/" + req.params.gameId)
+    .once("value")
+    .then(function (snapshot) {
+      const data = snapshot.val() || {};
+      res.json(data);
+    });
 });
 
 module.exports = router;
