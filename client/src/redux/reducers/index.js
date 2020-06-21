@@ -1,10 +1,8 @@
 import { combineReducers } from "redux";
-import courses from "./courseReducer";
-import apiCallsInProgress from "./apiStatusReducer";
+import game from "./gameReducer";
 
 const rootReducer = combineReducers({
-  courses,
-  apiCallsInProgress,
+  game,
 });
 
 export default rootReducer;

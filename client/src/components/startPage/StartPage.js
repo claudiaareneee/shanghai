@@ -4,27 +4,27 @@ import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
+import { createGame } from "../../redux/actions/gameActions";
+import { connect } from "react-redux";
 
-function StartPage(props) {
+function StartPage({ game, createGame, history }) {
   const [errors, setErrors] = useState({});
-  const [game, setGame] = useState({
+  const [form, setForm] = useState({
     name: localStorage.getItem("name") || "",
     room: localStorage.getItem("room") || "",
     selection: "",
   });
 
   function handleChange({ target }) {
-    setGame({
-      ...game,
+    setForm({
+      ...form,
       [target.name]: target.value,
     });
-
-    localStorage.setItem(target.name, target.value);
   }
 
   function handleSelection({ target }) {
-    setGame({
-      ...game,
+    setForm({
+      ...form,
       selection: target.value,
     });
   }
@@ -32,8 +32,8 @@ function StartPage(props) {
   function formIsValid() {
     const _errors = {};
 
-    if (!game.name) _errors.name = "Name is required";
-    if (game.selection === "join" && !game.room)
+    if (!form.name) _errors.name = "Name is required";
+    if (form.selection === "join" && !form.room)
       _errors.room = "Room is required";
 
     setErrors(_errors);
@@ -45,18 +45,25 @@ function StartPage(props) {
     event.preventDefault();
     if (!formIsValid()) return;
 
-    props.history.push("/WaitingRoom");
+    localStorage.setItem("name", form.name);
+    localStorage.setItem("room", form.room);
+
+    console.log(form.selection);
+
+    createGame(form.selection === "join" ? { id: form.room } : {});
+
+    history.push("/WaitingRoom");
   }
 
   return (
     <div className="">
       <Header />
       <div className="d-flex justify-content-center">
-        <div className="GameSelection">
+        <div className="FormSelection">
           <StartSelection onSelection={handleSelection} />
           <GameForm
             errors={errors}
-            game={game}
+            form={form}
             onChange={handleChange}
             onSubmit={handleSubmit}
           />
@@ -70,4 +77,14 @@ StartPage.propTypes = {
   history: PropTypes.array.isRequired,
 };
 
-export default StartPage;
+function mapStateToProps(state) {
+  return {
+    game: state.game,
+  };
+}
+
+const mapDispatchtoProps = {
+  createGame,
+};
+
+export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);

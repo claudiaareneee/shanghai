@@ -3,8 +3,8 @@ import TextInput from "../common/TextInput";
 import PropTypes from "prop-types";
 
 function GameForm(props) {
-  if (props.game.selection === "") return <></>;
-  else if (props.game.selection === "create")
+  if (props.form.selection === "") return <></>;
+  else if (props.form.selection === "create")
     return (
       <form onSubmit={props.onSubmit}>
         <TextInput
@@ -12,7 +12,7 @@ function GameForm(props) {
           name="name"
           label="Name"
           onChange={props.onChange}
-          value={props.game.name}
+          value={props.form.name}
           error={props.errors.name}
         />
 
@@ -31,7 +31,7 @@ function GameForm(props) {
         name="name"
         label="Name"
         onChange={props.onChange}
-        value={props.game.name}
+        value={props.form.name}
         error={props.errors.name}
       />
 
@@ -40,7 +40,7 @@ function GameForm(props) {
         name="room"
         label="Room"
         onChange={props.onChange}
-        value={props.game.room}
+        value={props.form.room}
         error={props.errors.room}
       />
 
@@ -54,7 +54,7 @@ function GameForm(props) {
 }
 
 GameForm.propTypes = {
-  game: PropTypes.object.isRequired,
+  form: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,

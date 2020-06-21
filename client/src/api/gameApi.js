@@ -1,5 +1,6 @@
 import firebase from "./firebase.config";
 import * as tools from "../tools";
+import { handleError } from "./apiUtils";
 import "firebase/database";
 
 const database = firebase.database();
@@ -13,12 +14,19 @@ export const createGame = (game) => {
   const newKey = database.ref().child(gameBaseUrl).push().key;
   const newGame = { ...game, id: newKey };
 
-  database.ref(gameBaseUrl + newKey).set(newGame);
-  return newGame;
+  return database
+    .ref(gameBaseUrl + newKey)
+    .set(newGame)
+    .then(() => newGame)
+    .catch(handleError);
 };
 
 export const updateGame = (game) => {
-  return database.ref(gameBaseUrl + game.id).update({ ...game });
+  return database
+    .ref(gameBaseUrl + game.id)
+    .update({ ...game })
+    .then(() => game)
+    .catch(handleError);
 };
 
 export const addPlayerToGame = (game, player) => {
