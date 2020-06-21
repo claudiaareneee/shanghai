@@ -29,15 +29,13 @@ export function testPlayerApi() {
     .catch((error) => console.log(error));
 }
 
-export async function createGame() {
+export async function createGame(player, gameId) {
   let game = await gameApi.saveGame({
+    id: gameId,
     roomCode: "placeHolder",
     hand: { books: 0, runs: 0 },
   });
 
-  let player = await playerApi.savePlayer(
-    { name: "Merlin", score: 0 },
-    game.id
-  );
-  return player;
+  let _player = await playerApi.savePlayer({ ...player }, game.id);
+  return game;
 }

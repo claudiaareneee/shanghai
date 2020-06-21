@@ -11,8 +11,8 @@ app.use(express.static(path.join(__dirname, "client/build")));
 app.use(bodyParser.json());
 
 // Api end points
-app.use("/api/players", players);
-app.use("/api/games", games);
+// app.use("/api/players", players);
+// app.use("/api/games", games);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.

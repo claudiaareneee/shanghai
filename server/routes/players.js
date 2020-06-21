@@ -35,10 +35,7 @@ router.post("/", function (req, res) {
   database
     .ref(baseUrlGames + req.body.gameId)
     .child("opponents")
-    .push()
-    .set({
-      id: newPlayer,
-    });
+    .push(newPlayer);
 
   res.json(player);
 });
