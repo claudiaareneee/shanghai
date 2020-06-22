@@ -4,17 +4,29 @@ import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
-import { createGame, loadGame } from "../../redux/actions/gameActions";
-import { createPlayer, loadPlayer } from "../../redux/actions/playerActions";
 import { connect } from "react-redux";
+import {
+  updateGame,
+  createGame,
+  loadGame,
+  addPlayerToGame,
+} from "../../redux/actions/gameActions";
+import {
+  createPlayer,
+  loadPlayer,
+  updatePlayer,
+} from "../../redux/actions/playerActions";
 
 function StartPage({
   game,
   player,
+  updateGame,
   createGame,
   loadGame,
   createPlayer,
   loadPlayer,
+  addPlayerToGame,
+  updatePlayer,
   history,
 }) {
   const [errors, setErrors] = useState({});
@@ -51,12 +63,20 @@ function StartPage({
   }
 
   async function initializeGameAndAddPlayer() {
-    // form.selection === "join" ? { id: form.room } : {}
-    const _game = await createGame({});
-    loadGame(_game.id);
-
-    const _player = await createPlayer({ name: form.name, gameId: _game.id });
+    const _player = await createPlayer({ name: form.name });
     loadPlayer(_player.id);
+    localStorage.setItem("uid", _player.id);
+
+    let _game = {};
+
+    if (form.selection === "join") _game = await updateGame({ id: form.room });
+    else _game = await createGame({});
+
+    loadGame(_game.id);
+    localStorage.setItem("room", game.id);
+
+    updatePlayer({ ..._player, gameId: _game.id });
+    addPlayerToGame(_game, _player.id);
   }
 
   function handleSubmit(event) {
@@ -66,7 +86,7 @@ function StartPage({
     localStorage.setItem("name", form.name);
     localStorage.setItem("room", form.room);
 
-    if (form.selection === "create") initializeGameAndAddPlayer();
+    initializeGameAndAddPlayer();
 
     history.push("/WaitingRoom");
   }
@@ -102,9 +122,12 @@ function mapStateToProps(state) {
 
 const mapDispatchtoProps = {
   createGame,
+  updateGame,
   loadGame,
   createPlayer,
   loadPlayer,
+  addPlayerToGame,
+  updatePlayer,
 };
 
 export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);

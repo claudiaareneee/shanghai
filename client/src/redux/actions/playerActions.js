@@ -9,6 +9,10 @@ export const loadPlayerSuccess = (player) => {
   return { type: types.LOAD_PLAYER_SUCCESS, player };
 };
 
+export const updatePlayerSucces = (player) => {
+  return { type: types.UPDATE_PLAYER_SUCCESS, player };
+};
+
 export function createPlayer(player) {
   return function (dispatch) {
     return playerApi.createPlayer(player).then((player) => {
@@ -23,5 +27,11 @@ export function loadPlayer(playerId) {
     return playerApi.getPlayerById(playerId, (player) => {
       dispatch(loadPlayerSuccess(player));
     });
+  };
+}
+
+export function updatePlayer(player) {
+  return function (dispatch) {
+    return playerApi.updatePlayer(player);
   };
 }
