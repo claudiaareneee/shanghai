@@ -67,13 +67,13 @@ function StartPage({
     loadPlayer(_player.id);
     localStorage.setItem("uid", _player.id);
 
-    let _game = {};
-
-    if (form.selection === "join") _game = await updateGame({ id: form.room });
-    else _game = await createGame({});
+    const _game =
+      form.selection === "join"
+        ? await updateGame({ id: form.room })
+        : await createGame({});
 
     loadGame(_game.id);
-    localStorage.setItem("room", game.id);
+    localStorage.setItem("room", _game.id);
 
     updatePlayer({ ..._player, gameId: _game.id });
     addPlayerToGame(_game, _player.id);
@@ -82,9 +82,6 @@ function StartPage({
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
-
-    localStorage.setItem("name", form.name);
-    localStorage.setItem("room", form.room);
 
     initializeGameAndAddPlayer();
 
