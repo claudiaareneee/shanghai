@@ -9,11 +9,24 @@ export const createGameSuccess = (game) => {
   return { type: types.CREATE_GAME_SUCCESS, game };
 };
 
+export const loadGameSuccess = (game) => {
+  return { type: types.LOAD_GAME_SUCCESS, game };
+};
+
 export function createGame(game) {
   return function (dispatch) {
-    return gameApi
-      .createGame(game)
-      .then((game) => dispatch(createGameSuccess(game)));
+    return gameApi.createGame(game).then((game) => {
+      dispatch(createGameSuccess(game));
+      return game;
+    });
+  };
+}
+
+export function loadGame(gameId) {
+  return function (dispatch) {
+    return gameApi.getGameById(gameId, (game) => {
+      dispatch(loadGameSuccess(game));
+    });
   };
 }
 

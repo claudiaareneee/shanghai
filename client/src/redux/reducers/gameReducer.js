@@ -8,6 +8,8 @@ export default function gameReducer(state = initialState.game, action) {
       // return [...state, { ...action.game }];
       return action.game;
 
+    case types.LOAD_GAME_SUCCESS:
+      return { ...state, ...action.game };
     // case types.UPDATE_COURSE_SUCCESS:
     //   return state.map((course) =>
     //     course.id === action.course.id ? action.course : course

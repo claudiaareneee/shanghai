@@ -4,10 +4,10 @@ import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
-import { createGame } from "../../redux/actions/gameActions";
+import { createGame, loadGame } from "../../redux/actions/gameActions";
 import { connect } from "react-redux";
 
-function StartPage({ game, createGame, history }) {
+function StartPage({ game, createGame, loadGame, history }) {
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     name: localStorage.getItem("name") || "",
@@ -48,10 +48,11 @@ function StartPage({ game, createGame, history }) {
     localStorage.setItem("name", form.name);
     localStorage.setItem("room", form.room);
 
-    console.log(form.selection);
-
-    createGame(form.selection === "join" ? { id: form.room } : {});
-
+    createGame(form.selection === "join" ? { id: form.room } : {}).then(
+      (game) => {
+        loadGame(game.id);
+      }
+    );
     history.push("/WaitingRoom");
   }
 
@@ -74,7 +75,7 @@ function StartPage({ game, createGame, history }) {
 }
 
 StartPage.propTypes = {
-  history: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -85,6 +86,7 @@ function mapStateToProps(state) {
 
 const mapDispatchtoProps = {
   createGame,
+  loadGame,
 };
 
 export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);

@@ -35,7 +35,7 @@ function WaitingRoomPage(props) {
 }
 
 WaitingRoomPage.propTypes = {
-  history: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default WaitingRoomPage;
