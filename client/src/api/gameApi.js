@@ -29,12 +29,12 @@ export const updateGame = (game) => {
     .catch(handleError);
 };
 
-export const addPlayerToGame = (game, player) => {
+export const addPlayerToGame = (game, playerId) => {
   database
     .ref()
     .child(gameBaseUrl + game.id)
     .child("opponents")
-    .push(player);
+    .push(playerId);
 };
 
 export const getGameById = (id, onGamesRecieved) => {

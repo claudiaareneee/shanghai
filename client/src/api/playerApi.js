@@ -1,4 +1,5 @@
 import firebase from "./firebase.config";
+import { handleError } from "./apiUtils";
 import "firebase/database";
 
 const database = firebase.database();
@@ -12,8 +13,11 @@ export const createPlayer = (player) => {
   const newKey = database.ref().child(playerBaseUrl).push().key;
   const newPlayer = { ...player, id: newKey };
 
-  database.ref(playerBaseUrl + newKey).set(newPlayer);
-  return newPlayer;
+  return database
+    .ref(playerBaseUrl + newKey)
+    .set(newPlayer)
+    .then(() => newPlayer)
+    .catch(handleError);
 };
 
 export const updatePlayer = (player) => {

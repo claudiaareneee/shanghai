@@ -5,7 +5,6 @@ export default function gameReducer(state = initialState.game, action) {
   switch (action.type) {
     case types.CREATE_GAME_SUCCESS:
       // Redux flow step 3:
-      // return [...state, { ...action.game }];
       return action.game;
 
     case types.LOAD_GAME_SUCCESS:

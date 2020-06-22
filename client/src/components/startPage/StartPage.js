@@ -5,9 +5,17 @@ import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
 import { createGame, loadGame } from "../../redux/actions/gameActions";
+import { createPlayer } from "../../redux/actions/playerActions";
 import { connect } from "react-redux";
 
-function StartPage({ game, createGame, loadGame, history }) {
+function StartPage({
+  game,
+  player,
+  createGame,
+  loadGame,
+  createPlayer,
+  history,
+}) {
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     name: localStorage.getItem("name") || "",
@@ -41,6 +49,14 @@ function StartPage({ game, createGame, loadGame, history }) {
     return Object.keys(_errors).length === 0;
   }
 
+  async function initializeGameAndAddPlayer() {
+    // form.selection === "join" ? { id: form.room } : {}
+    const _game = await createGame({});
+    loadGame(_game.id);
+
+    const _player = await createPlayer({ name: form.name, gameId: _game.id });
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
@@ -48,11 +64,8 @@ function StartPage({ game, createGame, loadGame, history }) {
     localStorage.setItem("name", form.name);
     localStorage.setItem("room", form.room);
 
-    createGame(form.selection === "join" ? { id: form.room } : {}).then(
-      (game) => {
-        loadGame(game.id);
-      }
-    );
+    if (form.selection === "create") initializeGameAndAddPlayer();
+
     history.push("/WaitingRoom");
   }
 
@@ -81,12 +94,14 @@ StartPage.propTypes = {
 function mapStateToProps(state) {
   return {
     game: state.game,
+    player: state.player,
   };
 }
 
 const mapDispatchtoProps = {
   createGame,
   loadGame,
+  createPlayer,
 };
 
 export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);

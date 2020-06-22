@@ -7,8 +7,9 @@ export const createPlayerSuccess = (player) => {
 
 export function createPlayer(player) {
   return function (dispatch) {
-    return playerApi
-      .createPlayer(player)
-      .then((player) => dispatch(createPlayerSuccess(player)));
+    return playerApi.createPlayer(player).then((player) => {
+      dispatch(createPlayerSuccess(player));
+      return player;
+    });
   };
 }
