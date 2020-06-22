@@ -5,7 +5,7 @@ import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
 import { createGame, loadGame } from "../../redux/actions/gameActions";
-import { createPlayer } from "../../redux/actions/playerActions";
+import { createPlayer, loadPlayer } from "../../redux/actions/playerActions";
 import { connect } from "react-redux";
 
 function StartPage({
@@ -14,6 +14,7 @@ function StartPage({
   createGame,
   loadGame,
   createPlayer,
+  loadPlayer,
   history,
 }) {
   const [errors, setErrors] = useState({});
@@ -55,6 +56,7 @@ function StartPage({
     loadGame(_game.id);
 
     const _player = await createPlayer({ name: form.name, gameId: _game.id });
+    loadPlayer(_player.id);
   }
 
   function handleSubmit(event) {
@@ -102,6 +104,7 @@ const mapDispatchtoProps = {
   createGame,
   loadGame,
   createPlayer,
+  loadPlayer,
 };
 
 export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);
