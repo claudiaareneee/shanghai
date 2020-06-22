@@ -22,9 +22,7 @@ function WaitingRoomPage(props) {
       <h2>Room code: {room}</h2>
       <Row className="PlayerList justify-content-center">
         <Col md="auto" className="w-50">
-          <h4>Players</h4>
           <PlayerList />
-          <p>Waiting for others to join...</p>
           <Button className="float-right" onClick={handleClick}>
             {"Everybody's in!"}
           </Button>
