@@ -18,7 +18,7 @@ function WaitingRoomPage(props) {
   return (
     <div className="WaitingRoom">
       <Header />
-      <PlayerList onClick={handleClick} gameId={gameId} />
+      <PlayerList onClick={handleClick} gameId={room} />
     </div>
   );
 }
