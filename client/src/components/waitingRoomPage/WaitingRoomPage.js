@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Header from "../common/Header";
 import PlayerList from "./PlayerList";
 import PropTypes from "prop-types";
-import { Button, Col, Row } from "react-bootstrap";
 import "./WaitingRoomPage.css";
 
 function WaitingRoomPage(props) {
@@ -19,15 +18,7 @@ function WaitingRoomPage(props) {
   return (
     <div className="WaitingRoom">
       <Header />
-      <h2>Room code: {room}</h2>
-      <Row className="PlayerList justify-content-center">
-        <Col md="auto" className="w-50">
-          <PlayerList />
-          <Button className="float-right" onClick={handleClick}>
-            {"Everybody's in!"}
-          </Button>
-        </Col>
-      </Row>
+      <PlayerList onClick={handleClick} gameId={gameId} />
     </div>
   );
 }
