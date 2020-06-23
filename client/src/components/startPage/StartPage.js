@@ -51,6 +51,8 @@ function StartPage({ history }) {
 
     const _player = await playerApi.createPlayer(_game.id, { name: form.name });
     localStorage.setItem("uid", _player.id);
+
+    gameApi.addPlayerToGame(_game, _player.id);
   }
 
   async function handleSubmit(event) {

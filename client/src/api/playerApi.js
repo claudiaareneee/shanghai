@@ -42,7 +42,7 @@ export const getPlayerById = (playerId, gameId, onPlayerReceived) => {
   const player = firebase
     .database()
     .ref()
-    .child(playerBaseUrl + gameId + "/" + player.id);
+    .child(playerBaseUrl + gameId + "/" + playerId);
   player.on("value", function (snapshot) {
     if (snapshot.val() != null) onPlayerReceived(snapshot.val());
   });

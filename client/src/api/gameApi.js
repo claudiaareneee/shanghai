@@ -7,7 +7,6 @@ const database = firebase.database();
 
 const baseUrl = "/dev/";
 const gameBaseUrl = baseUrl + "games/";
-const playerBaseUrl = baseUrl + "players/";
 const discardBaseUrl = baseUrl + "discard/";
 const drawBaseUrl = baseUrl + "draw/";
 
