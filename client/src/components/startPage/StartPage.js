@@ -42,9 +42,6 @@ function StartPage({ history }) {
   }
 
   async function initializeGameAndAddPlayer() {
-    const _player = await playerApi.createPlayer({ name: form.name });
-    localStorage.setItem("uid", _player.id);
-
     const _game =
       form.selection === "join"
         ? await gameApi.updateGame({ id: form.room })
@@ -52,7 +49,9 @@ function StartPage({ history }) {
 
     localStorage.setItem("room", _game.id);
 
-    playerApi.updatePlayer({ ..._player, gameId: _game.id });
+    const _player = await playerApi.createPlayer(_game.id, { name: form.name });
+    localStorage.setItem("uid", _player.id);
+
     gameApi.addPlayerToGame(_game, _player.id);
   }
 

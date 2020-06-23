@@ -9,11 +9,11 @@ import * as playerApi from "../../api/playerApi";
 function WaitingRoomPage({ history }) {
   const [game, setGame] = useState({});
   const [players, setPlayers] = useState({
-    "-MAX5EqhMvTavxEUMqvB": {
-      gameId: "-MAX5Es7RMXLQ20afczh",
-      id: "-MAX5EqhMvTavxEUMqvB",
-      name: "Percy",
-    },
+    // "-MAX5EqhMvTavxEUMqvB": {
+    //   gameId: "-MAX5Es7RMXLQ20afczh",
+    //   id: "-MAX5EqhMvTavxEUMqvB",
+    //   name: "Percy",
+    // },
   });
   const [room] = useState(localStorage.getItem("room") || "");
 
@@ -23,23 +23,11 @@ function WaitingRoomPage({ history }) {
       gameApi.getGameById(localStorage.getItem("room"), (game) => {
         setGame(game);
       });
+    else
+      playerApi.getPlayers(game.id, (players) => {
+        setPlayers(players);
+      });
   }, [room, game]);
-
-  useEffect(() => {
-    console.log("players");
-    console.log(players);
-    // console.log(game.opponents);
-
-    for (let opponent in game.opponents) {
-      if (!players[opponent]) {
-        // console.log(game.opponents[opponent]);
-        playerApi.getPlayerById(game.opponents[opponent], (player) => {
-          console.log({ ...players, [player.id]: { ...player } });
-          setPlayers({ ...players, [player.id]: { ...player } });
-        });
-      }
-    }
-  }, [game.opponents]);
 
   function handleClick() {
     history.push("/play");

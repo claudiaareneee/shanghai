@@ -9,23 +9,40 @@ const playerBaseUrl = baseUrl + "players/";
 const cardsInHandBaseUrl = baseUrl + "cardsInHand/";
 const cardsOnTableBaseUrl = baseUrl + "cardsOnTable/";
 
-export const createPlayer = (player) => {
-  const newKey = database.ref().child(playerBaseUrl).push().key;
+export const createPlayer = (gameId, player) => {
+  const newKey = database.ref().child(playerBaseUrl).child(gameId).push().key;
   const newPlayer = { ...player, id: newKey };
 
   return database
-    .ref(playerBaseUrl + newKey)
+    .ref()
+    .child(playerBaseUrl + gameId + "/" + newKey)
     .set(newPlayer)
     .then(() => newPlayer)
     .catch(handleError);
 };
 
-export const updatePlayer = (player) => {
-  return database.ref(playerBaseUrl + player.id).update({ ...player });
+export const updatePlayer = (gameId, player) => {
+  return database
+    .ref()
+    .child(playerBaseUrl + gameId + "/" + player.id)
+    .update({ ...player });
 };
 
-export const getPlayerById = (id, onPlayerReceived) => {
-  const player = firebase.database().ref(playerBaseUrl + id);
+export const getPlayers = (gameId, onPlayersReceived) => {
+  const player = firebase
+    .database()
+    .ref()
+    .child(playerBaseUrl + gameId);
+  player.on("value", function (snapshot) {
+    if (snapshot.val() != null) onPlayersReceived(snapshot.val());
+  });
+};
+
+export const getPlayerById = (playerId, gameId, onPlayerReceived) => {
+  const player = firebase
+    .database()
+    .ref()
+    .child(playerBaseUrl + gameId + "/" + player.id);
   player.on("value", function (snapshot) {
     if (snapshot.val() != null) onPlayerReceived(snapshot.val());
   });
