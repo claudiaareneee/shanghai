@@ -13,6 +13,10 @@ export const updatePlayerSucces = (player) => {
   return { type: types.UPDATE_PLAYER_SUCCESS, player };
 };
 
+export const updateOpponentPlayers = (opponents) => {
+  return { type: types.UPDATE_OPPONENT_PLAYERS, opponents };
+};
+
 export function createPlayer(player) {
   return function (dispatch) {
     return playerApi.createPlayer(player).then((player) => {
