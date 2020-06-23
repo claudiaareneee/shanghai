@@ -11,6 +11,12 @@ export const setDeal = (game, numberOfDecks) => {
       game.opponents[playerId],
       deal.players[playerId]
     );
+
+    playerApi.updatePlayer(game.id, {
+      id: game.opponents[playerId],
+      score: 0,
+      numberOfRemainingCards: 11,
+    });
   }
 
   gameApi.setDraw(game.id, deal.draw);

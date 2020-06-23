@@ -2,6 +2,7 @@ import React from "react";
 import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
+import CardPlaceholder from "./CardPlaceholder";
 
 function CardDiscard({ cards, source, onCardClicked }) {
   const containerHeight = constants.CARD_WIDTH + constants.CARD_HEIGHT;
@@ -19,18 +20,22 @@ function CardDiscard({ cards, source, onCardClicked }) {
 
   return (
     <div style={style}>
-      {cards.map((card) => (
-        <PlayingCard
-          key={card.id}
-          id={card.id}
-          yTranslation={0.5 * constants.CARD_WIDTH}
-          xTranslation={0.5 * constants.CARD_WIDTH}
-          rotation={card.rotation}
-          transformOrigin="0% 50%"
-          source={source}
-          onCardClicked={onCardClicked}
-        />
-      ))}
+      {cards.length > 0 ? (
+        cards.map((card) => (
+          <PlayingCard
+            key={card.id}
+            id={card.id}
+            yTranslation={0.5 * constants.CARD_WIDTH}
+            xTranslation={0.5 * constants.CARD_WIDTH}
+            rotation={card.rotation}
+            transformOrigin="0% 50%"
+            source={source}
+            onCardClicked={onCardClicked}
+          />
+        ))
+      ) : (
+        <CardPlaceholder />
+      )}
     </div>
   );
 }

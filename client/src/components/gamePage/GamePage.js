@@ -1,7 +1,7 @@
 // import React, { useState, useEffect } from "react";
-import React from "react";
-// import { getGameById } from "../../api/gameApi";
-// import { getPlayerById } from "../../api/playerApi";
+import React, { useEffect, useState } from "react";
+import * as gameApi from "../../api/gameApi";
+import * as playerApi from "../../api/playerApi";
 import "./GamePage.css";
 import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
@@ -58,20 +58,53 @@ function getDiscard(cards) {
 }
 
 function GamePage() {
+  const [game, setGame] = useState({});
+  const [players, setPlayers] = useState({});
+  const [discard, setDiscard] = useState([]);
+  const [discardStyles, setDiscardStyles] = useState([]);
+  const room = localStorage.getItem("room") || "";
+  const player = localStorage.getItem("uid") || "";
+
+  useEffect(() => {
+    console.log(game);
+    if (!game.id)
+      gameApi.getGameById(room, (game) => {
+        setGame(game);
+      });
+    else {
+      playerApi.getPlayers(game.id, (players) => {
+        setPlayers(players);
+      });
+      gameApi.getDiscard(game.id, (discard) => {
+        setDiscard(
+          discard.map((card, index) =>
+            discard[index].rotation
+              ? { id: card }
+              : { id: card, rotation: Math.random() * 360 }
+          )
+        );
+      });
+    }
+  }, [game]);
+
+  useEffect(() => {
+    setDiscardStyles(discard.map((card) => {}));
+  }, [discard]);
+
   return (
     <div className="GamePage">
       <Row>
         <Col>
           <CardTable
-            discard={getDiscard([...Array(17).keys()])}
+            discard={discard || []}
             numberOfDrawCards={30}
             playerCards={[...Array(17).keys()]}
           />
         </Col>
 
-        <Col className="SidebarCol" xs lg="5">
+        {/* <Col className="SidebarCol" xs lg="5">
           <Sidebar players={players} />
-        </Col>
+        </Col> */}
       </Row>
     </div>
   );

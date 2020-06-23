@@ -56,7 +56,7 @@ export const getDiscard = (gameId, onDiscardReceived) => {
   const discard = firebase.database().ref(discardBaseUrl + gameId);
   discard.on("value", function (snapshot) {
     // if (snapshot.val() != null) onDiscardReceived(snapshot.val());
-    onDiscardReceived(tools.snapshotToArray(snapshot.val()));
+    onDiscardReceived(snapshot.val());
   });
 };
 
