@@ -7,12 +7,15 @@ import { connect } from "react-redux";
 import { loadPlayer } from "../../redux/actions/playerActions";
 import { loadGame } from "../../redux/actions/gameActions";
 
-function WaitingRoomPage({ game, player, loadGame, loadPlayer, history }) {
+function WaitingRoomPage({ game, players, loadGame, loadPlayer, history }) {
   const [room] = useState(localStorage.getItem("room") || "");
 
   useEffect(() => {
+    const playerId = localStorage.getItem("uid");
+
+    if (!players[playerId]) loadPlayer(localStorage.getItem("uid"));
     if (!game.id) loadGame(localStorage.getItem("room"));
-    if (!player.id) loadPlayer(localStorage.getItem("uid"));
+
     localStorage.getItem("room");
   }, [room]);
 
@@ -35,7 +38,7 @@ WaitingRoomPage.propTypes = {
 function mapStateToProps(state) {
   return {
     game: state.game,
-    player: state.player,
+    players: state.players,
   };
 }
 
