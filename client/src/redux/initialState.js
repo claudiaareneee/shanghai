@@ -1,4 +1,4 @@
 export default {
   game: {},
-  player: {},
+  players: {},
 };

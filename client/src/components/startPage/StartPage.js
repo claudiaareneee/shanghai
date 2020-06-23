@@ -19,7 +19,7 @@ import {
 
 function StartPage({
   game,
-  player,
+  players,
   updateGame,
   createGame,
   loadGame,
@@ -113,7 +113,7 @@ StartPage.propTypes = {
 function mapStateToProps(state) {
   return {
     game: state.game,
-    player: state.player,
+    players: state.player,
   };
 }
 
