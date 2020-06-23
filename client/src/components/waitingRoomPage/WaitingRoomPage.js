@@ -3,21 +3,43 @@ import Header from "../common/Header";
 import PlayerList from "./PlayerList";
 import PropTypes from "prop-types";
 import "./WaitingRoomPage.css";
-import { connect } from "react-redux";
-import { loadPlayer } from "../../redux/actions/playerActions";
-import { loadGame } from "../../redux/actions/gameActions";
+import * as gameApi from "../../api/gameApi";
+import * as playerApi from "../../api/playerApi";
 
-function WaitingRoomPage({ game, players, loadGame, loadPlayer, history }) {
+function WaitingRoomPage({ history }) {
+  const [game, setGame] = useState({});
+  const [players, setPlayers] = useState({
+    "-MAX5EqhMvTavxEUMqvB": {
+      gameId: "-MAX5Es7RMXLQ20afczh",
+      id: "-MAX5EqhMvTavxEUMqvB",
+      name: "Percy",
+    },
+  });
   const [room] = useState(localStorage.getItem("room") || "");
 
   useEffect(() => {
-    const playerId = localStorage.getItem("uid");
+    console.log(game);
+    if (!game.id)
+      gameApi.getGameById(localStorage.getItem("room"), (game) => {
+        setGame(game);
+      });
+  }, [room, game]);
 
-    if (!players[playerId]) loadPlayer(localStorage.getItem("uid"));
-    if (!game.id) loadGame(localStorage.getItem("room"));
+  useEffect(() => {
+    console.log("players");
+    console.log(players);
+    // console.log(game.opponents);
 
-    localStorage.getItem("room");
-  }, [room]);
+    for (let opponent in game.opponents) {
+      if (!players[opponent]) {
+        // console.log(game.opponents[opponent]);
+        playerApi.getPlayerById(game.opponents[opponent], (player) => {
+          console.log({ ...players, [player.id]: { ...player } });
+          setPlayers({ ...players, [player.id]: { ...player } });
+        });
+      }
+    }
+  }, [game.opponents]);
 
   function handleClick() {
     history.push("/play");
@@ -26,7 +48,11 @@ function WaitingRoomPage({ game, players, loadGame, loadPlayer, history }) {
   return (
     <div className="WaitingRoom">
       <Header />
-      <PlayerList onClick={handleClick} gameId={room || "loading ..."} />
+      <PlayerList
+        players={players}
+        onClick={handleClick}
+        gameId={room || "loading ..."}
+      />
     </div>
   );
 }
@@ -35,16 +61,4 @@ WaitingRoomPage.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    game: state.game,
-    players: state.players,
-  };
-}
-
-const mapDispatchtoProps = {
-  loadGame,
-  loadPlayer,
-};
-
-export default connect(mapStateToProps, mapDispatchtoProps)(WaitingRoomPage);
+export default WaitingRoomPage;

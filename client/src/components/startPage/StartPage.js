@@ -4,31 +4,10 @@ import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import {
-  updateGame,
-  createGame,
-  loadGame,
-  addPlayerToGame,
-} from "../../redux/actions/gameActions";
-import {
-  createPlayer,
-  loadPlayer,
-  updatePlayer,
-} from "../../redux/actions/playerActions";
+import * as gameApi from "../../api/gameApi";
+import * as playerApi from "../../api/playerApi";
 
-function StartPage({
-  game,
-  players,
-  updateGame,
-  createGame,
-  loadGame,
-  createPlayer,
-  loadPlayer,
-  addPlayerToGame,
-  updatePlayer,
-  history,
-}) {
+function StartPage({ history }) {
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
     name: localStorage.getItem("name") || "",
@@ -63,27 +42,26 @@ function StartPage({
   }
 
   async function initializeGameAndAddPlayer() {
-    const _player = await createPlayer({ name: form.name });
-    loadPlayer(_player.id);
+    const _player = await playerApi.createPlayer({ name: form.name });
     localStorage.setItem("uid", _player.id);
 
     const _game =
       form.selection === "join"
-        ? await updateGame({ id: form.room })
-        : await createGame({});
+        ? await gameApi.updateGame({ id: form.room })
+        : await gameApi.createGame({});
 
-    loadGame(_game.id);
     localStorage.setItem("room", _game.id);
 
-    updatePlayer({ ..._player, gameId: _game.id });
-    addPlayerToGame(_game, _player.id);
+    playerApi.updatePlayer({ ..._player, gameId: _game.id });
+    gameApi.addPlayerToGame(_game, _player.id);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
 
-    initializeGameAndAddPlayer();
+    localStorage.setItem("name", form.name);
+    await initializeGameAndAddPlayer();
 
     history.push("/WaitingRoom");
   }
@@ -110,21 +88,4 @@ StartPage.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    game: state.game,
-    players: state.player,
-  };
-}
-
-const mapDispatchtoProps = {
-  createGame,
-  updateGame,
-  loadGame,
-  createPlayer,
-  loadPlayer,
-  addPlayerToGame,
-  updatePlayer,
-};
-
-export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);
+export default StartPage;

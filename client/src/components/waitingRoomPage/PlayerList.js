@@ -12,9 +12,9 @@ function PlayerList({ players, onClick, gameId }) {
         <Col md="auto" className="w-50">
           <h4>Players</h4>
           <ListGroup>
-            {players.map((player) => (
-              <ListGroup.Item key={player.name} variant="info">
-                {player.name}
+            {Object.keys(players).map((key) => (
+              <ListGroup.Item key={key} variant="info">
+                {players[key].name}
               </ListGroup.Item>
             ))}
           </ListGroup>
