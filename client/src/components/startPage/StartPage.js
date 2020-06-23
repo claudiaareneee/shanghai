@@ -4,27 +4,48 @@ import GameForm from "./GameForm";
 import StartSelection from "./StartSelection";
 import Header from "../common/Header";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import {
+  updateGame,
+  createGame,
+  loadGame,
+  addPlayerToGame,
+} from "../../redux/actions/gameActions";
+import {
+  createPlayer,
+  loadPlayer,
+  updatePlayer,
+} from "../../redux/actions/playerActions";
 
-function StartPage(props) {
+function StartPage({
+  game,
+  player,
+  updateGame,
+  createGame,
+  loadGame,
+  createPlayer,
+  loadPlayer,
+  addPlayerToGame,
+  updatePlayer,
+  history,
+}) {
   const [errors, setErrors] = useState({});
-  const [game, setGame] = useState({
+  const [form, setForm] = useState({
     name: localStorage.getItem("name") || "",
     room: localStorage.getItem("room") || "",
     selection: "",
   });
 
   function handleChange({ target }) {
-    setGame({
-      ...game,
+    setForm({
+      ...form,
       [target.name]: target.value,
     });
-
-    localStorage.setItem(target.name, target.value);
   }
 
   function handleSelection({ target }) {
-    setGame({
-      ...game,
+    setForm({
+      ...form,
       selection: target.value,
     });
   }
@@ -32,8 +53,8 @@ function StartPage(props) {
   function formIsValid() {
     const _errors = {};
 
-    if (!game.name) _errors.name = "Name is required";
-    if (game.selection === "join" && !game.room)
+    if (!form.name) _errors.name = "Name is required";
+    if (form.selection === "join" && !form.room)
       _errors.room = "Room is required";
 
     setErrors(_errors);
@@ -41,22 +62,41 @@ function StartPage(props) {
     return Object.keys(_errors).length === 0;
   }
 
+  async function initializeGameAndAddPlayer() {
+    const _player = await createPlayer({ name: form.name });
+    loadPlayer(_player.id);
+    localStorage.setItem("uid", _player.id);
+
+    const _game =
+      form.selection === "join"
+        ? await updateGame({ id: form.room })
+        : await createGame({});
+
+    loadGame(_game.id);
+    localStorage.setItem("room", _game.id);
+
+    updatePlayer({ ..._player, gameId: _game.id });
+    addPlayerToGame(_game, _player.id);
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
 
-    props.history.push("/WaitingRoom");
+    initializeGameAndAddPlayer();
+
+    history.push("/WaitingRoom");
   }
 
   return (
     <div className="">
       <Header />
       <div className="d-flex justify-content-center">
-        <div className="GameSelection">
+        <div className="FormSelection">
           <StartSelection onSelection={handleSelection} />
           <GameForm
             errors={errors}
-            game={game}
+            form={form}
             onChange={handleChange}
             onSubmit={handleSubmit}
           />
@@ -67,7 +107,24 @@ function StartPage(props) {
 }
 
 StartPage.propTypes = {
-  history: PropTypes.array.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
-export default StartPage;
+function mapStateToProps(state) {
+  return {
+    game: state.game,
+    player: state.player,
+  };
+}
+
+const mapDispatchtoProps = {
+  createGame,
+  updateGame,
+  loadGame,
+  createPlayer,
+  loadPlayer,
+  addPlayerToGame,
+  updatePlayer,
+};
+
+export default connect(mapStateToProps, mapDispatchtoProps)(StartPage);

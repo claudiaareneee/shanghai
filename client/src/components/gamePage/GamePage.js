@@ -58,29 +58,6 @@ function getDiscard(cards) {
 }
 
 function GamePage() {
-  // const [game, setGame] = useState({
-  //   draw: [],
-  //   players: [],
-  // });
-
-  // const [player, setPlayer] = useState({ cards: [] });
-
-  // useEffect(() => {
-  //   getGameById(23421)
-  //     .then((_game) => {
-  //       setGame({ ..._game, discard: getDiscard });
-  //     })
-  //     .catch((error) => {});
-  // }, []);
-
-  // useEffect(() => {
-  //   getPlayerById(43521).then((_player) => setPlayer(_player));
-  // }, []);
-
-  // function handleCardClicked({ target }) {
-  //   debugger;
-  // }
-
   return (
     <div className="GamePage">
       <Row>

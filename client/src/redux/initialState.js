@@ -1,4 +1,4 @@
 export default {
-  courses: [],
-  apiCallsInProgress: 0,
+  game: {},
+  player: {},
 };
