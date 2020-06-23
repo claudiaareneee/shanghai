@@ -61,7 +61,7 @@ function GamePage() {
   const [game, setGame] = useState({});
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
-  const [discardStyles, setDiscardStyles] = useState([]);
+  const [cardsInHand, setCardsInHand] = useState([]);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -75,6 +75,9 @@ function GamePage() {
       playerApi.getPlayers(game.id, (players) => {
         setPlayers(players);
       });
+      playerApi.getPlayerCardsInHandById(player, (players) => {
+        setCardsInHand(players);
+      });
       gameApi.getDiscard(game.id, (discard) => {
         setDiscard(
           discard.map((card, index) =>
@@ -87,10 +90,6 @@ function GamePage() {
     }
   }, [game]);
 
-  useEffect(() => {
-    setDiscardStyles(discard.map((card) => {}));
-  }, [discard]);
-
   return (
     <div className="GamePage">
       <Row>
@@ -98,7 +97,7 @@ function GamePage() {
           <CardTable
             discard={discard || []}
             numberOfDrawCards={30}
-            playerCards={[...Array(17).keys()]}
+            playerCards={cardsInHand}
           />
         </Col>
 
