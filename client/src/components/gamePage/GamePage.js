@@ -39,6 +39,11 @@ function GamePage() {
     }
   }, [room, game, player]);
 
+  function handleDropdownClicked(playerId) {
+    const showCards = players[playerId].showCards ? false : true;
+    setPlayers({ ...players, [playerId]: { ...players[playerId], showCards } });
+  }
+
   return (
     <div className="GamePage">
       <Row>
@@ -55,7 +60,10 @@ function GamePage() {
         </Col>
 
         <Col className="SidebarCol" xs lg="5">
-          <Sidebar players={players} />
+          <Sidebar
+            players={players}
+            onDropdownClicked={handleDropdownClicked}
+          />
         </Col>
       </Row>
     </div>

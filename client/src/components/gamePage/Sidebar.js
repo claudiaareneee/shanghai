@@ -3,15 +3,16 @@ import "./Sidebar.css";
 import PropTypes from "prop-types";
 import PlayerBucket from "./PlayerBucket";
 
-function Sidebar({ players, onCardClicked }) {
+function Sidebar({ players, onCardClicked, onDropdownClicked }) {
   return (
     <div className="Sidebar">
       <h3 className="Title">Players</h3>
       {Object.keys(players).map((key) => (
         <PlayerBucket
-          key={players[key].id}
+          key={key}
           player={players[key]}
           onCardClicked={onCardClicked}
+          onDropdownClicked={onDropdownClicked}
         />
       ))}
     </div>
@@ -21,10 +22,12 @@ function Sidebar({ players, onCardClicked }) {
 Sidebar.propTypes = {
   players: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func,
+  onDropdownClicked: PropTypes.func,
 };
 
 Sidebar.defaultProps = {
   onCardClicked: () => {},
+  onDropdownClickedL: () => {},
 };
 
 export default Sidebar;
