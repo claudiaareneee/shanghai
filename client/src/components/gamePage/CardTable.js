@@ -14,7 +14,6 @@ function CardTable({
   hand,
   numberOfBuys,
 }) {
-  console.log(numberOfBuys);
   return (
     <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
@@ -57,7 +56,12 @@ function CardTable({
         />
       </Row>
 
-      <Buys numberOfBuys={numberOfBuys} />
+      <Buys
+        numberOfBuys={numberOfBuys}
+        onClick={() => {
+          console.log("BUYY!");
+        }}
+      />
     </div>
   );
 }

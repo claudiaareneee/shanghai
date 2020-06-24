@@ -14,7 +14,6 @@ function WaitingRoomPage({ history }) {
   const [room] = useState(localStorage.getItem("room") || "");
 
   useEffect(() => {
-    console.log(game);
     if (!game.id)
       gameApi.getGameById(localStorage.getItem("room"), (game) => {
         setGame(game);

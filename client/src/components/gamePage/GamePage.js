@@ -16,7 +16,6 @@ function GamePage() {
   const player = localStorage.getItem("uid") || "";
 
   useEffect(() => {
-    console.log(game);
     if (!game.id)
       gameApi.getGameById(room, (game) => {
         setGame(game);
@@ -38,7 +37,7 @@ function GamePage() {
         );
       });
     }
-  }, [game]);
+  }, [room, game, player]);
 
   return (
     <div className="GamePage">

@@ -1,7 +1,8 @@
 import React from "react";
 import { Button, Row } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-function Buys({ numberOfBuys }) {
+function Buys({ numberOfBuys, onClick }) {
   return (
     <>
       <Row>
@@ -14,6 +15,7 @@ function Buys({ numberOfBuys }) {
               variant="outline-success"
               size="lg"
               key={key}
+              onClick={onClick}
               style={{ marginRight: ".5rem" }}
             >
               $$$
@@ -25,6 +27,7 @@ function Buys({ numberOfBuys }) {
               disabled={true}
               variant="outline-success"
               size="lg"
+              onClick={onClick}
               style={{ marginRight: ".5rem" }}
             >
               $$$
@@ -41,5 +44,10 @@ function Buys({ numberOfBuys }) {
     </>
   );
 }
+
+Buys.propTypes = {
+  numberOfBuys: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
+};
 
 export default Buys;
