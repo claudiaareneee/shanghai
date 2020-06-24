@@ -12,6 +12,7 @@ function PlayingCard({
   transformOrigin,
   source,
   onCardClicked,
+  onCardHovered,
 }) {
   const style = {
     WebkitTransition: "all", // note the capital 'W' here
@@ -19,6 +20,7 @@ function PlayingCard({
     height: `${constants.CARD_HEIGHT}`,
     transformOrigin: `${transformOrigin}`,
     transform: `translateX(${xTranslation}rem) translateY(${yTranslation}rem) rotate(${rotation}deg) `,
+    cursor: "pointer",
   };
 
   const src =
@@ -28,6 +30,12 @@ function PlayingCard({
       ? CardSources.backs[Math.floor(id / 54)]
       : CardSources.fronts[id % 54];
 
+  // const changeHighlight = ({ target }) => {
+  //   target.style.boxShaddow = "0rem 0rem 1rem red";
+  //   console.log("mouse over");
+  //   console.log(target.id);
+  // };
+
   return (
     <div className="PlayingCard" style={style}>
       <img
@@ -36,6 +44,7 @@ function PlayingCard({
         src={src}
         alt={id}
         onClick={onCardClicked}
+        onMouseOver={onCardHovered}
       />
     </div>
   );
@@ -49,6 +58,7 @@ PlayingCard.propTypes = {
   transformOrigin: PropTypes.string,
   source: PropTypes.string,
   onCardClicked: PropTypes.func,
+  onCardHovered: PropTypes.func,
 };
 
 PlayingCard.defaultProps = {
@@ -59,6 +69,7 @@ PlayingCard.defaultProps = {
   transformOrigin: "0% 0%",
   source: "front",
   onCardClicked: () => {},
+  onCardHovered: () => {},
 };
 
 export default PlayingCard;

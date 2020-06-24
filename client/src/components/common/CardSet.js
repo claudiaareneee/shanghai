@@ -3,7 +3,7 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardSet({ cards, source, onCardClicked }) {
+function CardSet({ cards, source, onCardClicked, onCardHovered }) {
   const offset = -1 * Math.floor(cards.length / 2.0);
   const containerHeight =
     0.5 * constants.CARD_WIDTH + constants.CARD_HEIGHT + 1;
@@ -31,6 +31,7 @@ function CardSet({ cards, source, onCardClicked }) {
           transformOrigin="50% 100%"
           source={source}
           onCardClicked={onCardClicked}
+          onCardHovered={onCardHovered}
         />
       ))}
     </div>
@@ -40,12 +41,14 @@ function CardSet({ cards, source, onCardClicked }) {
 CardSet.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: PropTypes.func,
+  onCardHovered: PropTypes.func,
   source: PropTypes.string,
 };
 
 CardSet.defaultProps = {
   cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: () => {},
+  onCardHovered: () => {},
   source: "front",
 };
 

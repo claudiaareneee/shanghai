@@ -50,8 +50,13 @@ function CardTable({
         <CardSet
           cards={playerCards}
           source="front"
-          onCardClicked={() => {
-            console.log("yay!");
+          onCardClicked={({ target }) => {
+            console.log("clicked");
+            console.log(target.id);
+          }}
+          onCardHovered={({ target }) => {
+            console.log("Hovered");
+            console.log(target.id);
           }}
         />
       </Row>
