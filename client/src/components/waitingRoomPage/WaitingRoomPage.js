@@ -3,30 +3,49 @@ import Header from "../common/Header";
 import PlayerList from "./PlayerList";
 import PropTypes from "prop-types";
 import "./WaitingRoomPage.css";
-import { connect } from "react-redux";
-import { loadPlayer } from "../../redux/actions/playerActions";
-import { loadGame } from "../../redux/actions/gameActions";
+import * as baseApi from "../../api/baseApi";
+import * as gameApi from "../../api/gameApi";
+import * as playerApi from "../../api/playerApi";
 
-function WaitingRoomPage({ game, players, loadGame, loadPlayer, history }) {
+function WaitingRoomPage({ history }) {
+  const [numberOfDecks, setNumberOfDecks] = useState("2");
+  const [game, setGame] = useState({});
+  const [players, setPlayers] = useState({});
   const [room] = useState(localStorage.getItem("room") || "");
 
   useEffect(() => {
-    const playerId = localStorage.getItem("uid");
+    if (!game.id)
+      gameApi.getGameById(localStorage.getItem("room"), (game) => {
+        setGame(game);
+      });
+    else
+      playerApi.getPlayers(game.id, (players) => {
+        setPlayers(players);
+      });
+  }, [room, game]);
 
-    if (!players[playerId]) loadPlayer(localStorage.getItem("uid"));
-    if (!game.id) loadGame(localStorage.getItem("room"));
+  function handleClick(event) {
+    event.preventDefault();
+    if (numberOfDecks !== "") {
+      baseApi.setDeal(game, numberOfDecks);
+      history.push("/play");
+    }
+  }
 
-    localStorage.getItem("room");
-  }, [room]);
-
-  function handleClick() {
-    history.push("/play");
+  function handleChange({ target }) {
+    setNumberOfDecks(target.value);
   }
 
   return (
     <div className="WaitingRoom">
       <Header />
-      <PlayerList onClick={handleClick} gameId={room || "loading ..."} />
+      <PlayerList
+        players={players}
+        numberOfDecks={numberOfDecks}
+        onClick={handleClick}
+        onChange={handleChange}
+        gameId={room || "loading ..."}
+      />
     </div>
   );
 }
@@ -35,16 +54,4 @@ WaitingRoomPage.propTypes = {
   history: PropTypes.object.isRequired,
 };
 
-function mapStateToProps(state) {
-  return {
-    game: state.game,
-    players: state.players,
-  };
-}
-
-const mapDispatchtoProps = {
-  loadGame,
-  loadPlayer,
-};
-
-export default connect(mapStateToProps, mapDispatchtoProps)(WaitingRoomPage);
+export default WaitingRoomPage;

@@ -1,5 +1,4 @@
 import firebase from "./firebase.config";
-import * as tools from "../tools";
 import { handleError } from "./apiUtils";
 import "firebase/database";
 
@@ -56,7 +55,7 @@ export const getDiscard = (gameId, onDiscardReceived) => {
   const discard = firebase.database().ref(discardBaseUrl + gameId);
   discard.on("value", function (snapshot) {
     // if (snapshot.val() != null) onDiscardReceived(snapshot.val());
-    onDiscardReceived(tools.snapshotToArray(snapshot.val()));
+    onDiscardReceived(snapshot.val());
   });
 };
 

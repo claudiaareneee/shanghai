@@ -4,7 +4,7 @@ import "./PlayerList.css";
 import PropTypes from "prop-types";
 import { Button, Col, Row } from "react-bootstrap";
 
-function PlayerList({ players, onClick, gameId }) {
+function PlayerList({ players, onClick, gameId, numberOfDecks, onChange }) {
   return (
     <>
       <h2>Room code: {gameId}</h2>
@@ -12,16 +12,33 @@ function PlayerList({ players, onClick, gameId }) {
         <Col md="auto" className="w-50">
           <h4>Players</h4>
           <ListGroup>
-            {players.map((player) => (
-              <ListGroup.Item key={player.name} variant="info">
-                {player.name}
+            {Object.keys(players).map((key) => (
+              <ListGroup.Item key={key} variant="info">
+                {players[key].name}
               </ListGroup.Item>
             ))}
           </ListGroup>
           <p>Waiting for others to join...</p>
-          <Button className="float-right" onClick={onClick}>
-            {"Everybody's in!"}
-          </Button>
+          <form onSubmit={onClick}>
+            <div className="form-group row">
+              <label htmlFor="numberOfDecks" className="col-sm">
+                Number of decks
+              </label>
+              <div className="col-sm">
+                <input
+                  id="numberOfDecks"
+                  type="number"
+                  className="form-control"
+                  value={numberOfDecks}
+                  placeholder="number of decks"
+                  onChange={onChange}
+                />
+              </div>
+            </div>
+            <Button type="submit" className="float-right">
+              {"Everybody's in!"}
+            </Button>
+          </form>
         </Col>
       </Row>
     </>
@@ -31,11 +48,11 @@ function PlayerList({ players, onClick, gameId }) {
 PlayerList.propTypes = {
   gameId: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
-  players: PropTypes.array,
+  players: PropTypes.object,
 };
 
 PlayerList.defaultProps = {
-  players: [],
+  players: {},
 };
 
 export default PlayerList;

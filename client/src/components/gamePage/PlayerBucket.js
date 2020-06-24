@@ -5,7 +5,7 @@ import CardPlaceholder from "../common/CardPlaceholder";
 import { Row, Col, Container } from "react-bootstrap";
 import "./PlayerBucket.css";
 
-function CardsPlayed({ cards, onCardClicked }) {
+function CardsPlayed({ cards = [], onCardClicked }) {
   return cards.length === 0 ? (
     <div className="cards">
       <CardPlaceholder source={"placeholder"} />
@@ -32,7 +32,7 @@ CardsPlayed.propTypes = {
   onCardClicked: PropTypes.func.isRequired,
 };
 
-function PlayerBucket({ player, onCardClicked }) {
+function PlayerBucket({ player, onCardClicked, onDropdownClicked }) {
   return (
     <Container>
       <Row className="player">
@@ -45,14 +45,23 @@ function PlayerBucket({ player, onCardClicked }) {
         </Col>
         <Col xs lg={2}>
           {player.showCards ? (
-            <i className="fas fa-lg fa-chevron-circle-up"></i>
+            <i
+              className="fas fa-lg fa-chevron-circle-up"
+              onClick={() => onDropdownClicked(player.id)}
+            ></i>
           ) : (
-            <i className="fas fa-lg fa-chevron-circle-down"></i>
+            <i
+              className="fas fa-lg fa-chevron-circle-down"
+              onClick={() => onDropdownClicked(player.id)}
+            ></i>
           )}
         </Col>
       </Row>
       {player.showCards ? (
-        <CardsPlayed cards={player.cards} onCardClicked={onCardClicked} />
+        <CardsPlayed
+          cards={player.cards}
+          onCardClicked={() => onCardClicked(player.id)}
+        />
       ) : (
         <></>
       )}
@@ -63,6 +72,7 @@ function PlayerBucket({ player, onCardClicked }) {
 PlayerBucket.propTypes = {
   player: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func.isRequired,
+  onDropdownClicked: PropTypes.func.isRequired,
 };
 
 export default PlayerBucket;

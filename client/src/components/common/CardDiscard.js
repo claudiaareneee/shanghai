@@ -19,6 +19,15 @@ function CardDiscard({ cards, source, onCardClicked }) {
 
   return (
     <div style={style}>
+      <PlayingCard
+        id={0}
+        yTranslation={0.5 * constants.CARD_WIDTH}
+        // xTranslation={0.5 * constants.CARD_WIDTH}
+        rotation={0}
+        transformOrigin="0% 50%"
+        source={"placeholder"}
+        onCardClicked={onCardClicked}
+      />
       {cards.map((card) => (
         <PlayingCard
           key={card.id}

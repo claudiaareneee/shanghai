@@ -36,7 +36,7 @@ export const shuffle = (deck) => {
 
 export function dealCards(opponents, numberOfDecks) {
   const deck = [...shuffle([...Array(54 * numberOfDecks).keys()])];
-  const deal = {};
+  const deal = { players: {}, draw: [] };
 
   for (let playerId in opponents) deal.players[playerId] = deck.splice(0, 11);
 
