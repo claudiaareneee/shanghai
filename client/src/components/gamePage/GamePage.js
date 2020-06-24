@@ -28,13 +28,14 @@ function GamePage() {
         setCardsInHand(players);
       });
       gameApi.getDiscard(game.id, (discard) => {
-        setDiscard(
-          discard.map((card, index) =>
-            discard[index].rotation
-              ? { id: card }
-              : { id: card, rotation: Math.random() * 360 }
-          )
-        );
+        if (discard)
+          setDiscard(
+            discard.map((card, index) =>
+              discard[index].rotation
+                ? { id: card }
+                : { id: card, rotation: Math.random() * 360 }
+            )
+          );
       });
     }
   }, [room, game, player]);
