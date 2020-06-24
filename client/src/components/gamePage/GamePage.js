@@ -98,6 +98,7 @@ function GamePage() {
             discard={discard || []}
             numberOfDrawCards={30}
             playerCards={cardsInHand}
+            hand={game.hand || { books: 0, runs: 0 }}
           />
         </Col>
 

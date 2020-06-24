@@ -23,7 +23,7 @@ function CardDiscard({ cards, source, onCardClicked }) {
       <PlayingCard
         id={0}
         yTranslation={0.5 * constants.CARD_WIDTH}
-        xTranslation={0.5 * constants.CARD_WIDTH}
+        // xTranslation={0.5 * constants.CARD_WIDTH}
         rotation={0}
         transformOrigin="0% 50%"
         source={"placeholder"}

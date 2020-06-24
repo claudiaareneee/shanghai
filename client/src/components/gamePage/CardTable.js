@@ -6,12 +6,14 @@ import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
 import CardStack from "../common/CardStack";
 
-function CardTable({ discard, numberOfDrawCards, playerCards }) {
+function CardTable({ discard, numberOfDrawCards, playerCards, hand }) {
   return (
     <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
         <Col>
-          <h5>Hand: 1 run, 2 books</h5>
+          <h5>
+            Hand: {hand.books} books, {hand.runs} runs
+          </h5>
         </Col>
       </Row>
       <Row className="PilesBlock">
@@ -58,6 +60,7 @@ CardTable.propTypes = {
   discard: PropTypes.array.isRequired,
   numberOfDrawCards: PropTypes.number.isRequired,
   playerCards: PropTypes.array.isRequired,
+  hand: PropTypes.object.isRequired,
 };
 
 CardTable.defaultProps = {
