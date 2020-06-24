@@ -15,6 +15,7 @@ export const setDeal = (game, numberOfDecks) => {
     playerApi.updatePlayer(game.id, {
       id: game.opponents[playerId],
       score: 0,
+      buys: 3,
       numberOfRemainingCards: 11,
     });
   }

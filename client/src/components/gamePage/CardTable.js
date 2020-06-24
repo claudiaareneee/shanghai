@@ -5,14 +5,24 @@ import PropTypes from "prop-types";
 import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
 import CardStack from "../common/CardStack";
+import Buys from "./Buys";
 
-function CardTable({ discard, numberOfDrawCards, playerCards, hand }) {
+function CardTable({
+  discard,
+  numberOfDrawCards,
+  playerCards,
+  hand,
+  numberOfBuys,
+}) {
+  console.log(numberOfBuys);
   return (
     <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
         <Col>
           <h5>
-            Hand: {hand.books} books, {hand.runs} runs
+            Hand: {hand.books}{" "}
+            {parseInt(hand.books, 10) === 1 ? "book" : "books"}, {hand.runs}{" "}
+            {parseInt(hand.runs, 10) === 1 ? "run" : "runs"}
           </h5>
         </Col>
       </Row>
@@ -47,11 +57,7 @@ function CardTable({ discard, numberOfDrawCards, playerCards, hand }) {
         />
       </Row>
 
-      <Row className="BuyBlock">
-        <Button variant="outline-success" size="lg">
-          BUYYY
-        </Button>
-      </Row>
+      <Buys numberOfBuys={numberOfBuys} />
     </div>
   );
 }
