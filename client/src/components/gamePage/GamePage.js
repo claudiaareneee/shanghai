@@ -37,6 +37,7 @@ function GamePage() {
             )
           );
       });
+      console.log(game.numberOfDrawCards);
     }
   }, [room, game, player]);
 
@@ -51,7 +52,13 @@ function GamePage() {
         <Col>
           <CardTable
             discard={discard || []}
-            numberOfDrawCards={30}
+            numberOfDrawCards={
+              !game.numberOfDrawCards
+                ? 0
+                : game.numberOfDrawCards > 30
+                ? 30
+                : game.numberOfDrawCards
+            }
             playerCards={cardsInHand}
             hand={game.hand || { books: 0, runs: 0 }}
             numberOfBuys={

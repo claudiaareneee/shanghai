@@ -20,7 +20,7 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
     marginBottom: "1rem",
   };
 
-  return (
+  return numberOfCards > 0 ? (
     <div style={style}>
       {[...Array(numberOfBottomCards)].map((_, index) => (
         <PlayingCard
@@ -40,6 +40,17 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
         yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
         source={source}
         onCardClicked={onTopCardClicked}
+      />
+    </div>
+  ) : (
+    <div style={style}>
+      <PlayingCard
+        id={0}
+        xTranslation={
+          constants.CARDSTACK_STRETCH_X * (numberOfBottomCards + offset)
+        }
+        yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
+        source={"placeholder"}
       />
     </div>
   );
