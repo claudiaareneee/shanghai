@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
-const players = require("./routes/players");
-const games = require("./routes/games");
+// const players = require("./routes/players");
+// const games = require("./routes/games");
 const bodyParser = require("body-parser");
 
 const app = express();
