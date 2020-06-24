@@ -1,6 +1,6 @@
 import React from "react";
 import "./CardTable.css";
-import { Row, Col, Button } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import PropTypes from "prop-types";
 import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";

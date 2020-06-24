@@ -1,5 +1,4 @@
 import firebase from "./firebase.config";
-import * as tools from "../tools";
 import { handleError } from "./apiUtils";
 import "firebase/database";
 

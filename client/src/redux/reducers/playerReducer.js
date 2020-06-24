@@ -1,6 +1,5 @@
 import * as types from "../actions/actionTypes";
 import initialState from "../initialState";
-import { updatePlayer } from "../actions/playerActions";
 
 export default function playerReducer(state = initialState.players, action) {
   switch (action.type) {

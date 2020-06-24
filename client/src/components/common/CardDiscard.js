@@ -2,7 +2,6 @@ import React from "react";
 import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
-import CardPlaceholder from "./CardPlaceholder";
 
 function CardDiscard({ cards, source, onCardClicked }) {
   const containerHeight = constants.CARD_WIDTH + constants.CARD_HEIGHT;
