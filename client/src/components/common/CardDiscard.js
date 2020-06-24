@@ -20,22 +20,27 @@ function CardDiscard({ cards, source, onCardClicked }) {
 
   return (
     <div style={style}>
-      {cards.length > 0 ? (
-        cards.map((card) => (
-          <PlayingCard
-            key={card.id}
-            id={card.id}
-            yTranslation={0.5 * constants.CARD_WIDTH}
-            xTranslation={0.5 * constants.CARD_WIDTH}
-            rotation={card.rotation}
-            transformOrigin="0% 50%"
-            source={source}
-            onCardClicked={onCardClicked}
-          />
-        ))
-      ) : (
-        <CardPlaceholder />
-      )}
+      <PlayingCard
+        id={0}
+        yTranslation={0.5 * constants.CARD_WIDTH}
+        xTranslation={0.5 * constants.CARD_WIDTH}
+        rotation={0}
+        transformOrigin="0% 50%"
+        source={"placeholder"}
+        onCardClicked={onCardClicked}
+      />
+      {cards.map((card) => (
+        <PlayingCard
+          key={card.id}
+          id={card.id}
+          yTranslation={0.5 * constants.CARD_WIDTH}
+          xTranslation={0.5 * constants.CARD_WIDTH}
+          rotation={card.rotation}
+          transformOrigin="0% 50%"
+          source={source}
+          onCardClicked={onCardClicked}
+        />
+      ))}
     </div>
   );
 }
