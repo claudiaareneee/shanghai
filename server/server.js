@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 // Serve static files from the React app
-app.use(express.static(path.join(__dirname, "client/build")));
+app.use(express.static(path.join(__dirname, "/client/build")));
 app.use(bodyParser.json());
 
 // Api end points
