@@ -54,9 +54,9 @@ function GamePage() {
           />
         </Col>
 
-        {/* <Col className="SidebarCol" xs lg="5">
+        <Col className="SidebarCol" xs lg="5">
           <Sidebar players={players} />
-        </Col> */}
+        </Col>
       </Row>
     </div>
   );

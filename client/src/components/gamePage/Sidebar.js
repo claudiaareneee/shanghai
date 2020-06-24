@@ -7,10 +7,10 @@ function Sidebar({ players, onCardClicked }) {
   return (
     <div className="Sidebar">
       <h3 className="Title">Players</h3>
-      {players.map((player) => (
+      {Object.keys(players).map((key) => (
         <PlayerBucket
-          key={player.id}
-          player={player}
+          key={players[key].id}
+          player={players[key]}
           onCardClicked={onCardClicked}
         />
       ))}
@@ -19,7 +19,7 @@ function Sidebar({ players, onCardClicked }) {
 }
 
 Sidebar.propTypes = {
-  players: PropTypes.array.isRequired,
+  players: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func,
 };
 
