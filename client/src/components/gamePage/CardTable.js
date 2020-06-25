@@ -15,6 +15,9 @@ function CardTable({
   onPlayerCardHovered,
   hand,
   numberOfBuys,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -54,6 +57,9 @@ function CardTable({
           source="front"
           onCardClicked={onPlayerCardClicked}
           onCardHovered={onPlayerCardHovered}
+          onDragStart={onDragStart}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
         />
       </Row>
 

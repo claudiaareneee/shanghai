@@ -42,7 +42,6 @@ function GamePage() {
             )
           );
       });
-      console.log(game.numberOfDrawCards);
     }
   }, [room, game, player]);
 
@@ -71,6 +70,35 @@ function GamePage() {
     );
   }
 
+  const onDragStart = (event, id) => {
+    console.log("dragstart:", id);
+    event.dataTransfer.setData("id", id);
+  };
+
+  const onDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  const onDrop = (event, cat) => {
+    let id = parseInt(event.dataTransfer.getData("id"), 10);
+    console.log("drag:", id);
+    console.log("drop:", cat);
+
+    const card = cardsInHand[parseInt(id, 10)];
+    const newArray = cardsInHand.filter((card, index) => {
+      return id !== index;
+    });
+
+    // id > cat ? cat : cat - 1
+
+    if (cat > 0) {
+      const startArray = newArray.splice(0, cat);
+      setCardsInHand([...startArray, card, ...newArray]);
+    } else {
+      setCardsInHand([card, ...newArray]);
+    }
+  };
+
   return (
     <div className="GamePage">
       <Row>
@@ -91,6 +119,9 @@ function GamePage() {
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
+            onDragStart={onDragStart}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
           />
         </Col>
 

@@ -3,7 +3,15 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardSet({ cards, source, onCardClicked, onCardHovered }) {
+function CardSet({
+  cards,
+  source,
+  onCardClicked,
+  onCardHovered,
+  onDragStart,
+  onDragOver,
+  onDrop,
+}) {
   const offset = -1 * Math.floor(cards.length / 2.0);
   const containerHeight =
     0.5 * constants.CARD_WIDTH + constants.CARD_HEIGHT + 1;
@@ -17,21 +25,6 @@ function CardSet({ cards, source, onCardClicked, onCardHovered }) {
     position: "relative",
     marginTop: "1rem",
     marginBottom: "1rem",
-  };
-
-  const onDragStart = (ev, id) => {
-    console.log("dragstart:", id);
-    ev.dataTransfer.setData("id", id);
-  };
-
-  const onDragOver = (ev) => {
-    ev.preventDefault();
-  };
-
-  const onDrop = (ev, cat) => {
-    let id = ev.dataTransfer.getData("id");
-    console.log("drag:", id);
-    console.log("drop:", cat);
   };
 
   return (
