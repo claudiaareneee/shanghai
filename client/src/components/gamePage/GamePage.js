@@ -10,6 +10,7 @@ function GamePage() {
   const [game, setGame] = useState({});
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
+  const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
@@ -51,13 +52,6 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    // setCardsInHand(
-    //   cardsInHand.map((card) =>
-    //     card.id === parseInt(target.id, 10)
-    //       ? { ...card, highlight: !card.highlight }
-    //       : { ...card }
-    //   )
-    // );
     console.log("card clicked");
   }
 
@@ -69,6 +63,10 @@ function GamePage() {
           : { ...card }
       )
     );
+  }
+
+  function handleDrawHovered({ target }) {
+    setHighlightDraw(!highlightDraw);
   }
 
   const onDragStart = (event, id) => {
@@ -121,6 +119,8 @@ function GamePage() {
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDrop={onDrop}
+            onDrawHovered={handleDrawHovered}
+            highlightDraw={highlightDraw}
           />
         </Col>
 

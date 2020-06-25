@@ -10,6 +10,8 @@ import Buys from "./Buys";
 function CardTable({
   discard,
   numberOfDrawCards,
+  onDrawHovered,
+  highlightDraw,
   playerCards,
   onPlayerCardClicked,
   onPlayerCardHovered,
@@ -44,6 +46,8 @@ function CardTable({
           <CardStack
             numberOfCards={numberOfDrawCards}
             source="back"
+            highlight={highlightDraw}
+            onCardHovered={onDrawHovered}
             onTopCardClicked={() => {
               console.log("Top Card Clicked");
             }}
