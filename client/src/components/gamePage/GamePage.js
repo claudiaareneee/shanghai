@@ -28,18 +28,21 @@ function GamePage() {
         setCardsInHand(
           players.map((card, index) =>
             players[index].highlight
-              ? { id: card }
-              : { id: card, highlight: false }
+              ? { id: parseInt(card, 10) }
+              : { id: parseInt(card, 10), highlight: false }
           )
         );
       });
-      gameApi.getDiscard(game.id, (discard) => {
-        if (discard)
+      gameApi.getDiscard(game.id, (_discard) => {
+        if (_discard)
           setDiscard(
-            discard.map((card, index) =>
-              discard[index].rotation
-                ? { id: card }
-                : { id: card, rotation: Math.random() * 360 }
+            Object.keys(_discard).map((key, index) =>
+              discard[index] && discard[index].rotation
+                ? { id: parseInt(_discard[key], 10) }
+                : {
+                    id: parseInt(_discard[key], 10),
+                    rotation: parseInt(_discard[key], 10) * 3,
+                  }
             )
           );
       });
@@ -52,6 +55,7 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
+    gameApi.pushToDiscard(game.id, target.id);
     console.log("card clicked");
   }
 
