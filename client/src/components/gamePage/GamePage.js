@@ -92,12 +92,20 @@ function GamePage() {
       return id !== index;
     });
 
+    let cards = [];
+
     if (cat > 0) {
       const startArray = newArray.splice(0, cat);
-      setCardsInHand([...startArray, card, ...newArray]);
+      cards = [...startArray, card, ...newArray];
     } else {
-      setCardsInHand([card, ...newArray]);
+      cards = [card, ...newArray];
     }
+
+    setCardsInHand(cards);
+    playerApi.setPlayerCardsInHand(
+      player,
+      cards.map((card) => card.id)
+    );
   };
 
   return (
