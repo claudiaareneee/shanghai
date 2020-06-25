@@ -41,11 +41,7 @@ function CardSet({
           source={source}
           onCardClicked={onCardClicked}
           onCardHovered={onCardHovered}
-          boxShadow={
-            card.highlight
-              ? "0rem 0rem 2rem #ffff00"
-              : "0rem 0rem 1rem #282c3452"
-          }
+          highlight={card.highlight}
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDrop={onDrop}

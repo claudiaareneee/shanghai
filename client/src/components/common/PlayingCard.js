@@ -12,7 +12,7 @@ function PlayingCard({
   xTranslation,
   yTranslation,
   transformOrigin,
-  boxShadow,
+  highlight,
   source,
   onCardClicked,
   onCardHovered,
@@ -54,7 +54,11 @@ function PlayingCard({
         }}
         // onMouseDownCapture={(event) => console.log(event.nativeEvent)}
         // onDragOver={(event) => console.log(event)}
-        style={{ boxShadow }}
+        style={{
+          boxShadow: highlight
+            ? "0rem 0rem 2rem #ffff00"
+            : "0rem 0rem 1rem #282c3452",
+        }}
       />
     </div>
   );
