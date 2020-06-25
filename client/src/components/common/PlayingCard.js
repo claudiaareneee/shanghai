@@ -16,6 +16,9 @@ function PlayingCard({
   source,
   onCardClicked,
   onCardHovered,
+  onDragStart,
+  onDragOver,
+  onDrop,
 }) {
   const style = {
     WebkitTransition: "all", // note the capital 'W' here
@@ -40,9 +43,17 @@ function PlayingCard({
         id={id}
         src={src}
         alt={id}
+        draggable
         onClick={onCardClicked}
         onMouseOver={onCardHovered}
-        onMouseLeave={onCardHovered}
+        onMouseOut={onCardHovered}
+        onDragStart={(e) => onDragStart(e, index)}
+        onDragOver={(e) => onDragOver(e)}
+        onDrop={(e) => {
+          onDrop(e, index);
+        }}
+        // onMouseDownCapture={(event) => console.log(event.nativeEvent)}
+        // onDragOver={(event) => console.log(event)}
         style={{ boxShadow }}
       />
     </div>
@@ -60,6 +71,9 @@ PlayingCard.propTypes = {
   boxShadow: PropTypes.string,
   onCardClicked: PropTypes.func,
   onCardHovered: PropTypes.func,
+  onDragStart: PropTypes.func,
+  onDragOver: PropTypes.func,
+  onDrop: PropTypes.func,
 };
 
 PlayingCard.defaultProps = {
@@ -73,6 +87,9 @@ PlayingCard.defaultProps = {
   boxShadow: "0rem 0rem 1rem #282c3452",
   onCardClicked: () => {},
   onCardHovered: () => {},
+  onDragStart: () => {},
+  onDragOver: () => {},
+  onDrop: () => {},
 };
 
 export default PlayingCard;

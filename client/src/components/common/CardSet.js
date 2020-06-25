@@ -19,6 +19,21 @@ function CardSet({ cards, source, onCardClicked, onCardHovered }) {
     marginBottom: "1rem",
   };
 
+  const onDragStart = (ev, id) => {
+    console.log("dragstart:", id);
+    ev.dataTransfer.setData("id", id);
+  };
+
+  const onDragOver = (ev) => {
+    ev.preventDefault();
+  };
+
+  const onDrop = (ev, cat) => {
+    let id = ev.dataTransfer.getData("id");
+    console.log("drag:", id);
+    console.log("drop:", cat);
+  };
+
   return (
     <div style={style}>
       {cards.map((card, index) => (
@@ -38,6 +53,9 @@ function CardSet({ cards, source, onCardClicked, onCardHovered }) {
               ? "0rem 0rem 2rem #ffff00"
               : "0rem 0rem 1rem #282c3452"
           }
+          onDragStart={onDragStart}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
         />
       ))}
     </div>
@@ -45,14 +63,13 @@ function CardSet({ cards, source, onCardClicked, onCardHovered }) {
 }
 
 CardSet.propTypes = {
-  cards: PropTypes.arrayOf(PropTypes.number),
+  cards: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCardClicked: PropTypes.func,
   onCardHovered: PropTypes.func,
   source: PropTypes.string,
 };
 
 CardSet.defaultProps = {
-  cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: () => {},
   onCardHovered: () => {},
   source: "front",
