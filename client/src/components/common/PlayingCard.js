@@ -3,13 +3,16 @@ import CardSources from "./CardSources";
 import "./PlayingCard.css";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
+import { Card } from "react-bootstrap";
 
 function PlayingCard({
   id,
+  index,
   rotation,
   xTranslation,
   yTranslation,
   transformOrigin,
+  boxShadow,
   source,
   onCardClicked,
   onCardHovered,
@@ -30,12 +33,6 @@ function PlayingCard({
       ? CardSources.backs[Math.floor(id / 54)]
       : CardSources.fronts[id % 54];
 
-  // const changeHighlight = ({ target }) => {
-  //   target.style.boxShaddow = "0rem 0rem 1rem red";
-  //   console.log("mouse over");
-  //   console.log(target.id);
-  // };
-
   return (
     <div className="PlayingCard" style={style}>
       <img
@@ -45,6 +42,7 @@ function PlayingCard({
         alt={id}
         onClick={onCardClicked}
         onMouseOver={onCardHovered}
+        style={{ boxShadow }}
       />
     </div>
   );
@@ -52,22 +50,26 @@ function PlayingCard({
 
 PlayingCard.propTypes = {
   id: PropTypes.number,
+  index: PropTypes.number,
   rotation: PropTypes.number,
   xTranslation: PropTypes.number,
   yTranslation: PropTypes.number,
   transformOrigin: PropTypes.string,
   source: PropTypes.string,
+  boxShadow: PropTypes.string,
   onCardClicked: PropTypes.func,
   onCardHovered: PropTypes.func,
 };
 
 PlayingCard.defaultProps = {
   id: 0,
+  index: 0,
   rotation: 0,
   xTranslation: 0,
   yTranslation: 0,
   transformOrigin: "0% 0%",
   source: "front",
+  boxShadow: "0rem 0rem 1rem #282c3452",
   onCardClicked: () => {},
   onCardHovered: () => {},
 };

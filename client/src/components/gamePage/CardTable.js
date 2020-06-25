@@ -11,6 +11,8 @@ function CardTable({
   discard,
   numberOfDrawCards,
   playerCards,
+  onPlayerCardClicked,
+  onPlayerCardHovered,
   hand,
   numberOfBuys,
 }) {
@@ -50,14 +52,8 @@ function CardTable({
         <CardSet
           cards={playerCards}
           source="front"
-          onCardClicked={({ target }) => {
-            console.log("clicked");
-            console.log(target.id);
-          }}
-          onCardHovered={({ target }) => {
-            console.log("Hovered");
-            console.log(target.id);
-          }}
+          onCardClicked={onPlayerCardClicked}
+          onCardHovered={onPlayerCardHovered}
         />
       </Row>
 
@@ -75,11 +71,9 @@ CardTable.propTypes = {
   discard: PropTypes.array.isRequired,
   numberOfDrawCards: PropTypes.number.isRequired,
   playerCards: PropTypes.array.isRequired,
+  onPlayerCardClicked: PropTypes.func.isRequired,
+  onPlayerCardHovered: PropTypes.func.isRequired,
   hand: PropTypes.object.isRequired,
-};
-
-CardTable.defaultProps = {
-  onCardClicked: () => {},
 };
 
 export default CardTable;

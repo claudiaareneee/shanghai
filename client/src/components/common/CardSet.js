@@ -23,8 +23,9 @@ function CardSet({ cards, source, onCardClicked, onCardHovered }) {
     <div style={style}>
       {cards.map((card, index) => (
         <PlayingCard
-          key={card}
-          id={card}
+          key={card.id}
+          id={card.id}
+          index={index}
           xTranslation={constants.CARDSET_STRETCH_X * (index + offset)}
           yTranslation={1}
           rotation={(180 / cards.length) * (index + offset)}
@@ -32,6 +33,11 @@ function CardSet({ cards, source, onCardClicked, onCardHovered }) {
           source={source}
           onCardClicked={onCardClicked}
           onCardHovered={onCardHovered}
+          boxShadow={
+            card.highlight
+              ? "0rem 0rem 2rem #ffff00"
+              : "0rem 0rem 1rem #282c3452"
+          }
         />
       ))}
     </div>
