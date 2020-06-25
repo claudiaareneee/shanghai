@@ -42,6 +42,7 @@ function PlayingCard({
         alt={id}
         onClick={onCardClicked}
         onMouseOver={onCardHovered}
+        onMouseLeave={onCardHovered}
         style={{ boxShadow }}
       />
     </div>

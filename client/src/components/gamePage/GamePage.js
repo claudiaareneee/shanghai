@@ -52,6 +52,16 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
+    // setCardsInHand(
+    //   cardsInHand.map((card) =>
+    //     card.id === parseInt(target.id, 10)
+    //       ? { ...card, highlight: !card.highlight }
+    //       : { ...card }
+    //   )
+    // );
+  }
+
+  function handlePlayerCardHovered({ target }) {
     setCardsInHand(
       cardsInHand.map((card) =>
         card.id === parseInt(target.id, 10)
@@ -60,8 +70,6 @@ function GamePage() {
       )
     );
   }
-
-  function handlePlayerCardHovered({ target }) {}
 
   return (
     <div className="GamePage">
