@@ -69,6 +69,16 @@ function GamePage() {
     );
   }
 
+  function handleDiscardHovered({ target }) {
+    setDiscard(
+      discard.map((card) =>
+        card.id === parseInt(target.id, 10)
+          ? { ...card, highlight: !card.highlight }
+          : { ...card }
+      )
+    );
+  }
+
   function handleDrawHovered({ target }) {
     setHighlightDraw(!highlightDraw);
   }
@@ -132,6 +142,7 @@ function GamePage() {
             onDragOver={onDragOver}
             onDrop={onDrop}
             onDrawHovered={handleDrawHovered}
+            onDiscardHovered={handleDiscardHovered}
             highlightDraw={highlightDraw}
           />
         </Col>

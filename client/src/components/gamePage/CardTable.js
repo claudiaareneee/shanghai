@@ -11,6 +11,7 @@ function CardTable({
   discard,
   numberOfDrawCards,
   onDrawHovered,
+  onDiscardHovered,
   highlightDraw,
   playerCards,
   onPlayerCardClicked,
@@ -37,6 +38,7 @@ function CardTable({
           <CardDiscard
             cards={discard}
             source="front"
+            onCardHovered={onDiscardHovered}
             onCardClicked={() => {
               console.log("yay!");
             }}
