@@ -8,29 +8,36 @@ import CardStack from "../common/CardStack";
 import Buys from "./Buys";
 
 function CardTable({
+  game,
+  playerCards,
   discard,
-  numberOfDrawCards,
+  highlightDraw,
+  numberOfBuys,
   onDrawHovered,
   onDiscardHovered,
-  highlightDraw,
-  playerCards,
   onPlayerCardClicked,
   onPlayerCardHovered,
-  hand,
-  numberOfBuys,
   onDragStart,
   onDragOver,
   onDrop,
+  onDrawClicked,
+  onPlayClicked,
+  onDiscardClicked,
 }) {
   return (
     <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
         <Col>
-          <h5>
-            Hand: {hand.books}{" "}
-            {parseInt(hand.books, 10) === 1 ? "book" : "books"}, {hand.runs}{" "}
-            {parseInt(hand.runs, 10) === 1 ? "run" : "runs"}
-          </h5>
+          {game.hand ? (
+            <h5>
+              Hand: {game.hand.books}{" "}
+              {parseInt(game.hand.books, 10) === 1 ? "book" : "books"},{" "}
+              {game.hand.runs}{" "}
+              {parseInt(game.hand.runs, 10) === 1 ? "run" : "runs"}
+            </h5>
+          ) : (
+            <></>
+          )}
         </Col>
       </Row>
       <Row className="PilesBlock">
@@ -46,7 +53,13 @@ function CardTable({
         </Col>
         <Col className="justify-content-center align-self-center">
           <CardStack
-            numberOfCards={numberOfDrawCards}
+            numberOfCards={
+              !game.numberOfDrawCards
+                ? 0
+                : game.numberOfDrawCards > 30
+                ? 30
+                : game.numberOfDrawCards
+            }
             source="back"
             highlight={highlightDraw}
             onCardHovered={onDrawHovered}
@@ -69,12 +82,42 @@ function CardTable({
         />
       </Row>
 
-      <Buys
-        numberOfBuys={numberOfBuys}
-        onClick={() => {
-          console.log("BUYY!");
-        }}
-      />
+      <Row>
+        <Col>
+          <Buys
+            numberOfBuys={numberOfBuys}
+            onClick={() => {
+              console.log("BUYY!");
+            }}
+          />
+        </Col>
+        <Col>
+          <h3 style={{ textAlign: "right" }}>It's your turn!</h3>
+          <Row className="justify-content-end">
+            <button
+              className="btn btn-success"
+              style={{ marginRight: ".5rem" }}
+              onClick={onDrawClicked}
+            >
+              Draw
+            </button>
+            <button
+              className="btn btn-primary"
+              style={{ marginRight: ".5rem" }}
+              onClick={onPlayClicked}
+            >
+              Play
+            </button>
+            <button
+              className="btn btn-danger"
+              style={{ marginRight: ".5rem" }}
+              onClick={onDiscardClicked}
+            >
+              Discard
+            </button>
+          </Row>
+        </Col>
+      </Row>
     </div>
   );
 }
@@ -85,7 +128,6 @@ CardTable.propTypes = {
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
   onPlayerCardHovered: PropTypes.func.isRequired,
-  hand: PropTypes.object.isRequired,
 };
 
 export default CardTable;

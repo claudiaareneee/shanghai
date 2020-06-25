@@ -123,18 +123,11 @@ function GamePage() {
       <Row>
         <Col>
           <CardTable
+            game={game}
             discard={discard || []}
-            numberOfDrawCards={
-              !game.numberOfDrawCards
-                ? 0
-                : game.numberOfDrawCards > 30
-                ? 30
-                : game.numberOfDrawCards
-            }
             playerCards={cardsInHand}
             onPlayerCardClicked={handlePlayerCardClicked}
             onPlayerCardHovered={handlePlayerCardHovered}
-            hand={game.hand || { books: 0, runs: 0 }}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
