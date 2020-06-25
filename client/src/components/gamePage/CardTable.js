@@ -6,9 +6,11 @@ import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
 import CardStack from "../common/CardStack";
 import Buys from "./Buys";
+import Turn from "./Turn";
 
 function CardTable({
   game,
+  player,
   playerCards,
   discard,
   highlightDraw,
@@ -46,9 +48,7 @@ function CardTable({
             cards={discard}
             source="front"
             onCardHovered={onDiscardHovered}
-            onCardClicked={() => {
-              console.log("yay!");
-            }}
+            onCardClicked={onDiscardClicked}
           />
         </Col>
         <Col className="justify-content-center align-self-center">
@@ -63,9 +63,7 @@ function CardTable({
             source="back"
             highlight={highlightDraw}
             onCardHovered={onDrawHovered}
-            onTopCardClicked={() => {
-              console.log("Top Card Clicked");
-            }}
+            onCardClicked={onDrawClicked}
           />
         </Col>
       </Row>
@@ -91,32 +89,13 @@ function CardTable({
             }}
           />
         </Col>
-        <Col>
-          <h3 style={{ textAlign: "right" }}>It's your turn!</h3>
-          <Row className="justify-content-end">
-            <button
-              className="btn btn-success"
-              style={{ marginRight: ".5rem" }}
-              onClick={onDrawClicked}
-            >
-              Draw
-            </button>
-            <button
-              className="btn btn-primary"
-              style={{ marginRight: ".5rem" }}
-              onClick={onPlayClicked}
-            >
-              Play
-            </button>
-            <button
-              className="btn btn-danger"
-              style={{ marginRight: ".5rem" }}
-              onClick={onDiscardClicked}
-            >
-              Discard
-            </button>
-          </Row>
-        </Col>
+        {/* <Turn
+          player={player}
+          game={game}
+          onPlayClicked={onPlayClicked}
+          onDrawClicked={onDrawClicked}
+          onDiscardClicked={onDiscardClicked}
+        /> */}
       </Row>
     </div>
   );
@@ -124,7 +103,6 @@ function CardTable({
 
 CardTable.propTypes = {
   discard: PropTypes.array.isRequired,
-  numberOfDrawCards: PropTypes.number.isRequired,
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
   onPlayerCardHovered: PropTypes.func.isRequired,

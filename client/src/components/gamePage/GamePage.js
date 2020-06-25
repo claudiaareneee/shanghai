@@ -69,6 +69,27 @@ function GamePage() {
     );
   }
 
+  function handleDiscardClicked({ target }) {
+    console.log("discard");
+
+    if (game.turn && game.turn.player === player)
+      gameApi.popDiscard(game.id, (card) => {
+        const newCards = [
+          ...cardsInHand,
+          { id: parseInt(Object.values(card)[0], 10) },
+        ];
+
+        setCardsInHand(newCards);
+
+        playerApi.setPlayerCardsInHand(
+          player,
+          newCards.map((card) => card.id)
+        );
+
+        if (discard.length === 1) setDiscard([]);
+      });
+  }
+
   function handleDiscardHovered({ target }) {
     setDiscard(
       discard.map((card) =>
@@ -77,6 +98,10 @@ function GamePage() {
           : { ...card }
       )
     );
+  }
+
+  function handleDrawClicked({ target }) {
+    console.log("draw");
   }
 
   function handleDrawHovered({ target }) {
@@ -124,6 +149,7 @@ function GamePage() {
         <Col>
           <CardTable
             game={game}
+            player={player}
             discard={discard || []}
             playerCards={cardsInHand}
             onPlayerCardClicked={handlePlayerCardClicked}
@@ -134,7 +160,9 @@ function GamePage() {
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDrop={onDrop}
+            onDrawClicked={handleDrawClicked}
             onDrawHovered={handleDrawHovered}
+            onDiscardClicked={handleDiscardClicked}
             onDiscardHovered={handleDiscardHovered}
             highlightDraw={highlightDraw}
           />

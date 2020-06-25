@@ -7,7 +7,7 @@ function CardStack({
   numberOfCards,
   source,
   highlight,
-  onTopCardClicked,
+  onCardClicked,
   onCardHovered,
 }) {
   const offset = -1 * Math.floor(numberOfCards / 2.0);
@@ -46,7 +46,7 @@ function CardStack({
         yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
         source={source}
         onCardHovered={onCardHovered}
-        onCardClicked={onTopCardClicked}
+        onCardClicked={onCardClicked}
         highlight={highlight}
       />
     </div>
@@ -66,7 +66,7 @@ function CardStack({
 
 CardStack.propTypes = {
   numberOfCards: PropTypes.number,
-  onTopCardClicked: PropTypes.func,
+  onCardClicked: PropTypes.func,
   source: PropTypes.string,
 };
 
