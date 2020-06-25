@@ -58,6 +58,7 @@ function GamePage() {
     //       : { ...card }
     //   )
     // );
+    console.log("card clicked");
   }
 
   function handlePlayerCardHovered({ target }) {
@@ -88,8 +89,6 @@ function GamePage() {
     const newArray = cardsInHand.filter((card, index) => {
       return id !== index;
     });
-
-    // id > cat ? cat : cat - 1
 
     if (cat > 0) {
       const startArray = newArray.splice(0, cat);
@@ -127,6 +126,7 @@ function GamePage() {
 
         <Col className="SidebarCol" xs lg="5">
           <Sidebar
+            turn={game.turn}
             players={players}
             onDropdownClicked={handleDropdownClicked}
           />
