@@ -36,14 +36,10 @@ function GamePage() {
       gameApi.getDiscard(game.id, (_discard) => {
         if (_discard)
           setDiscard(
-            Object.keys(_discard).map((key, index) =>
-              discard[index] && discard[index].rotation
-                ? { id: parseInt(_discard[key], 10) }
-                : {
-                    id: parseInt(_discard[key], 10),
-                    rotation: parseInt(_discard[key], 10) * 3,
-                  }
-            )
+            Object.keys(_discard).map((key, index) => ({
+              id: parseInt(_discard[key], 10),
+              rotation: parseInt(_discard[key], 10) * 3,
+            }))
           );
       });
     }
