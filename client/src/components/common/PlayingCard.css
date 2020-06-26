@@ -1,0 +1,9 @@
+.PlayingCard {
+  position: absolute;
+  height: 10rem;
+}
+
+.CardImage {
+  height: 100%;
+  border-radius: 4%;
+}
