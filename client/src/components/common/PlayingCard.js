@@ -1,9 +1,7 @@
 import React from "react";
 import CardSources from "./CardSources";
-import "./PlayingCard.css";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
-import { Card } from "react-bootstrap";
 
 function PlayingCard({
   id,
@@ -20,13 +18,23 @@ function PlayingCard({
   onDragOver,
   onDrop,
 }) {
-  const style = {
+  const divStyle = {
+    position: "absolute",
+    height: constants.CARD_HEIGHT,
     WebkitTransition: "all", // note the capital 'W' here
     msTransition: "all", // 'ms' is the only lowercase vendor prefix
     height: `${constants.CARD_HEIGHT}`,
     transformOrigin: `${transformOrigin}`,
     transform: `translateX(${xTranslation}rem) translateY(${yTranslation}rem) rotate(${rotation}deg) `,
     cursor: "pointer",
+  };
+
+  const imgStyle = {
+    height: "100%",
+    borderRadius: "4%",
+    boxShadow: highlight
+      ? "0rem 0rem 2rem #ffff00"
+      : "0rem 0rem 1rem #282c3452",
   };
 
   const src =
@@ -37,7 +45,7 @@ function PlayingCard({
       : CardSources.fronts[id % 54];
 
   return (
-    <div className="PlayingCard" style={style}>
+    <div className="PlayingCard" style={divStyle}>
       <img
         className="CardImage"
         id={id}
@@ -52,13 +60,7 @@ function PlayingCard({
         onDrop={(e) => {
           onDrop(e, index);
         }}
-        // onMouseDownCapture={(event) => console.log(event.nativeEvent)}
-        // onDragOver={(event) => console.log(event)}
-        style={{
-          boxShadow: highlight
-            ? "0rem 0rem 2rem #ffff00"
-            : "0rem 0rem 1rem #282c3452",
-        }}
+        style={imgStyle}
       />
     </div>
   );
