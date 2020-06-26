@@ -48,7 +48,8 @@ export const getPlayerById = (playerId, gameId, onPlayerReceived) => {
   });
 };
 
-export const setPlayerCardsInHand = (id, cards) => {
+export const setPlayerCardsInHand = (id, gameId, cards) => {
+  updatePlayer(gameId, { id, numberOfRemainingCards: cards.length });
   return database.ref(cardsInHandBaseUrl + id).set(cards);
 };
 

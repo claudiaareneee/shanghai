@@ -55,7 +55,20 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    gameApi.pushToDiscard(game.id, target.id);
+    if (game.turn && game.turn.player === player) {
+      gameApi.pushToDiscard(game.id, target.id);
+
+      const newCards = cardsInHand.filter(
+        (card) => card.id !== parseInt(target.id, 10)
+      );
+
+      setCardsInHand(newCards);
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCards.map((card) => card.id)
+      );
+    }
     console.log("card clicked");
   }
 
@@ -83,6 +96,7 @@ function GamePage() {
 
         playerApi.setPlayerCardsInHand(
           player,
+          game.id,
           newCards.map((card) => card.id)
         );
 
@@ -114,10 +128,9 @@ function GamePage() {
 
         playerApi.setPlayerCardsInHand(
           player,
+          game.id,
           newCards.map((card) => card.id)
         );
-
-        // if (game.number.length === 1) setDiscard([]);
       });
   }
 
@@ -156,6 +169,7 @@ function GamePage() {
     setCardsInHand(cards);
     playerApi.setPlayerCardsInHand(
       player,
+      game.id,
       cards.map((card) => card.id)
     );
   };
