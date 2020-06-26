@@ -22,7 +22,8 @@ function CardSlide({ cards, source, onCardClicked }) {
     <div
       style={style}
       onDrop={(event) => {
-        debugger;
+        // debugger;
+        console.log(event);
       }}
       onDragOver={(event) => event.preventDefault()}
     >
