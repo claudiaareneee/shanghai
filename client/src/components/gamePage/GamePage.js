@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import * as baseApi from "../../api/baseApi";
 import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
 import "./GamePage.css";
@@ -8,6 +9,7 @@ import Sidebar from "./Sidebar";
 
 function GamePage() {
   const [game, setGame] = useState({});
+  const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
   const [highlightDraw, setHighlightDraw] = useState(false);
@@ -51,7 +53,7 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    if (game.turn && game.turn.player === player) {
+    if (turnState === "Discard") {
       gameApi.pushToDiscard(game.id, target.id);
 
       const newCards = cardsInHand.filter(
@@ -64,6 +66,8 @@ function GamePage() {
         game.id,
         newCards.map((card) => card.id)
       );
+
+      baseApi.nextTurn(game);
     }
     console.log("card clicked");
   }
@@ -81,7 +85,7 @@ function GamePage() {
   function handleDiscardClicked({ target }) {
     console.log("discard");
 
-    if (game.turn && game.turn.player === player)
+    if (turnState === "Draw")
       gameApi.popDiscard(game.id, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -97,6 +101,7 @@ function GamePage() {
         );
 
         if (discard.length === 1) setDiscard([]);
+        baseApi.nextTurn(game);
       });
   }
 
@@ -113,7 +118,7 @@ function GamePage() {
   function handleDrawClicked({ target }) {
     console.log("draw");
 
-    if (game.turn && game.turn.player === player)
+    if (turnState === "Draw")
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -127,11 +132,23 @@ function GamePage() {
           game.id,
           newCards.map((card) => card.id)
         );
+
+        baseApi.nextTurn(game);
       });
   }
 
   function handleDrawHovered({ target }) {
     setHighlightDraw(!highlightDraw);
+  }
+
+  function handleTurnButtonClicked({ target }) {
+    setTurnState(target.name);
+
+    if (target.name === "Discard") baseApi.setTurn(game, "discarding");
+
+    if (target.name === "Play") baseApi.setTurn(game, "playing");
+
+    console.log(target.name);
   }
 
   const onDragStart = (event, id) => {
@@ -191,6 +208,7 @@ function GamePage() {
             onDrawHovered={handleDrawHovered}
             onDiscardClicked={handleDiscardClicked}
             onDiscardHovered={handleDiscardHovered}
+            onTurnButtonClicked={handleTurnButtonClicked}
             highlightDraw={highlightDraw}
           />
         </Col>

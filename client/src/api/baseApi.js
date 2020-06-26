@@ -30,6 +30,24 @@ export const setDeal = (game, numberOfDecks) => {
   });
 };
 
+export const nextTurn = (game) => {
+  const turn = tools.nextTurn(tools.snapshotToArray(game.opponents), game.turn);
+  console.log("Turn: ", turn);
+  gameApi.updateGame({
+    ...game,
+    turn,
+  });
+};
+
+export const setTurn = (game, state) => {
+  const turn = { ...game.turn, state };
+  console.log("Turn: ", turn);
+  gameApi.updateGame({
+    ...game,
+    turn,
+  });
+};
+
 export const discardCardWithId = (gameId, playerId, playerCards, card) => {
   gameApi.pushToDiscard(gameId, card);
   playerApi.setPlayerCardsInHand(playerId, gameId, playerCards);

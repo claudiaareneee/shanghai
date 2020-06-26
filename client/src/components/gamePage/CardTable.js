@@ -23,8 +23,8 @@ function CardTable({
   onDragOver,
   onDrop,
   onDrawClicked,
-  onPlayClicked,
   onDiscardClicked,
+  onTurnButtonClicked,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -89,13 +89,11 @@ function CardTable({
             }}
           />
         </Col>
-        {/* <Turn
+        <Turn
           player={player}
           game={game}
-          onPlayClicked={onPlayClicked}
-          onDrawClicked={onDrawClicked}
-          onDiscardClicked={onDiscardClicked}
-        /> */}
+          onTurnButtonClicked={onTurnButtonClicked}
+        />
       </Row>
     </div>
   );

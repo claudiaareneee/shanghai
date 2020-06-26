@@ -1,16 +1,9 @@
 import React from "react";
 import { Col, Row } from "react-bootstrap";
 
-function Turn({
-  game,
-  player,
-  onDrawClicked,
-  onPlayClicked,
-  onDiscardClicked,
-}) {
+function Turn({ game, player, onTurnButtonClicked }) {
   const canDraw = game.turn && game.turn.state === "drawing";
-  const canPlay = game.turn && game.turn.state === "playing";
-  const canDiscard =
+  const canPlay =
     game.turn &&
     (game.turn.state === "playing" || game.turn.state === "discarding");
 
@@ -21,24 +14,27 @@ function Turn({
         <button
           className="btn btn-success"
           style={{ marginRight: ".5rem" }}
-          onClick={onDrawClicked}
+          onClick={onTurnButtonClicked}
           disabled={!canDraw}
+          name="Draw"
         >
           Draw
         </button>
         <button
           className="btn btn-primary"
           style={{ marginRight: ".5rem" }}
-          onClick={onPlayClicked}
+          onClick={onTurnButtonClicked}
           disabled={!canPlay}
+          name="Play"
         >
           Play
         </button>
         <button
           className="btn btn-danger"
           style={{ marginRight: ".5rem" }}
-          onClick={onDiscardClicked}
-          disabled={!canDiscard}
+          onClick={onTurnButtonClicked}
+          disabled={!canPlay}
+          name="Discard"
         >
           Discard
         </button>
