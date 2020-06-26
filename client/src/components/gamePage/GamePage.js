@@ -102,6 +102,23 @@ function GamePage() {
 
   function handleDrawClicked({ target }) {
     console.log("draw");
+
+    if (game.turn && game.turn.player === player)
+      gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
+        const newCards = [
+          ...cardsInHand,
+          { id: parseInt(Object.values(card)[0], 10) },
+        ];
+
+        setCardsInHand(newCards);
+
+        playerApi.setPlayerCardsInHand(
+          player,
+          newCards.map((card) => card.id)
+        );
+
+        // if (game.number.length === 1) setDiscard([]);
+      });
   }
 
   function handleDrawHovered({ target }) {
