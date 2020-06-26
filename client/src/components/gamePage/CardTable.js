@@ -7,6 +7,7 @@ import CardDiscard from "../common/CardDiscard";
 import CardStack from "../common/CardStack";
 import Buys from "./Buys";
 import Turn from "./Turn";
+import CardSelection from "./CardSelection";
 
 function CardTable({
   game,
@@ -80,6 +81,8 @@ function CardTable({
         />
       </Row>
 
+      <CardSelection cards={[]} />
+
       <Row>
         <Col>
           <Buys
@@ -87,6 +90,7 @@ function CardTable({
             onClick={() => {
               console.log("BUYY!");
             }}
+            disabled={game.turn && game.turn.player === player}
           />
         </Col>
         <Turn

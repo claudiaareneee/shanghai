@@ -12,23 +12,33 @@ function CardSlide({ cards, source, onCardClicked }) {
     height: `${containerHeight}rem`,
     display: "flex",
     justifyContent: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
     position: "relative",
     marginTop: "1rem",
     marginBottom: "1rem",
   };
 
   return (
-    <div style={style}>
-      {cards.map((card, index) => (
-        <PlayingCard
-          key={card}
-          id={card}
-          xTranslation={constants.CARDSLIDE_STRETCH_X * (index + offset)}
-          source={source}
-          onCardClicked={onCardClicked}
-        />
-      ))}
+    <div
+      style={style}
+      onDrop={(event) => {
+        debugger;
+      }}
+      onDragOver={(event) => event.preventDefault()}
+    >
+      {cards.length > 0 ? (
+        cards.map((card, index) => (
+          <PlayingCard
+            key={card}
+            id={card}
+            xTranslation={constants.CARDSLIDE_STRETCH_X * (index + offset)}
+            source={source}
+            onCardClicked={onCardClicked}
+          />
+        ))
+      ) : (
+        <PlayingCard id={0} source={"placeholder"} />
+      )}
     </div>
   );
 }
@@ -40,7 +50,7 @@ CardSlide.propTypes = {
 };
 
 CardSlide.defaultProps = {
-  cards: PropTypes.arrayOf(PropTypes.number),
+  cards: [],
   onCardClicked: () => {},
   source: "front",
 };
