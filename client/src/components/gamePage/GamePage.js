@@ -6,6 +6,7 @@ import "./GamePage.css";
 import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
+import { toast } from "react-toastify";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -68,6 +69,7 @@ function GamePage() {
       );
 
       baseApi.nextTurn(game);
+      setTurnState("Wait");
     }
     console.log("card clicked");
   }
@@ -143,12 +145,19 @@ function GamePage() {
 
   function handleTurnButtonClicked({ target }) {
     setTurnState(target.name);
+    if (target.name === "Draw") {
+      toast.success("🦄 Select draw card!");
+    }
 
-    if (target.name === "Discard") baseApi.setTurn(game, "discarding");
+    if (target.name === "Play") {
+      baseApi.setTurn(game, "playing");
+      toast.info("🦒 Select cards to play");
+    }
 
-    if (target.name === "Play") baseApi.setTurn(game, "playing");
-
-    console.log(target.name);
+    if (target.name === "Discard") {
+      baseApi.setTurn(game, "discarding");
+      toast.warn("🐨 Select a card to discard!");
+    }
   }
 
   const onDragStart = (event, id) => {

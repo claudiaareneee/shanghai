@@ -16,7 +16,17 @@ function App() {
         <Route path="/play" component={GamePage} />
         <Route component={NotFoundPage} />
       </Switch>
-      <ToastContainer autoClose={3000} hideProgressBar />
+      <ToastContainer
+        position="top-center"
+        autoClose={10000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }
