@@ -3,7 +3,13 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardStack({ numberOfCards, source, onTopCardClicked }) {
+function CardStack({
+  numberOfCards,
+  source,
+  highlight,
+  onCardClicked,
+  onCardHovered,
+}) {
   const offset = -1 * Math.floor(numberOfCards / 2.0);
   const numberOfBottomCards = numberOfCards - 1;
   const containerHeight =
@@ -14,13 +20,13 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
     height: `${containerHeight}rem`,
     display: "flex",
     justifyContent: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
     position: "relative",
     marginTop: "1rem",
     marginBottom: "1rem",
   };
 
-  return (
+  return numberOfCards > 0 ? (
     <div style={style}>
       {[...Array(numberOfBottomCards)].map((_, index) => (
         <PlayingCard
@@ -39,7 +45,20 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
         }
         yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
         source={source}
-        onCardClicked={onTopCardClicked}
+        onCardHovered={onCardHovered}
+        onCardClicked={onCardClicked}
+        highlight={highlight}
+      />
+    </div>
+  ) : (
+    <div style={style}>
+      <PlayingCard
+        id={0}
+        xTranslation={
+          constants.CARDSTACK_STRETCH_X * (numberOfBottomCards + offset)
+        }
+        yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
+        source={"placeholder"}
       />
     </div>
   );
@@ -47,7 +66,7 @@ function CardStack({ numberOfCards, source, onTopCardClicked }) {
 
 CardStack.propTypes = {
   numberOfCards: PropTypes.number,
-  onTopCardClicked: PropTypes.func,
+  onCardClicked: PropTypes.func,
   source: PropTypes.string,
 };
 

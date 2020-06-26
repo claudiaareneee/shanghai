@@ -49,13 +49,13 @@ export const nextTurn = (opponents, turn = {}) => {
   let playerIndex = turn.player ? opponents.indexOf(turn.player) : 0;
   let player = turn.player;
 
-  if (turn.state === "draw") state = "play";
-  else if (turn.state === "play") state = "discard";
-  else if (turn.state === "discard") {
-    state = "draw";
+  if (turn.state === "drawing") state = "playing";
+  else if (turn.state === "playing") state = "discarding";
+  else if (turn.state === "discarding") {
+    state = "drawing";
     player = opponents[(playerIndex + 1) % opponents.length];
   } else {
-    state = "draw";
+    state = "drawing";
     player = opponents[0];
   }
 

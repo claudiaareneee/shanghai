@@ -3,7 +3,13 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardDiscard({ cards, source, onCardClicked }) {
+function CardDiscard({
+  cards,
+  source,
+  highlight,
+  onCardHovered,
+  onCardClicked,
+}) {
   const containerHeight = constants.CARD_WIDTH + constants.CARD_HEIGHT;
 
   const style = {
@@ -28,7 +34,7 @@ function CardDiscard({ cards, source, onCardClicked }) {
         source={"placeholder"}
         onCardClicked={onCardClicked}
       />
-      {cards.map((card) => (
+      {cards.map((card, index) => (
         <PlayingCard
           key={card.id}
           id={card.id}
@@ -37,7 +43,9 @@ function CardDiscard({ cards, source, onCardClicked }) {
           rotation={card.rotation}
           transformOrigin="0% 50%"
           source={source}
-          onCardClicked={onCardClicked}
+          highlight={card.highlight}
+          onCardClicked={index === cards.length - 1 ? onCardClicked : () => {}}
+          onCardHovered={index === cards.length - 1 ? onCardHovered : () => {}}
         />
       ))}
     </div>

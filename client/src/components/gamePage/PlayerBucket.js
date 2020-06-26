@@ -32,12 +32,19 @@ CardsPlayed.propTypes = {
   onCardClicked: PropTypes.func.isRequired,
 };
 
-function PlayerBucket({ player, onCardClicked, onDropdownClicked }) {
+function PlayerBucket({ player, onCardClicked, onDropdownClicked, turn }) {
+  const style = turn.player === player.id ? { backgroundColor: "#0066cc" } : {};
   return (
     <Container>
-      <Row className="player">
+      <Row className="player" style={style}>
         <Col>
-          <h5 className="name">{player.name}</h5>
+          {turn.player === player.id ? (
+            <h5 className="name">
+              {player.name} ({turn.state})
+            </h5>
+          ) : (
+            <h5 className="name">{player.name}</h5>
+          )}
           <div className="playerInfo">
             <p>Score: {player.score}</p>
             <p>Remaining Cards: {player.numberOfRemainingCards}</p>

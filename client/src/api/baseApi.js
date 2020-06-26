@@ -21,7 +21,12 @@ export const setDeal = (game, numberOfDecks) => {
   }
 
   gameApi.setDraw(game.id, deal.draw);
-  gameApi.updateGame({ ...game, hand: tools.getHand(game.hand || 0), turn });
+  gameApi.updateGame({
+    ...game,
+    hand: tools.getHand(game.hand || 0),
+    turn,
+    numberOfDrawCards: deal.draw.length,
+  });
 };
 
 export const discardCardWithId = (gameId, playerId, playerCards, card) => {

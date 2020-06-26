@@ -63,7 +63,7 @@ export const setDraw = (gameId, cards) => {
   return database.ref(drawBaseUrl + gameId).set(cards);
 };
 
-export const popDrawCard = (gameId, onDrawRecieved) => {
+export const popDrawCard = (gameId, numberOfDrawCards, onDrawRecieved) => {
   const ref = database.ref(drawBaseUrl + gameId);
 
   ref
@@ -74,6 +74,8 @@ export const popDrawCard = (gameId, onDrawRecieved) => {
       onDrawRecieved(snapshot.val());
       ref.child(Object.keys(snapshot.val())[0]).remove();
     });
+
+  updateGame({ id: gameId, numberOfDrawCards: numberOfDrawCards - 1 });
 };
 
 export const popDiscard = (gameId, onDiscardReceived) => {

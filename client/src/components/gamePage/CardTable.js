@@ -6,23 +6,40 @@ import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
 import CardStack from "../common/CardStack";
 import Buys from "./Buys";
+import Turn from "./Turn";
 
 function CardTable({
-  discard,
-  numberOfDrawCards,
+  game,
+  player,
   playerCards,
-  hand,
+  discard,
+  highlightDraw,
   numberOfBuys,
+  onDrawHovered,
+  onDiscardHovered,
+  onPlayerCardClicked,
+  onPlayerCardHovered,
+  onDragStart,
+  onDragOver,
+  onDrop,
+  onDrawClicked,
+  onPlayClicked,
+  onDiscardClicked,
 }) {
   return (
     <div className="CardTable sticky-top">
       <Row className="GameInformationBlock">
         <Col>
-          <h5>
-            Hand: {hand.books}{" "}
-            {parseInt(hand.books, 10) === 1 ? "book" : "books"}, {hand.runs}{" "}
-            {parseInt(hand.runs, 10) === 1 ? "run" : "runs"}
-          </h5>
+          {game.hand ? (
+            <h5>
+              Hand: {game.hand.books}{" "}
+              {parseInt(game.hand.books, 10) === 1 ? "book" : "books"},{" "}
+              {game.hand.runs}{" "}
+              {parseInt(game.hand.runs, 10) === 1 ? "run" : "runs"}
+            </h5>
+          ) : (
+            <></>
+          )}
         </Col>
       </Row>
       <Row className="PilesBlock">
@@ -30,18 +47,23 @@ function CardTable({
           <CardDiscard
             cards={discard}
             source="front"
-            onCardClicked={() => {
-              console.log("yay!");
-            }}
+            onCardHovered={onDiscardHovered}
+            onCardClicked={onDiscardClicked}
           />
         </Col>
         <Col className="justify-content-center align-self-center">
           <CardStack
-            numberOfCards={numberOfDrawCards}
+            numberOfCards={
+              !game.numberOfDrawCards
+                ? 0
+                : game.numberOfDrawCards > 30
+                ? 30
+                : game.numberOfDrawCards
+            }
             source="back"
-            onTopCardClicked={() => {
-              console.log("Top Card Clicked");
-            }}
+            highlight={highlightDraw}
+            onCardHovered={onDrawHovered}
+            onCardClicked={onDrawClicked}
           />
         </Col>
       </Row>
@@ -50,31 +72,40 @@ function CardTable({
         <CardSet
           cards={playerCards}
           source="front"
-          onCardClicked={() => {
-            console.log("yay!");
-          }}
+          onCardClicked={onPlayerCardClicked}
+          onCardHovered={onPlayerCardHovered}
+          onDragStart={onDragStart}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
         />
       </Row>
 
-      <Buys
-        numberOfBuys={numberOfBuys}
-        onClick={() => {
-          console.log("BUYY!");
-        }}
-      />
+      <Row>
+        <Col>
+          <Buys
+            numberOfBuys={numberOfBuys}
+            onClick={() => {
+              console.log("BUYY!");
+            }}
+          />
+        </Col>
+        {/* <Turn
+          player={player}
+          game={game}
+          onPlayClicked={onPlayClicked}
+          onDrawClicked={onDrawClicked}
+          onDiscardClicked={onDiscardClicked}
+        /> */}
+      </Row>
     </div>
   );
 }
 
 CardTable.propTypes = {
   discard: PropTypes.array.isRequired,
-  numberOfDrawCards: PropTypes.number.isRequired,
   playerCards: PropTypes.array.isRequired,
-  hand: PropTypes.object.isRequired,
-};
-
-CardTable.defaultProps = {
-  onCardClicked: () => {},
+  onPlayerCardClicked: PropTypes.func.isRequired,
+  onPlayerCardHovered: PropTypes.func.isRequired,
 };
 
 export default CardTable;

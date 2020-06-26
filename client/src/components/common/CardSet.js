@@ -3,7 +3,15 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardSet({ cards, source, onCardClicked }) {
+function CardSet({
+  cards,
+  source,
+  onCardClicked,
+  onCardHovered,
+  onDragStart,
+  onDragOver,
+  onDrop,
+}) {
   const offset = -1 * Math.floor(cards.length / 2.0);
   const containerHeight =
     0.5 * constants.CARD_WIDTH + constants.CARD_HEIGHT + 1;
@@ -13,7 +21,7 @@ function CardSet({ cards, source, onCardClicked }) {
     height: `${containerHeight}rem`,
     display: "flex",
     justifyContent: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
     position: "relative",
     marginTop: "1rem",
     marginBottom: "1rem",
@@ -23,14 +31,20 @@ function CardSet({ cards, source, onCardClicked }) {
     <div style={style}>
       {cards.map((card, index) => (
         <PlayingCard
-          key={card}
-          id={card}
+          key={card.id}
+          id={card.id}
+          index={index}
           xTranslation={constants.CARDSET_STRETCH_X * (index + offset)}
           yTranslation={1}
           rotation={(180 / cards.length) * (index + offset)}
           transformOrigin="50% 100%"
           source={source}
           onCardClicked={onCardClicked}
+          onCardHovered={onCardHovered}
+          highlight={card.highlight}
+          onDragStart={onDragStart}
+          onDragOver={onDragOver}
+          onDrop={onDrop}
         />
       ))}
     </div>
@@ -38,14 +52,15 @@ function CardSet({ cards, source, onCardClicked }) {
 }
 
 CardSet.propTypes = {
-  cards: PropTypes.arrayOf(PropTypes.number),
+  cards: PropTypes.arrayOf(PropTypes.object).isRequired,
   onCardClicked: PropTypes.func,
+  onCardHovered: PropTypes.func,
   source: PropTypes.string,
 };
 
 CardSet.defaultProps = {
-  cards: PropTypes.arrayOf(PropTypes.number),
   onCardClicked: () => {},
+  onCardHovered: () => {},
   source: "front",
 };
 
