@@ -17,7 +17,7 @@ function CardDiscard({
     height: `${containerHeight}rem`,
     display: "flex",
     justifyContent: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
     position: "relative",
     marginTop: "1rem",
     marginBottom: "1rem",
@@ -28,8 +28,6 @@ function CardDiscard({
       <PlayingCard
         id={0}
         yTranslation={0.5 * constants.CARD_WIDTH}
-        // xTranslation={0.5 * constants.CARD_WIDTH}
-        rotation={0}
         transformOrigin="0% 50%"
         source={"placeholder"}
         onCardClicked={onCardClicked}

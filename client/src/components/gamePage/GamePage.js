@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
+import * as baseApi from "../../api/baseApi";
 import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
 import "./GamePage.css";
 import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
+import { toast } from "react-toastify";
 
 function GamePage() {
   const [game, setGame] = useState({});
+  const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
   const [highlightDraw, setHighlightDraw] = useState(false);
@@ -36,14 +39,10 @@ function GamePage() {
       gameApi.getDiscard(game.id, (_discard) => {
         if (_discard)
           setDiscard(
-            Object.keys(_discard).map((key, index) =>
-              discard[index] && discard[index].rotation
-                ? { id: parseInt(_discard[key], 10) }
-                : {
-                    id: parseInt(_discard[key], 10),
-                    rotation: parseInt(_discard[key], 10) * 3,
-                  }
-            )
+            Object.keys(_discard).map((key, index) => ({
+              id: parseInt(_discard[key], 10),
+              rotation: parseInt(_discard[key], 10) * 3,
+            }))
           );
       });
     }
@@ -55,7 +54,23 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    gameApi.pushToDiscard(game.id, target.id);
+    if (turnState === "Discard") {
+      gameApi.pushToDiscard(game.id, target.id);
+
+      const newCards = cardsInHand.filter(
+        (card) => card.id !== parseInt(target.id, 10)
+      );
+
+      setCardsInHand(newCards);
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCards.map((card) => card.id)
+      );
+
+      baseApi.nextTurn(game);
+      setTurnState("Wait");
+    }
     console.log("card clicked");
   }
 
@@ -72,7 +87,7 @@ function GamePage() {
   function handleDiscardClicked({ target }) {
     console.log("discard");
 
-    if (game.turn && game.turn.player === player)
+    if (turnState === "Draw")
       gameApi.popDiscard(game.id, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -83,10 +98,12 @@ function GamePage() {
 
         playerApi.setPlayerCardsInHand(
           player,
+          game.id,
           newCards.map((card) => card.id)
         );
 
         if (discard.length === 1) setDiscard([]);
+        baseApi.nextTurn(game);
       });
   }
 
@@ -103,7 +120,7 @@ function GamePage() {
   function handleDrawClicked({ target }) {
     console.log("draw");
 
-    if (game.turn && game.turn.player === player)
+    if (turnState === "Draw")
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -114,15 +131,33 @@ function GamePage() {
 
         playerApi.setPlayerCardsInHand(
           player,
+          game.id,
           newCards.map((card) => card.id)
         );
 
-        // if (game.number.length === 1) setDiscard([]);
+        baseApi.nextTurn(game);
       });
   }
 
   function handleDrawHovered({ target }) {
     setHighlightDraw(!highlightDraw);
+  }
+
+  function handleTurnButtonClicked({ target }) {
+    setTurnState(target.name);
+    if (target.name === "Draw") {
+      toast.success("🦄 Select draw card!");
+    }
+
+    if (target.name === "Play") {
+      baseApi.setTurn(game, "playing");
+      toast.info("🦒 Select cards to play");
+    }
+
+    if (target.name === "Discard") {
+      baseApi.setTurn(game, "discarding");
+      toast.warn("🐨 Select a card to discard!");
+    }
   }
 
   const onDragStart = (event, id) => {
@@ -156,6 +191,7 @@ function GamePage() {
     setCardsInHand(cards);
     playerApi.setPlayerCardsInHand(
       player,
+      game.id,
       cards.map((card) => card.id)
     );
   };
@@ -181,6 +217,7 @@ function GamePage() {
             onDrawHovered={handleDrawHovered}
             onDiscardClicked={handleDiscardClicked}
             onDiscardHovered={handleDiscardHovered}
+            onTurnButtonClicked={handleTurnButtonClicked}
             highlightDraw={highlightDraw}
           />
         </Col>

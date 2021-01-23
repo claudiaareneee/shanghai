@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Row } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-function Buys({ numberOfBuys, onClick }) {
+function Buys({ numberOfBuys, onClick, disabled }) {
   return (
     <>
       <Row>
@@ -16,6 +16,7 @@ function Buys({ numberOfBuys, onClick }) {
               size="lg"
               key={key}
               onClick={onClick}
+              disabled={disabled}
               style={{ marginRight: ".5rem" }}
             >
               $$$
