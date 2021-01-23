@@ -6,6 +6,7 @@ import Header from "../common/Header";
 import PropTypes from "prop-types";
 import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
+import { toast } from "react-toastify";
 
 function StartPage({ history }) {
   const [errors, setErrors] = useState({});
@@ -58,6 +59,20 @@ function StartPage({ history }) {
   async function handleSubmit(event) {
     event.preventDefault();
     if (!formIsValid()) return;
+
+    // TODO: Check for existing name -- this player already exists, would you like to join as them?
+    if (form.selection === "join") {
+      const game = await (await gameApi.getGameByIdOnce(form.room)).val();
+      if (game.hand != null) {
+        var answer = window.confirm(
+          "This game is already in progress. Would you like to join as a spectator?"
+        );
+        if (answer) {
+          history.push("/WaitingRoom");
+          return;
+        }
+      }
+    }
 
     localStorage.setItem("name", form.name);
     await initializeGameAndAddPlayer();

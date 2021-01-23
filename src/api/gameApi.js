@@ -43,6 +43,10 @@ export const getGameById = (id, onGamesRecieved) => {
   });
 };
 
+export const getGameByIdOnce = (id) => {
+  return database.ref(gameBaseUrl + id).once("value");
+};
+
 export const setDiscard = (gameId, cards) => {
   return database.ref(discardBaseUrl + gameId).set(cards);
 };
