@@ -18,7 +18,7 @@ function GameForm(props) {
 
         <input
           type="submit"
-          value="Start"
+          value="Create"
           className="btn btn-primary float-right"
         />
       </form>
@@ -46,7 +46,7 @@ function GameForm(props) {
 
       <input
         type="submit"
-        value="Start"
+        value="Join"
         className="btn btn-primary float-right"
       />
     </form>
