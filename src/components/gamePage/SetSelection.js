@@ -1,5 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
+import {
+  GROUP_1_COLOR,
+  GROUP_2_COLOR,
+  GROUP_3_COLOR,
+} from "../common/Constants";
 
 function SetSelection({ hand, onClick, onLayDown }) {
   const buttonStrings = [];
@@ -7,7 +12,7 @@ function SetSelection({ hand, onClick, onLayDown }) {
   for (let i = 0; i < hand.books; i++) buttonStrings.push("book");
   for (let i = 0; i < hand.runs; i++) buttonStrings.push("run");
 
-  const selectionColors = ["#EE6123", "#00916E", "#FA003F"];
+  const selectionColors = [GROUP_1_COLOR, GROUP_2_COLOR, GROUP_3_COLOR];
 
   return (
     <>
@@ -18,7 +23,7 @@ function SetSelection({ hand, onClick, onLayDown }) {
           onClick={() => onClick(buttonStrings[index], selectionColors[index])}
           style={{
             marginRight: ".5rem",
-            backgroundColor: selectionColors[index],
+            backgroundColor: "#" + selectionColors[index],
             display: "inline",
           }}
           name={buttonStrings + index}

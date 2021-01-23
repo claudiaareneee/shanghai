@@ -7,6 +7,11 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
+import {
+  GROUP_1_COLOR,
+  GROUP_2_COLOR,
+  GROUP_3_COLOR,
+} from "../common/Constants";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -19,7 +24,11 @@ function GamePage() {
     selecting: false,
     color: "",
   });
-  const [cardSelections, setCardSelections] = useState({});
+  const [cardSelections, setCardSelections] = useState({
+    [GROUP_1_COLOR]: [],
+    [GROUP_2_COLOR]: [],
+    [GROUP_3_COLOR]: [],
+  });
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -84,22 +93,20 @@ function GamePage() {
       });
 
       const newCardSelections = !isSelected
-        ? {
-            ...cardSelections,
-            [selection.color]: [
-              cardSelections[selection.color].filter((id) => id === target.id),
-            ],
-          }
-        : cardSelections[selection.color]
-        ? {
-            ...cardSelections,
-            [selection.color]: [...cardSelections[selection.color], target.id],
-          }
+        ? cardSelections[selection.color].length == 1
+          ? { ...cardSelections, [selection.color]: [] }
+          : {
+              ...cardSelections,
+              [selection.color]: [
+                cardSelections[selection.color].filter(
+                  (id) => id === target.id
+                ),
+              ],
+            }
         : {
             ...cardSelections,
-            [selection.color]: [target.id],
+            [selection.color]: [...cardSelections[selection.color], target.id],
           };
-
       console.log(newCardSelections);
 
       setCardsInHand(newCardsInHand);
@@ -253,6 +260,24 @@ function GamePage() {
 
   const handleLayDown = () => {
     console.log(cardSelections);
+    let cardsToRemove = [];
+
+    Object.values(cardSelections).forEach((value) => {
+      cardsToRemove = [...cardsToRemove, ...value];
+    });
+
+    const newCardsInHand = cardsInHand.filter(
+      (card) => !cardsToRemove.includes(card.id.toString())
+    );
+
+    playerApi.setPlayerCardsOnTable(player, cardSelections);
+    playerApi.setPlayerCardsInHand(
+      player,
+      game.id,
+      newCardsInHand.map((card) => card.id)
+    );
+
+    console.log(cardsToRemove);
   };
 
   return (

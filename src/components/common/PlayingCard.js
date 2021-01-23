@@ -57,7 +57,7 @@ function PlayingCard({
         // onMouseDownCapture={(event) => console.log(event.nativeEvent)}
         // onDragOver={(event) => console.log(event)}
         style={{
-          border: selected ? ".5rem solid " + selectedColor : "",
+          border: selected ? ".5rem solid #" + selectedColor : "",
           boxShadow: highlight
             ? "0rem 0rem 2rem #ffff00"
             : "0rem 0rem 1rem #282c3452",
