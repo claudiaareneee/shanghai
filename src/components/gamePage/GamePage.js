@@ -61,7 +61,10 @@ function GamePage() {
   function handlePlayerCardClicked({ target }) {
     if (turnState === "Play" && selection.selecting) {
       const newCards = cardsInHand.map((card) => {
-        if (card.id.toString() === target.id) card.selected = !card.selected;
+        if (card.id.toString() === target.id) {
+          card.selected = !card.selected;
+          card.selectedColor = selection.color;
+        }
         return card;
       });
 
@@ -149,6 +152,7 @@ function GamePage() {
           newCards.map((card) => card.id)
         );
 
+        setTurnState("Play");
         baseApi.nextTurn(game);
       });
   }
@@ -163,11 +167,6 @@ function GamePage() {
 
     if (target.name === "Draw") {
       toast.success("🦄 Select draw card!");
-    }
-
-    if (target.name === "Play") {
-      baseApi.setTurn(game, "playing");
-      toast.info("🦒 Select cards to play");
     }
 
     if (target.name === "Discard") {

@@ -22,7 +22,7 @@ function SetSelection({ hand, onClick }) {
           }}
           name="Play"
         >
-          Make selection {index + 1}
+          Select {buttonStrings[index]} {index + 1}
         </button>
       ))}
     </>

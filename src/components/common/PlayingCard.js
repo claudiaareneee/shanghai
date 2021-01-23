@@ -14,6 +14,7 @@ function PlayingCard({
   transformOrigin,
   highlight,
   selected,
+  selectedColor,
   source,
   onCardClicked,
   onCardHovered,
@@ -56,9 +57,8 @@ function PlayingCard({
         // onMouseDownCapture={(event) => console.log(event.nativeEvent)}
         // onDragOver={(event) => console.log(event)}
         style={{
-          boxShadow: selected
-            ? "0rem 0rem 2rem #ff00ff"
-            : highlight
+          border: selected ? ".5rem solid " + selectedColor : "",
+          boxShadow: highlight
             ? "0rem 0rem 2rem #ffff00"
             : "0rem 0rem 1rem #282c3452",
         }}
@@ -76,6 +76,7 @@ PlayingCard.propTypes = {
   transformOrigin: PropTypes.string,
   highlight: PropTypes.bool,
   selected: PropTypes.bool,
+  selectedColor: PropTypes.string,
   source: PropTypes.string,
   boxShadow: PropTypes.string,
   onCardClicked: PropTypes.func,
@@ -94,6 +95,7 @@ PlayingCard.defaultProps = {
   transformOrigin: "0% 0%",
   highlight: false,
   selected: false,
+  selectedColor: "#EE6123",
   source: "front",
   boxShadow: "0rem 0rem 1rem #282c3452",
   onCardClicked: () => {},

@@ -21,15 +21,6 @@ function Turn({ game, player, onTurnButtonClicked }) {
           Draw
         </button>
         <button
-          className="btn btn-primary"
-          style={{ marginRight: ".5rem" }}
-          onClick={onTurnButtonClicked}
-          disabled={!canPlay}
-          name="Play"
-        >
-          Play
-        </button>
-        <button
           className="btn btn-danger"
           style={{ marginRight: ".5rem" }}
           onClick={onTurnButtonClicked}
