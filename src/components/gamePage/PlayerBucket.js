@@ -6,7 +6,7 @@ import PlayingCard from "../common/PlayingCard";
 import { Row, Col, Container } from "react-bootstrap";
 import "./PlayerBucket.css";
 
-function CardsPlayed({ cards = [], onCardClicked }) {
+function CardsPlayed({ cards = [], onCardClicked, onDrop }) {
   const containerHeight = constants.CARD_HEIGHT;
 
   const style = {
@@ -34,6 +34,7 @@ function CardsPlayed({ cards = [], onCardClicked }) {
           <CardSlide
             key={index}
             onCardClicked={onCardClicked}
+            onDrop={onDrop}
             cards={set}
             useStyle="slideStyle"
           />
@@ -53,6 +54,7 @@ function PlayerBucket({
   cards,
   onCardClicked,
   onDropdownClicked,
+  onDrop,
   turn,
 }) {
   const style = turn.player === player.id ? { backgroundColor: "#0066cc" } : {};
@@ -90,6 +92,7 @@ function PlayerBucket({
         <CardsPlayed
           cards={cards}
           onCardClicked={() => onCardClicked(player.id)}
+          onDrop={onDrop}
         />
       ) : (
         <></>
@@ -102,6 +105,7 @@ PlayerBucket.propTypes = {
   player: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func.isRequired,
   onDropdownClicked: PropTypes.func.isRequired,
+  onDrop: PropTypes.func.isRequired,
 };
 
 PlayerBucket.defaultProps = {

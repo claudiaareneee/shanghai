@@ -8,11 +8,9 @@ function Sidebar({
   cardsOnTable,
   onCardClicked,
   onDropdownClicked,
+  onDrop,
   turn,
 }) {
-  console.log("players:");
-  console.log(players);
-  console.log(cardsOnTable);
   return (
     <div className="Sidebar">
       <h3 className="Title">Players</h3>
@@ -24,6 +22,7 @@ function Sidebar({
           cards={cardsOnTable[key]}
           onCardClicked={onCardClicked}
           onDropdownClicked={onDropdownClicked}
+          onDrop={onDrop}
         />
       ))}
     </div>
@@ -34,12 +33,14 @@ Sidebar.propTypes = {
   players: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func,
   onDropdownClicked: PropTypes.func,
+  onDrop: PropTypes.func,
   cardsOnTable: PropTypes.object,
 };
 
 Sidebar.defaultProps = {
   onCardClicked: () => {},
   onDropdownClicked: () => {},
+  onDrop: () => {},
   cardsOnTable: {},
 };
 

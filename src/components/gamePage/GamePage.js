@@ -113,7 +113,6 @@ function GamePage() {
             ...cardSelections,
             [selection.color]: [...cardSelections[selection.color], target.id],
           };
-      console.log(newCardSelections);
 
       setCardsInHand(newCardsInHand);
       setCardSelections(newCardSelections);
@@ -221,8 +220,6 @@ function GamePage() {
       baseApi.setTurn(game, "discarding");
       toast.warn("🐨 Select a card to discard!");
     }
-
-    console.log(cardsOnTable);
   }
 
   const onDragStart = (event, id) => {
@@ -261,6 +258,12 @@ function GamePage() {
     );
   };
 
+  const onDropCardsOnTable = (event, cat) => {
+    let id = parseInt(event.dataTransfer.getData("id"), 10);
+    console.log("drag:", id);
+    console.log("drop:", cat);
+  };
+
   const handleSelectionButtonClicked = (type, color) => {
     toast.info(color + " " + type + " selected");
     setSelection({ ...selection, selecting: true, color });
@@ -283,8 +286,6 @@ function GamePage() {
       game.id,
       newCardsInHand.map((card) => card.id)
     );
-
-    console.log(players);
   };
 
   return (
@@ -319,6 +320,7 @@ function GamePage() {
           <Sidebar
             turn={game.turn}
             players={players}
+            onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
           />
