@@ -15,6 +15,7 @@ function GamePage() {
   const [discard, setDiscard] = useState([]);
   const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
+  const [selection, setSelection] = useState({ selecting: false, color: "" });
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -145,6 +146,8 @@ function GamePage() {
 
   function handleTurnButtonClicked({ target }) {
     setTurnState(target.name);
+    setSelection({ ...selection, selecting: false });
+
     if (target.name === "Draw") {
       toast.success("🦄 Select draw card!");
     }
@@ -196,6 +199,11 @@ function GamePage() {
     );
   };
 
+  const handleSelectionButtonClicked = (type, color) => {
+    toast.info(color + " " + type + " selected");
+    setSelection({ selecting: true, color });
+  };
+
   return (
     <div className="GamePage">
       <Row>
@@ -219,6 +227,7 @@ function GamePage() {
             onDiscardHovered={handleDiscardHovered}
             onTurnButtonClicked={handleTurnButtonClicked}
             highlightDraw={highlightDraw}
+            onSelectionButtonClicked={handleSelectionButtonClicked}
           />
         </Col>
 
