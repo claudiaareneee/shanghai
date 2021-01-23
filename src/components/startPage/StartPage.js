@@ -7,8 +7,6 @@ import PropTypes from "prop-types";
 import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
 
-// comment again
-
 function StartPage({ history }) {
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({
