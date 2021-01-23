@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-function SetSelection({ hand, onClick }) {
+function SetSelection({ hand, onClick, onLayDown }) {
   const buttonStrings = [];
 
   for (let i = 0; i < hand.books; i++) buttonStrings.push("book");
@@ -14,17 +14,29 @@ function SetSelection({ hand, onClick }) {
       {buttonStrings.map((_, index) => (
         <button
           className="btn"
+          key={index}
           onClick={() => onClick(buttonStrings[index], selectionColors[index])}
           style={{
             marginRight: ".5rem",
             backgroundColor: selectionColors[index],
             display: "inline",
           }}
-          name="Play"
+          name={buttonStrings + index}
         >
           Select {buttonStrings[index]} {index + 1}
         </button>
       ))}
+      <button
+        className="btn btn-primary"
+        onClick={onLayDown}
+        style={{
+          marginRight: ".5rem",
+          display: "inline",
+        }}
+        name="Play"
+      >
+        Lay down cards
+      </button>
     </>
   );
 }
@@ -32,11 +44,13 @@ function SetSelection({ hand, onClick }) {
 SetSelection.propTypes = {
   hand: PropTypes.object,
   onClick: PropTypes.func,
+  onLayDown: PropTypes.func,
 };
 
 SetSelection.defaultProps = {
   hand: { books: 0, runs: 0 },
   onClick: () => {},
+  onLayDown: () => {},
 };
 
 export default SetSelection;

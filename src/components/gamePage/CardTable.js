@@ -27,6 +27,7 @@ function CardTable({
   onDiscardClicked,
   onTurnButtonClicked,
   onSelectionButtonClicked,
+  onLayDown,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -81,7 +82,11 @@ function CardTable({
           onDrop={onDrop}
         />
       </Row>
-      <SetSelection hand={game.hand} onClick={onSelectionButtonClicked} />
+      <SetSelection
+        hand={game.hand}
+        onClick={onSelectionButtonClicked}
+        onLayDown={onLayDown}
+      />
       <Row>
         <Col>
           <Buys
@@ -108,6 +113,7 @@ CardTable.propTypes = {
   onPlayerCardClicked: PropTypes.func.isRequired,
   onPlayerCardHovered: PropTypes.func.isRequired,
   onSelectionButtonClicked: PropTypes.func.isRequired,
+  onLayDown: PropTypes.func.isRequired,
 };
 
 export default CardTable;

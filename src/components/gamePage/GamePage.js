@@ -18,8 +18,8 @@ function GamePage() {
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
-    cards: {},
   });
+  const [cardSelections, setCardSelections] = useState({});
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -50,6 +50,19 @@ function GamePage() {
             }))
           );
       });
+      if (player === game.turn.player) {
+        switch (game.turn.state) {
+          case "playing":
+            setTurnState("Play");
+            break;
+          case "discarding":
+            setTurnState("Discard");
+            break;
+          default:
+            setTurnState("Draw");
+            break;
+        }
+      }
     }
   }, [room, game, player]);
 
@@ -60,15 +73,37 @@ function GamePage() {
 
   function handlePlayerCardClicked({ target }) {
     if (turnState === "Play" && selection.selecting) {
-      const newCards = cardsInHand.map((card) => {
+      let isSelected = false;
+      const newCardsInHand = cardsInHand.map((card) => {
         if (card.id.toString() === target.id) {
           card.selected = !card.selected;
+          isSelected = card.selected;
           card.selectedColor = selection.color;
         }
         return card;
       });
 
-      setCardsInHand(newCards);
+      const newCardSelections = !isSelected
+        ? {
+            ...cardSelections,
+            [selection.color]: [
+              cardSelections[selection.color].filter((id) => id === target.id),
+            ],
+          }
+        : cardSelections[selection.color]
+        ? {
+            ...cardSelections,
+            [selection.color]: [...cardSelections[selection.color], target.id],
+          }
+        : {
+            ...cardSelections,
+            [selection.color]: [target.id],
+          };
+
+      console.log(newCardSelections);
+
+      setCardsInHand(newCardsInHand);
+      setCardSelections(newCardSelections);
     }
 
     if (turnState === "Discard") {
@@ -216,6 +251,10 @@ function GamePage() {
     setSelection({ ...selection, selecting: true, color });
   };
 
+  const handleLayDown = () => {
+    console.log(cardSelections);
+  };
+
   return (
     <div className="GamePage">
       <Row>
@@ -240,6 +279,7 @@ function GamePage() {
             onTurnButtonClicked={handleTurnButtonClicked}
             highlightDraw={highlightDraw}
             onSelectionButtonClicked={handleSelectionButtonClicked}
+            onLayDown={handleLayDown}
           />
         </Col>
 
