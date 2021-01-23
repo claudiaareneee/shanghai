@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
 
-// comment
+// comment again
 
 function StartPage({ history }) {
   const [errors, setErrors] = useState({});
