@@ -15,7 +15,11 @@ function GamePage() {
   const [discard, setDiscard] = useState([]);
   const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
-  const [selection, setSelection] = useState({ selecting: false, color: "" });
+  const [selection, setSelection] = useState({
+    selecting: false,
+    color: "",
+    cards: {},
+  });
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -55,6 +59,15 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
+    if (turnState === "Play" && selection.selecting) {
+      const newCards = cardsInHand.map((card) => {
+        if (card.id.toString() === target.id) card.selected = !card.selected;
+        return card;
+      });
+
+      setCardsInHand(newCards);
+    }
+
     if (turnState === "Discard") {
       gameApi.pushToDiscard(game.id, target.id);
 
@@ -201,7 +214,7 @@ function GamePage() {
 
   const handleSelectionButtonClicked = (type, color) => {
     toast.info(color + " " + type + " selected");
-    setSelection({ selecting: true, color });
+    setSelection({ ...selection, selecting: true, color });
   };
 
   return (

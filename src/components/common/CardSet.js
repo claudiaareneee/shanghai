@@ -42,6 +42,7 @@ function CardSet({
           onCardClicked={onCardClicked}
           onCardHovered={onCardHovered}
           highlight={card.highlight}
+          selected={card.selected}
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDrop={onDrop}
