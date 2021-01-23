@@ -7,7 +7,7 @@ import CardDiscard from "../common/CardDiscard";
 import CardStack from "../common/CardStack";
 import Buys from "./Buys";
 import Turn from "./Turn";
-import CardSelection from "./CardSelection";
+import SetSelection from "./SetSelection";
 
 function CardTable({
   game,
@@ -26,6 +26,7 @@ function CardTable({
   onDrawClicked,
   onDiscardClicked,
   onTurnButtonClicked,
+  onSelectionButtonClicked,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -80,9 +81,7 @@ function CardTable({
           onDrop={onDrop}
         />
       </Row>
-
-      <CardSelection cards={[]} />
-
+      <SetSelection hand={game.hand} onClick={onSelectionButtonClicked} />
       <Row>
         <Col>
           <Buys
@@ -108,6 +107,7 @@ CardTable.propTypes = {
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
   onPlayerCardHovered: PropTypes.func.isRequired,
+  onSelectionButtonClicked: PropTypes.func.isRequired,
 };
 
 export default CardTable;
