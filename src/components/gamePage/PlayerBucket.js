@@ -29,7 +29,7 @@ function CardsPlayed({ cards = [], onCardClicked }) {
     </div>
   ) : (
     <div className="cards">
-      {cards.map((set, index) => {
+      {Object.values(cards).map((set, index) => {
         return (
           <CardSlide
             key={index}
@@ -48,7 +48,13 @@ CardsPlayed.propTypes = {
   onCardClicked: PropTypes.func.isRequired,
 };
 
-function PlayerBucket({ player, onCardClicked, onDropdownClicked, turn }) {
+function PlayerBucket({
+  player,
+  cards,
+  onCardClicked,
+  onDropdownClicked,
+  turn,
+}) {
   const style = turn.player === player.id ? { backgroundColor: "#0066cc" } : {};
   return (
     <Container>
@@ -82,7 +88,7 @@ function PlayerBucket({ player, onCardClicked, onDropdownClicked, turn }) {
       </Row>
       {player.showCards ? (
         <CardsPlayed
-          cards={player.cards}
+          cards={cards}
           onCardClicked={() => onCardClicked(player.id)}
         />
       ) : (
@@ -96,6 +102,10 @@ PlayerBucket.propTypes = {
   player: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func.isRequired,
   onDropdownClicked: PropTypes.func.isRequired,
+};
+
+PlayerBucket.defaultProps = {
+  cards: [],
 };
 
 export default PlayerBucket;

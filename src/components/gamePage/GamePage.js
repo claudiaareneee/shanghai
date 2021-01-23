@@ -20,6 +20,7 @@ function GamePage() {
   const [discard, setDiscard] = useState([]);
   const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
+  const [cardsOnTable, setCardsOnTable] = useState([]);
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
@@ -59,6 +60,11 @@ function GamePage() {
             }))
           );
       });
+
+      playerApi.getPlayerCardsOnTableById(game.id, (_cardsOnTable) =>
+        setCardsOnTable(_cardsOnTable)
+      );
+
       if (player === game.turn.player) {
         switch (game.turn.state) {
           case "playing":
@@ -215,6 +221,8 @@ function GamePage() {
       baseApi.setTurn(game, "discarding");
       toast.warn("🐨 Select a card to discard!");
     }
+
+    console.log(cardsOnTable);
   }
 
   const onDragStart = (event, id) => {
@@ -259,7 +267,6 @@ function GamePage() {
   };
 
   const handleLayDown = () => {
-    console.log(cardSelections);
     let cardsToRemove = [];
 
     Object.values(cardSelections).forEach((value) => {
@@ -270,14 +277,14 @@ function GamePage() {
       (card) => !cardsToRemove.includes(card.id.toString())
     );
 
-    playerApi.setPlayerCardsOnTable(player, cardSelections);
+    playerApi.setPlayerCardsOnTable(player, game.id, cardSelections);
     playerApi.setPlayerCardsInHand(
       player,
       game.id,
       newCardsInHand.map((card) => card.id)
     );
 
-    console.log(cardsToRemove);
+    console.log(players);
   };
 
   return (
@@ -312,6 +319,7 @@ function GamePage() {
           <Sidebar
             turn={game.turn}
             players={players}
+            cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
           />
         </Col>

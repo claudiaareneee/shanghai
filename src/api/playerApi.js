@@ -60,12 +60,12 @@ export const getPlayerCardsInHandById = (id, onCardsReceived) => {
   });
 };
 
-export const setPlayerCardsOnTable = (id, cards) => {
-  return database.ref(cardsOnTableBaseUrl + id).set(cards);
+export const setPlayerCardsOnTable = (id, gameId, cards) => {
+  return database.ref(cardsOnTableBaseUrl + gameId + "/" + id).set(cards);
 };
 
-export const getPlayerCardsOnTableById = (id, onCardsReceived) => {
-  const cards = firebase.database().ref(cardsOnTableBaseUrl + id);
+export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
+  const cards = firebase.database().ref(cardsOnTableBaseUrl + gameId);
   cards.on("value", function (snapshot) {
     if (snapshot.val() != null) onCardsReceived(snapshot.val());
   });
