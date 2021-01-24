@@ -319,7 +319,6 @@ function GamePage() {
       newCardsInHand.map((card) => card.id)
     );
   };
-
   return (
     <div className="GamePage">
       <Row>

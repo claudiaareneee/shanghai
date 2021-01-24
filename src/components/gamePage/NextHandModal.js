@@ -1,21 +1,46 @@
 import React from "react";
-import { Modal } from "react-bootstrap";
+import { Row, Col, Table, Modal } from "react-bootstrap";
 
 function NextHandPage() {
   return <>Hand, score, who went out, maybe the cards on the table</>;
 }
 
-function NextHandModal(props) {
-  const getPersonWhoWentOut = () => {
-    Object.values(props.players).filter(
-      (player) => player.numberOfRemainingCards === 0
-    );
-  };
-  console.log(props.players);
-  console.log(getPersonWhoWentOut());
+function ScoreRow({ player }) {
+  return (
+    <tr>
+      <td>{player.name}</td>
+      <td>{player.oldScore}32</td>
+      <td>{player.score}</td>
+    </tr>
+  );
+}
+
+function ScoreTable({ players }) {
+  return (
+    <Table style={{ color: "#282c34" }}>
+      <thead>
+        <tr>
+          <th>name</th>
+          <th>old score</th>
+          <th>new score</th>
+        </tr>
+      </thead>
+      <tbody>
+        {Object.values(players).map((player, index) => (
+          <ScoreRow player={player} />
+        ))}
+      </tbody>
+    </Table>
+  );
+}
+
+function NextHandModal({ show, onHide, players }) {
+  console.log("NextHandModal players:", players);
+  console.log("NextHandModal players values:", Object.values(players));
+
   return (
     <Modal
-      {...props}
+      show={show}
       size="lg"
       dialogClassName="modal-90w"
       aria-labelledby="contained-modal-title-vcenter"
@@ -30,9 +55,10 @@ function NextHandModal(props) {
         <h4>Champion this round</h4>
         <h4>Scores</h4>
         <p>Hand, score, who went out, maybe the cards on the table</p>
+        <ScoreTable players={players} />
       </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
-        <button className="btn btn-primary" onClick={props.onHide}>
+        <button className="btn btn-primary" onClick={onHide}>
           Close
         </button>
       </Modal.Footer>
