@@ -12,6 +12,7 @@ import {
   GROUP_2_COLOR,
   GROUP_3_COLOR,
 } from "../common/Constants";
+import NextHandModal from "./NextHandModal";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -21,6 +22,7 @@ function GamePage() {
   const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
   const [cardsOnTable, setCardsOnTable] = useState([]);
+  const [modalShow, setModalShow] = React.useState(false);
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
@@ -357,6 +359,12 @@ function GamePage() {
           />
         </Col>
       </Row>
+      <button onClick={() => setModalShow(true)}>test</button>
+      <NextHandModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        players={players}
+      />
     </div>
   );
 }
