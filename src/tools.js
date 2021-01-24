@@ -1,3 +1,5 @@
+import { current } from "immer";
+
 export const snapshotToArray = (snapshot) =>
   Object.entries(snapshot).map((e) => e[1]);
 
@@ -60,4 +62,67 @@ export const nextTurn = (opponents, turn = {}) => {
   }
 
   return { player, state };
+};
+
+export const scorePlayer = (playerScore, cards) => {
+  // 54 cards in one deck, A, 2, 3, ..., J, Q, K
+  const newScore = cards.reduce(
+    (previous, current) => previous + getPointsOfCard(current)
+  );
+
+  return playerScore + newScore;
+};
+
+export const getLongCardNameFromId = (card) => {
+  // c, h, s, d, j
+  // A, 2, 3, ..., J, Q, K
+
+  const id = card % 54;
+  return getCardNumber(id) + getSuit(id);
+};
+
+export const getSuit = (card) => {
+  if (card < 13) return "♣";
+  else if (card < 26) return "♥️";
+  else if (card < 39) return "♠";
+  else if (card < 52) return "♦️";
+  else return "Joker";
+};
+
+export const getSuitLong = (card) => {
+  if (card < 13) return " of Clubs";
+  else if (card < 26) return " of Hearts";
+  else if (card < 39) return " of Spades";
+  else if (card < 52) return " of Diamonds";
+  else return "Joker";
+};
+
+export const getCardNumber = (card) => {
+  const id = card % 13;
+
+  if (card >= 52) return "";
+
+  switch (id) {
+    case 0:
+      return "A";
+    case 10:
+      return "J";
+    case 11:
+      return "Q";
+    case 12:
+      return "K";
+    default:
+      return (id + 1).toString();
+  }
+};
+
+export const getPointsOfCard = (card) => {
+  const cardNumberInDeck = card % 54;
+  const cardNumberInSuit = cardNumberInDeck % 13;
+  // console.log(id);
+
+  if (cardNumberInDeck % 54 >= 52) return 50;
+  if (cardNumberInSuit === 0) return 20;
+  if (cardNumberInSuit >= 9) return 10;
+  return 5;
 };
