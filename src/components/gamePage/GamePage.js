@@ -222,8 +222,9 @@ function GamePage() {
     }
   }
 
-  const onDragStart = (event, id) => {
+  const onDragStart = (event, index, id) => {
     console.log("dragstart:", id);
+    event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
   };
 
@@ -232,14 +233,14 @@ function GamePage() {
   };
 
   const onDrop = (event, cat, association) => {
-    let id = parseInt(event.dataTransfer.getData("id"), 10);
-    console.log("drag:", id);
+    const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
+    console.log("drag:", cardIndex);
     console.log("drop:", cat);
     console.log("association", association);
 
-    const card = cardsInHand[parseInt(id, 10)];
+    const card = cardsInHand[parseInt(cardIndex, 10)];
     const newArray = cardsInHand.filter((card, index) => {
-      return id !== index;
+      return cardIndex !== index;
     });
 
     let cards = [];
@@ -265,15 +266,19 @@ function GamePage() {
     console.log("association", association);
     console.log(cardsOnTable);
 
-    if (turnState === "Play") {
-      let newPlayerCardsOnTable = Object.values(cardsOnTable[player]).map(
-        (set, index) => {
-          if (index === association.index) return [...set];
-          return set;
-        }
-      );
+    const cardId = event.dataTransfer.getData("id");
 
+    if (turnState === "Play" && cardsOnTable[player]) {
+      const newPlayerCardsOnTable = Object.values(
+        cardsOnTable[association.location]
+      ).map((set, index) => {
+        if (index === association.index) return [...set, cardId];
+        return set;
+      });
+
+      console.log(cardsOnTable[player]);
       console.log(newPlayerCardsOnTable);
+      toast.success("got to here");
     }
   };
 
