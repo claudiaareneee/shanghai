@@ -119,7 +119,6 @@ export const getCardNumber = (card) => {
 export const getPointsOfCard = (card) => {
   const cardNumberInDeck = card % 54;
   const cardNumberInSuit = cardNumberInDeck % 13;
-  // console.log(id);
 
   if (cardNumberInDeck % 54 >= 52) return 50;
   if (cardNumberInSuit === 0) return 20;
