@@ -324,6 +324,7 @@ function GamePage() {
         <Col>
           <CardTable
             game={game}
+            turnState={turnState}
             player={player}
             discard={discard || []}
             playerCards={cardsInHand}
