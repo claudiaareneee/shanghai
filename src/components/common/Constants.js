@@ -5,3 +5,6 @@ export const CARDSTACK_STRETCH_Y = 0.05;
 export const CARDSET_STRETCH_X = 0;
 export const CARDSET_STRETCH_Y = 0.01;
 export const CARDSLIDE_STRETCH_X = 1;
+export const GROUP_1_COLOR = "EE6123";
+export const GROUP_2_COLOR = "00916E";
+export const GROUP_3_COLOR = "FA003F";

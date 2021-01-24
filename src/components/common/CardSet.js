@@ -6,6 +6,7 @@ import * as constants from "./Constants";
 function CardSet({
   cards,
   source,
+  association,
   onCardClicked,
   onCardHovered,
   onDragStart,
@@ -39,9 +40,12 @@ function CardSet({
           rotation={(180 / cards.length) * (index + offset)}
           transformOrigin="50% 100%"
           source={source}
+          association={association}
           onCardClicked={onCardClicked}
           onCardHovered={onCardHovered}
           highlight={card.highlight}
+          selected={card.selected}
+          selectedColor={card.selectedColor}
           onDragStart={onDragStart}
           onDragOver={onDragOver}
           onDrop={onDrop}
@@ -56,12 +60,14 @@ CardSet.propTypes = {
   onCardClicked: PropTypes.func,
   onCardHovered: PropTypes.func,
   source: PropTypes.string,
+  association: PropTypes.object,
 };
 
 CardSet.defaultProps = {
   onCardClicked: () => {},
   onCardHovered: () => {},
   source: "front",
+  association: { location: "player" },
 };
 
 export default CardSet;

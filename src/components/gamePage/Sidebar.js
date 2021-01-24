@@ -3,7 +3,14 @@ import "./Sidebar.css";
 import PropTypes from "prop-types";
 import PlayerBucket from "./PlayerBucket";
 
-function Sidebar({ players, onCardClicked, onDropdownClicked, turn }) {
+function Sidebar({
+  players,
+  cardsOnTable,
+  onCardClicked,
+  onDropdownClicked,
+  onDrop,
+  turn,
+}) {
   return (
     <div className="Sidebar">
       <h3 className="Title">Players</h3>
@@ -12,8 +19,10 @@ function Sidebar({ players, onCardClicked, onDropdownClicked, turn }) {
           key={key}
           turn={turn}
           player={players[key]}
+          cards={cardsOnTable[key]}
           onCardClicked={onCardClicked}
           onDropdownClicked={onDropdownClicked}
+          onDrop={onDrop}
         />
       ))}
     </div>
@@ -24,11 +33,15 @@ Sidebar.propTypes = {
   players: PropTypes.object.isRequired,
   onCardClicked: PropTypes.func,
   onDropdownClicked: PropTypes.func,
+  onDrop: PropTypes.func,
+  cardsOnTable: PropTypes.object,
 };
 
 Sidebar.defaultProps = {
   onCardClicked: () => {},
-  onDropdownClickedL: () => {},
+  onDropdownClicked: () => {},
+  onDrop: () => {},
+  cardsOnTable: {},
 };
 
 export default Sidebar;
