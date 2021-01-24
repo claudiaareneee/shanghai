@@ -276,6 +276,18 @@ function GamePage() {
         return set;
       });
 
+      playerApi.setPlayerCardsOnTable(
+        association.location,
+        game.id,
+        newPlayerCardsOnTable
+      );
+
+      const newPlayerCardsInHand = cardsInHand
+        .filter((card) => card.id.toString() !== cardId)
+        .map((card) => card.id);
+
+      playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+
       console.log(cardsOnTable[player]);
       console.log(newPlayerCardsOnTable);
       toast.success("got to here");
