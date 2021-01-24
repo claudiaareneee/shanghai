@@ -6,7 +6,7 @@ import PlayingCard from "../common/PlayingCard";
 import { Row, Col, Container } from "react-bootstrap";
 import "./PlayerBucket.css";
 
-function CardsPlayed({ cards = [], onCardClicked, onDrop }) {
+function CardsPlayed({ cards = [], player, onCardClicked, onDrop }) {
   const containerHeight = constants.CARD_HEIGHT;
 
   const style = {
@@ -35,7 +35,9 @@ function CardsPlayed({ cards = [], onCardClicked, onDrop }) {
             key={index}
             onCardClicked={onCardClicked}
             onDrop={onDrop}
+            index={index}
             cards={set}
+            association={{ location: player, index: index }}
             useStyle="slideStyle"
           />
         );
@@ -93,6 +95,7 @@ function PlayerBucket({
           cards={cards}
           onCardClicked={() => onCardClicked(player.id)}
           onDrop={onDrop}
+          player={player.id}
         />
       ) : (
         <></>

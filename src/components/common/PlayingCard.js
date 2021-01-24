@@ -16,6 +16,7 @@ function PlayingCard({
   selected,
   selectedColor,
   source,
+  association,
   onCardClicked,
   onCardHovered,
   onDragStart,
@@ -52,7 +53,7 @@ function PlayingCard({
         onDragStart={(e) => onDragStart(e, index)}
         onDragOver={(e) => onDragOver(e)}
         onDrop={(e) => {
-          onDrop(e, index);
+          onDrop(e, index, association);
         }}
         // onMouseDownCapture={(event) => console.log(event.nativeEvent)}
         // onDragOver={(event) => console.log(event)}
@@ -78,6 +79,7 @@ PlayingCard.propTypes = {
   selected: PropTypes.bool,
   selectedColor: PropTypes.string,
   source: PropTypes.string,
+  association: PropTypes.object,
   boxShadow: PropTypes.string,
   onCardClicked: PropTypes.func,
   onCardHovered: PropTypes.func,
@@ -97,6 +99,7 @@ PlayingCard.defaultProps = {
   selected: false,
   selectedColor: "#EE6123",
   source: "front",
+  association: { location: "player" },
   boxShadow: "0rem 0rem 1rem #282c3452",
   onCardClicked: () => {},
   onCardHovered: () => {},

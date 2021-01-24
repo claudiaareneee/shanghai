@@ -30,6 +30,7 @@ function CardDiscard({
         yTranslation={0.5 * constants.CARD_WIDTH}
         transformOrigin="0% 50%"
         source={"placeholder"}
+        association={{ location: "discard" }}
         onCardClicked={onCardClicked}
       />
       {cards.map((card, index) => (
@@ -41,6 +42,7 @@ function CardDiscard({
           rotation={card.rotation}
           transformOrigin="0% 50%"
           source={source}
+          association={{ location: "discard" }}
           highlight={card.highlight}
           onCardClicked={index === cards.length - 1 ? onCardClicked : () => {}}
           onCardHovered={index === cards.length - 1 ? onCardHovered : () => {}}

@@ -231,10 +231,11 @@ function GamePage() {
     event.preventDefault();
   };
 
-  const onDrop = (event, cat) => {
+  const onDrop = (event, cat, association) => {
     let id = parseInt(event.dataTransfer.getData("id"), 10);
     console.log("drag:", id);
     console.log("drop:", cat);
+    console.log("association", association);
 
     const card = cardsInHand[parseInt(id, 10)];
     const newArray = cardsInHand.filter((card, index) => {
@@ -258,10 +259,22 @@ function GamePage() {
     );
   };
 
-  const onDropCardsOnTable = (event, cat) => {
-    let id = parseInt(event.dataTransfer.getData("id"), 10);
-    console.log("drag:", id);
-    console.log("drop:", cat);
+  const onDropCardsOnTable = (event, index, association) => {
+    console.log("drag:", index);
+    console.log("drop:", index);
+    console.log("association", association);
+    console.log(cardsOnTable);
+
+    if (turnState === "Play") {
+      let newPlayerCardsOnTable = Object.values(cardsOnTable[player]).map(
+        (set, index) => {
+          if (index === association.index) return [...set];
+          return set;
+        }
+      );
+
+      console.log(newPlayerCardsOnTable);
+    }
   };
 
   const handleSelectionButtonClicked = (type, color) => {
