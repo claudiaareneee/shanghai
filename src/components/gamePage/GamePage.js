@@ -134,6 +134,12 @@ function GamePage() {
         newCards.map((card) => card.id)
       );
 
+      if (newCards.length === 0) {
+        toast.success("congratz, you just went out");
+
+        playerApi.calculateScores(game.id, players);
+      }
+
       baseApi.nextTurn(game);
       setTurnState("Wait");
     }

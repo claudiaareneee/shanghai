@@ -66,9 +66,8 @@ export const nextTurn = (opponents, turn = {}) => {
 
 export const scorePlayer = (playerScore, cards) => {
   // 54 cards in one deck, A, 2, 3, ..., J, Q, K
-  const newScore = cards.reduce(
-    (previous, current) => previous + getPointsOfCard(current)
-  );
+  console.log("testing cards: ", cards);
+  const newScore = cards.reduce((p, c) => p + getPointsOfCard(c), 0);
 
   return playerScore + newScore;
 };

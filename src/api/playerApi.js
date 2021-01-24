@@ -1,6 +1,7 @@
 import firebase from "./firebase.config";
 import { handleError } from "./apiUtils";
 import "firebase/database";
+import { scorePlayer } from "../tools";
 
 const database = firebase.database();
 
@@ -68,5 +69,23 @@ export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
   const cards = firebase.database().ref(cardsOnTableBaseUrl + gameId);
   cards.on("value", function (snapshot) {
     if (snapshot.val() != null) onCardsReceived(snapshot.val());
+  });
+};
+
+export const calculateScores = (gameId, players) => {
+  console.log("players: ", Object.keys(players));
+  Object.keys(players).forEach((key) => {
+    console.log("player: ", players[key]);
+    getPlayerCardsInHandById(key, (cards) => {
+      const newScore = scorePlayer(
+        players[key].score,
+        cards.map((card) => parseInt(card, 10))
+      );
+      updatePlayer(gameId, {
+        ...players[key],
+        oldScore: players[key].score,
+        score: newScore,
+      });
+    });
   });
 };

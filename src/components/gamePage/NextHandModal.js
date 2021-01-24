@@ -35,8 +35,8 @@ function ScoreTable({ players }) {
 }
 
 function NextHandModal({ show, onHide, players }) {
-  console.log("NextHandModal players:", players);
-  console.log("NextHandModal players values:", Object.values(players));
+  //   console.log("NextHandModal players:", players);
+  //   console.log("NextHandModal players values:", Object.values(players));
 
   return (
     <Modal
