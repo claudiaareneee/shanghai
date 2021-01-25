@@ -1,5 +1,3 @@
-import { current } from "immer";
-
 export const snapshotToArray = (snapshot) =>
   Object.entries(snapshot).map((e) => e[1]);
 
@@ -46,10 +44,12 @@ export function dealCards(opponents, numberOfDecks) {
   return deal;
 }
 
-export const nextTurn = (opponents, turn = {}) => {
+export const nextTurn = (opponents, endOfHand, turn = {}) => {
   let state = "";
   let playerIndex = turn.player ? opponents.indexOf(turn.player) : 0;
   let player = turn.player;
+
+  if (endOfHand) return { player: "End of Hand", state: "EndOfHand" };
 
   if (turn.state === "drawing") state = "playing";
   else if (turn.state === "playing") state = "discarding";

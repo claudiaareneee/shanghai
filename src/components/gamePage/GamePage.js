@@ -101,7 +101,7 @@ function GamePage() {
       });
 
       const newCardSelections = !isSelected
-        ? cardSelections[selection.color].length == 1
+        ? cardSelections[selection.color].length === 1
           ? { ...cardSelections, [selection.color]: [] }
           : {
               ...cardSelections,
@@ -134,14 +134,15 @@ function GamePage() {
         newCards.map((card) => card.id)
       );
 
-      if (newCards.length === 0) {
-        toast.success("congratz, you just went out");
-
+      if (newCards.length !== 0) {
+        baseApi.nextTurn(game);
+        setTurnState("Wait");
+      } else {
+        toast.success("congratz 🦑, you just went out");
         playerApi.calculateScores(game.id, players);
+        baseApi.nextTurn(game, true);
+        setTurnState("EndOfHand");
       }
-
-      baseApi.nextTurn(game);
-      setTurnState("Wait");
     }
     console.log("card clicked");
   }

@@ -1,15 +1,11 @@
 import React from "react";
-import { Row, Col, Table, Modal } from "react-bootstrap";
-
-function NextHandPage() {
-  return <>Hand, score, who went out, maybe the cards on the table</>;
-}
+import { Table, Modal } from "react-bootstrap";
 
 function ScoreRow({ player }) {
   return (
     <tr>
       <td>{player.name}</td>
-      <td>{player.oldScore}32</td>
+      <td>{player.oldScore}</td>
       <td>{player.score}</td>
     </tr>
   );
@@ -27,7 +23,7 @@ function ScoreTable({ players }) {
       </thead>
       <tbody>
         {Object.values(players).map((player, index) => (
-          <ScoreRow player={player} />
+          <ScoreRow player={player} key={player.name} />
         ))}
       </tbody>
     </Table>
@@ -35,12 +31,10 @@ function ScoreTable({ players }) {
 }
 
 function NextHandModal({ show, onHide, players }) {
-  //   console.log("NextHandModal players:", players);
-  //   console.log("NextHandModal players values:", Object.values(players));
-
   return (
     <Modal
       show={show}
+      onHide={onHide}
       size="lg"
       dialogClassName="modal-90w"
       aria-labelledby="contained-modal-title-vcenter"

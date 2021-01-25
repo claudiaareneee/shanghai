@@ -30,8 +30,12 @@ export const setDeal = (game, numberOfDecks) => {
   });
 };
 
-export const nextTurn = (game) => {
-  const turn = tools.nextTurn(tools.snapshotToArray(game.opponents), game.turn);
+export const nextTurn = (game, endHand = false) => {
+  const turn = tools.nextTurn(
+    tools.snapshotToArray(game.opponents),
+    endHand,
+    game.turn
+  );
   console.log("Turn: ", turn);
   gameApi.updateGame({
     ...game,
