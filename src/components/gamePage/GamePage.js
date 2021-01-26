@@ -67,6 +67,8 @@ function GamePage() {
         setCardsOnTable(_cardsOnTable)
       );
 
+      if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
+
       if (player === game.turn.player) {
         switch (game.turn.state) {
           case "playing":
