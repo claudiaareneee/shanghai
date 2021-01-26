@@ -25,7 +25,7 @@ export const setDeal = (game, numberOfDecks) => {
   gameApi.setDraw(game.id, deal.draw);
   gameApi.updateGame({
     ...game,
-    hand: tools.getHand(game.hand || 0),
+    hand: tools.getHand(game.hand ? game.hand.round : 0),
     turn,
     numberOfDrawCards: deal.draw.length,
   });

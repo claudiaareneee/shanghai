@@ -328,7 +328,9 @@ function GamePage() {
     );
   };
 
-  const handleNextHandClick = () => {};
+  const handleNextHandClick = () => {
+    baseApi.setDeal(game, 2);
+  };
 
   return (
     <div className="GamePage">
