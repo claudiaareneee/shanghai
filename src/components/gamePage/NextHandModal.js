@@ -30,7 +30,7 @@ function ScoreTable({ players }) {
   );
 }
 
-function NextHandModal({ show, players, onHide, onNextHandClick }) {
+function NextHandModal({ show, players, turnState, onHide, onNextHandClick }) {
   return (
     <Modal
       show={show}
@@ -53,9 +53,13 @@ function NextHandModal({ show, players, onHide, onNextHandClick }) {
         <ScoreTable players={players} />
       </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
-        <button className="btn btn-success" onClick={onNextHandClick}>
-          Next Hand
-        </button>
+        {turnState === "EndOfHand" ? (
+          <button className="btn btn-success" onClick={onNextHandClick}>
+            Next Hand
+          </button>
+        ) : (
+          <></>
+        )}
         <button className="btn btn-primary" onClick={onHide}>
           Close
         </button>

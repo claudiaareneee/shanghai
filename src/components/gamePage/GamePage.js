@@ -327,6 +327,9 @@ function GamePage() {
       newCardsInHand.map((card) => card.id)
     );
   };
+
+  const handleNextHandClick = () => {};
+
   return (
     <div className="GamePage">
       <Row>
@@ -371,8 +374,10 @@ function GamePage() {
       </Row>
       <NextHandModal
         show={modalShow}
-        onHide={() => setModalShow(false)}
+        turnState={turnState}
         players={players}
+        onHide={() => setModalShow(false)}
+        onNextHandClick={handleNextHandClick}
       />
     </div>
   );
