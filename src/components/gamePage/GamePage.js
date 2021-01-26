@@ -142,6 +142,7 @@ function GamePage() {
         playerApi.calculateScores(game.id, players);
         baseApi.nextTurn(game, true);
         setTurnState("EndOfHand");
+        // setModalShow(true);
       }
     }
     console.log("card clicked");
@@ -362,10 +363,12 @@ function GamePage() {
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
+            onScoreCardClicked={() => {
+              setModalShow(true);
+            }}
           />
         </Col>
       </Row>
-      <button onClick={() => setModalShow(true)}>test</button>
       <NextHandModal
         show={modalShow}
         onHide={() => setModalShow(false)}

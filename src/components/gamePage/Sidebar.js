@@ -9,6 +9,7 @@ function Sidebar({
   onCardClicked,
   onDropdownClicked,
   onDrop,
+  onScoreCardClicked,
   turn,
 }) {
   return (
@@ -25,6 +26,13 @@ function Sidebar({
           onDrop={onDrop}
         />
       ))}
+      <button
+        className="btn btn-primary"
+        style={{ float: "right", margin: ".5rem" }}
+        onClick={onScoreCardClicked}
+      >
+        View Score Card
+      </button>
     </div>
   );
 }
@@ -34,14 +42,16 @@ Sidebar.propTypes = {
   onCardClicked: PropTypes.func,
   onDropdownClicked: PropTypes.func,
   onDrop: PropTypes.func,
-  cardsOnTable: PropTypes.object,
+  onScoreCardClicked: PropTypes.func,
+  // cardsOnTable: PropTypes.object,
 };
 
 Sidebar.defaultProps = {
   onCardClicked: () => {},
   onDropdownClicked: () => {},
   onDrop: () => {},
-  cardsOnTable: {},
+  onScoreCardClicked: () => {},
+  // cardsOnTable: {},
 };
 
 export default Sidebar;

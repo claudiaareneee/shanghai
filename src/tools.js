@@ -49,7 +49,7 @@ export const nextTurn = (opponents, endOfHand, turn = {}) => {
   let playerIndex = turn.player ? opponents.indexOf(turn.player) : 0;
   let player = turn.player;
 
-  if (endOfHand) return { player: "End of Hand", state: "EndOfHand" };
+  if (endOfHand) return { player: "End of Hand", state: "endOfHand" };
 
   if (turn.state === "drawing") state = "playing";
   else if (turn.state === "playing") state = "discarding";
