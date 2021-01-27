@@ -29,6 +29,8 @@ export const setDeal = (game, numberOfDecks) => {
     turn,
     numberOfDrawCards: deal.draw.length,
   });
+
+  gameApi.clearDiscard(game.id);
 };
 
 export const nextTurn = (game, endHand = false) => {

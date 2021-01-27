@@ -90,3 +90,8 @@ export const popDiscard = (gameId, onDiscardReceived) => {
       ref.child(Object.keys(snapshot.val())[0]).remove();
     });
 };
+
+export const clearDiscard = (gameId) => {
+  const ref = database.ref(discardBaseUrl + gameId);
+  ref.remove();
+};
