@@ -3,7 +3,6 @@ import CardSources from "./CardSources";
 import "./PlayingCard.css";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
-import { Card } from "react-bootstrap";
 
 function PlayingCard({
   id,

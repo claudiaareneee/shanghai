@@ -15,6 +15,7 @@ export const setDeal = (game, numberOfDecks) => {
 
     playerApi.updatePlayer(game.id, {
       id: game.opponents[playerId],
+      oldScore: 0,
       score: 0,
       buys: 3,
       numberOfRemainingCards: 11,
@@ -24,14 +25,20 @@ export const setDeal = (game, numberOfDecks) => {
   gameApi.setDraw(game.id, deal.draw);
   gameApi.updateGame({
     ...game,
-    hand: tools.getHand(game.hand || 0),
+    hand: tools.getHand(game.hand ? game.hand.round : 0),
     turn,
     numberOfDrawCards: deal.draw.length,
   });
+
+  gameApi.clearDiscard(game.id);
 };
 
-export const nextTurn = (game) => {
-  const turn = tools.nextTurn(tools.snapshotToArray(game.opponents), game.turn);
+export const nextTurn = (game, endHand = false) => {
+  const turn = tools.nextTurn(
+    tools.snapshotToArray(game.opponents),
+    endHand,
+    game.turn
+  );
   console.log("Turn: ", turn);
   gameApi.updateGame({
     ...game,

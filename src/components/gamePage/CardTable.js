@@ -11,6 +11,7 @@ import SetSelection from "./SetSelection";
 
 function CardTable({
   game,
+  turnState,
   player,
   playerCards,
   discard,
@@ -82,11 +83,17 @@ function CardTable({
           onDrop={onDrop}
         />
       </Row>
-      <SetSelection
-        hand={game.hand}
-        onClick={onSelectionButtonClicked}
-        onLayDown={onLayDown}
-      />
+
+      {turnState === "Play" ? (
+        <SetSelection
+          hand={game.hand}
+          onClick={onSelectionButtonClicked}
+          onLayDown={onLayDown}
+        />
+      ) : (
+        <></>
+      )}
+
       <Row>
         <Col>
           <Buys

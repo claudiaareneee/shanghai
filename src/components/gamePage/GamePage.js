@@ -12,6 +12,7 @@ import {
   GROUP_2_COLOR,
   GROUP_3_COLOR,
 } from "../common/Constants";
+import NextHandModal from "./NextHandModal";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -21,6 +22,7 @@ function GamePage() {
   const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
   const [cardsOnTable, setCardsOnTable] = useState([]);
+  const [modalShow, setModalShow] = React.useState(false);
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
@@ -65,6 +67,8 @@ function GamePage() {
         setCardsOnTable(_cardsOnTable)
       );
 
+      if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
+
       if (player === game.turn.player) {
         switch (game.turn.state) {
           case "playing":
@@ -99,7 +103,7 @@ function GamePage() {
       });
 
       const newCardSelections = !isSelected
-        ? cardSelections[selection.color].length == 1
+        ? cardSelections[selection.color].length === 1
           ? { ...cardSelections, [selection.color]: [] }
           : {
               ...cardSelections,
@@ -132,8 +136,16 @@ function GamePage() {
         newCards.map((card) => card.id)
       );
 
-      baseApi.nextTurn(game);
-      setTurnState("Wait");
+      if (newCards.length !== 0) {
+        baseApi.nextTurn(game);
+        setTurnState("Wait");
+      } else {
+        toast.success("congratz 🦑, you just went out");
+        playerApi.calculateScores(game.id, players);
+        baseApi.nextTurn(game, true);
+        setTurnState("EndOfHand");
+        // setModalShow(true);
+      }
     }
     console.log("card clicked");
   }
@@ -318,12 +330,18 @@ function GamePage() {
     );
   };
 
+  const handleNextHandClick = () => {
+    baseApi.setDeal(game, 2);
+    setDiscard([]);
+  };
+
   return (
     <div className="GamePage">
       <Row>
         <Col>
           <CardTable
             game={game}
+            turnState={turnState}
             player={player}
             discard={discard || []}
             playerCards={cardsInHand}
@@ -353,9 +371,19 @@ function GamePage() {
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
+            onScoreCardClicked={() => {
+              setModalShow(true);
+            }}
           />
         </Col>
       </Row>
+      <NextHandModal
+        show={modalShow}
+        turnState={turnState}
+        players={players}
+        onHide={() => setModalShow(false)}
+        onNextHandClick={handleNextHandClick}
+      />
     </div>
   );
 }
