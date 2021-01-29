@@ -59,3 +59,57 @@ export const discardCardWithId = (gameId, playerId, playerCards, card) => {
   gameApi.pushToDiscard(gameId, card);
   playerApi.setPlayerCardsInHand(playerId, gameId, playerCards);
 };
+
+export async function buyWithId(
+  gameId,
+  playerId,
+  numberOfPlayerCards,
+  numberOfDrawCards
+) {
+  // pop discard and draw and push them to the player who bought
+  const discard = await gameApi.popDiscard(gameId, () => {});
+  const draw = await gameApi.popDrawCard(gameId, numberOfDrawCards, () => {});
+
+  console.log("draw: ", draw);
+  console.log("discard: ", discard);
+
+  // playerApi.pushCardToPlayerCardsInHand(playerId, discard);
+  // playerApi.pushCardToPlayerCardsInHand(playerId, draw);
+  // playerApi.setNumberOfRemainingCards(
+  //   gameId,
+  //   playerId,
+  //   numberOfPlayerCards + 2
+  // );
+}
+
+export const performBuy = (game, currentPlayer, players) => {
+  if (!game.buyers) return;
+
+  const buyer = tools.selectBuyer(
+    currentPlayer,
+    Object.values(game.buyers),
+    Object.values(game.opponents)
+  );
+
+  console.log(
+    "Buyer: ",
+    buyer,
+    " players[buyer]: ",
+    players[buyer],
+    " players[buyer].numberOfRemainingCards: ",
+    players[buyer] ? players[buyer].numberOfRemainingCards : "test"
+  );
+
+  if (players[buyer])
+    buyWithId(
+      game.id,
+      buyer,
+      players[buyer].numberOfPlayerCards || 0,
+      game.numberOfDrawCards
+    );
+
+  gameApi.clearBuyers(game.id);
+};
+// export const buyWithId = (gameId, playerId) => {
+//   discard = await gameApi.popDiscard()
+// }

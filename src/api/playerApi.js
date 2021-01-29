@@ -54,6 +54,22 @@ export const setPlayerCardsInHand = (id, gameId, cards) => {
   return database.ref(cardsInHandBaseUrl + id).set(cards);
 };
 
+export const pushCardToPlayerCardsInHand = (id, card) => {
+  return database.ref(cardsInHandBaseUrl + id).push(card);
+};
+
+export const setNumberOfRemainingCards = (
+  gameId,
+  id,
+  numberOfRemainingCards
+) => {
+  return database
+    .ref()
+    .child(playerBaseUrl + gameId + "/" + id)
+    .child(numberOfRemainingCards)
+    .set(numberOfRemainingCards);
+};
+
 export const getPlayerCardsInHandById = (id, onCardsReceived) => {
   const cards = firebase.database().ref(cardsInHandBaseUrl + id);
   cards.on("value", function (snapshot) {

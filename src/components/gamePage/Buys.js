@@ -28,7 +28,7 @@ function Buys({ numberOfBuys, onClick, disabled }) {
               disabled={true}
               variant="outline-success"
               size="lg"
-              onClick={onClick}
+              onClick={() => onClick()}
               style={{ marginRight: ".5rem" }}
             >
               $$$

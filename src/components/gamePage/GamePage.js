@@ -82,6 +82,8 @@ function GamePage() {
             break;
         }
       }
+      // console.log("buyers: ", Object.values(game.buyers));
+      // console.log("opponents: ", Object.values(game.opponents));
     }
   }, [room, game, player]);
 
@@ -211,6 +213,8 @@ function GamePage() {
           newCards.map((card) => card.id)
         );
 
+        baseApi.performBuy(game, player, players);
+
         setTurnState("Play");
         baseApi.nextTurn(game);
       });
@@ -335,6 +339,11 @@ function GamePage() {
     setDiscard([]);
   };
 
+  const handleBuyClicked = () => {
+    toast.info("ooo buy");
+    gameApi.pushBuyer(game.id, player);
+  };
+
   return (
     <div className="GamePage">
       <Row>
@@ -361,6 +370,7 @@ function GamePage() {
             highlightDraw={highlightDraw}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onLayDown={handleLayDown}
+            onBuyClicked={handleBuyClicked}
           />
         </Col>
 
