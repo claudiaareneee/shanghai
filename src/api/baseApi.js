@@ -73,13 +73,13 @@ export async function buyWithId(
   console.log("draw: ", draw);
   console.log("discard: ", discard);
 
-  // playerApi.pushCardToPlayerCardsInHand(playerId, discard);
-  // playerApi.pushCardToPlayerCardsInHand(playerId, draw);
-  // playerApi.setNumberOfRemainingCards(
-  //   gameId,
-  //   playerId,
-  //   numberOfPlayerCards + 2
-  // );
+  playerApi.pushCardToPlayerCardsInHand(playerId, parseInt(discard, 10));
+  playerApi.pushCardToPlayerCardsInHand(playerId, draw);
+  playerApi.setNumberOfRemainingCards(
+    gameId,
+    playerId,
+    numberOfPlayerCards + 2
+  );
 }
 
 export const performBuy = (game, currentPlayer, players) => {
