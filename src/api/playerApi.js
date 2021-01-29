@@ -66,7 +66,7 @@ export const setNumberOfRemainingCards = (
   return database
     .ref()
     .child(playerBaseUrl + gameId + "/" + id)
-    .child(numberOfRemainingCards)
+    .child("numberOfRemainingCards")
     .set(numberOfRemainingCards);
 };
 

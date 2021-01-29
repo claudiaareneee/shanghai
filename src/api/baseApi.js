@@ -92,6 +92,8 @@ export const performBuy = (game, currentPlayer, players) => {
   );
 
   console.log(
+    "Current Player: ",
+    currentPlayer,
     "Buyer: ",
     buyer,
     " players[buyer]: ",
@@ -104,7 +106,7 @@ export const performBuy = (game, currentPlayer, players) => {
     buyWithId(
       game.id,
       buyer,
-      players[buyer].numberOfPlayerCards || 0,
+      players[buyer].numberOfRemainingCards || 0,
       game.numberOfDrawCards
     );
 

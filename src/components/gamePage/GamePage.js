@@ -46,19 +46,11 @@ function GamePage() {
       });
       playerApi.getPlayerCardsInHandById(player, (players) => {
         setCardsInHand(
-          Object.values(players).map((card, index) => {
-            console.log(
-              "players[index]",
-              players[index],
-              "index",
-              index,
-              "card",
-              card
-            );
-            return !players[index] || players[index].highlight
+          Object.values(players).map((card, index) =>
+            !players[index] || players[index].highlight
               ? { id: parseInt(card, 10) }
-              : { id: parseInt(card, 10), highlight: false };
-          })
+              : { id: parseInt(card, 10), highlight: false }
+          )
         );
       });
       gameApi.getDiscard(game.id, (_discard) => {
