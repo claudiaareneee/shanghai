@@ -101,12 +101,15 @@ export const pushBuyer = (gameId, playerId) => {
     .push(playerId);
 };
 
-export const clearBuyers = (gameId) => {
+export async function clearBuyers(gameId) {
   console.log("clearing");
   const ref = database.ref(gameBaseUrl + gameId).child("buyers");
-  console.log("ref: ", ref);
-  ref.set(null);
-};
+  const buyersSnap = await ref.once("value");
+  Object.keys(buyersSnap.val()).forEach((buyer) => {
+    console.log("buyer: ", buyer);
+    ref.child(buyer).remove();
+  });
+}
 
 export const clearBuyer = (gameId, playerId) => {
   return database
