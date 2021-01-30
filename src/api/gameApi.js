@@ -8,6 +8,7 @@ const baseUrl = "/dev/";
 const gameBaseUrl = baseUrl + "games/";
 const discardBaseUrl = baseUrl + "discard/";
 const drawBaseUrl = baseUrl + "draw/";
+const cardsOnTableBaseUrl = baseUrl + "cardsOnTable/";
 
 export const createGame = (game) => {
   const newKey = database.ref().child(gameBaseUrl).push().key;
@@ -91,6 +92,11 @@ export async function popDiscard(gameId, onDiscardReceived) {
 
 export const clearDiscard = (gameId) => {
   const ref = database.ref(discardBaseUrl + gameId);
+  ref.remove();
+};
+
+export const clearCardsOnTable = (gameId) => {
+  const ref = database.ref(cardsOnTableBaseUrl + gameId);
   ref.remove();
 };
 

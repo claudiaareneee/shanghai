@@ -337,6 +337,7 @@ function GamePage() {
   const handleNextHandClick = () => {
     baseApi.setDeal(game, 2);
     setDiscard([]);
+    setCardsOnTable([]);
   };
 
   const handleBuyClicked = () => {

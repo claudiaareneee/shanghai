@@ -13,6 +13,7 @@ export const setDeal = (game, numberOfDecks) => {
       deal.players[playerId]
     );
 
+    // todo, shouldn't be setting score here
     playerApi.updatePlayer(game.id, {
       id: game.opponents[playerId],
       oldScore: 0,
@@ -31,6 +32,7 @@ export const setDeal = (game, numberOfDecks) => {
   });
 
   gameApi.clearDiscard(game.id);
+  gameApi.clearCardsOnTable(game.id);
 };
 
 export const nextTurn = (game, endHand = false) => {
