@@ -66,9 +66,9 @@ export const nextTurn = (opponents, endOfHand, turn = {}) => {
 
 export const scorePlayer = (playerScore, cards) => {
   // 54 cards in one deck, A, 2, 3, ..., J, Q, K
-  console.log("testing cards: ", cards);
+  console.log("scorePlayer called");
   const newScore = cards.reduce((p, c) => p + getPointsOfCard(c), 0);
-
+  console.log(playerScore, " + ", newScore, " = ", playerScore + newScore);
   return playerScore + newScore;
 };
 
@@ -126,9 +126,6 @@ export const getPointsOfCard = (card) => {
 };
 
 export const selectBuyer = (currentPlayer, buyers, opponents) => {
-  // console.log("current player: ", currentPlayer);
-  // console.log("buyers: ", buyers);
-  // console.log("opponents: ", opponents);
   const startIndex = opponents.indexOf(currentPlayer);
 
   for (let i = startIndex + 1; i < opponents.length + startIndex; i++) {

@@ -13,11 +13,8 @@ export const setDeal = (game, numberOfDecks) => {
       deal.players[playerId]
     );
 
-    // todo, shouldn't be setting score here
     playerApi.updatePlayer(game.id, {
       id: game.opponents[playerId],
-      oldScore: 0,
-      score: 0,
       buys: 3,
       numberOfRemainingCards: 11,
     });
@@ -41,7 +38,6 @@ export const nextTurn = (game, endHand = false) => {
     endHand,
     game.turn
   );
-  console.log("Turn: ", turn);
   gameApi.updateGame({
     ...game,
     turn,
@@ -50,7 +46,6 @@ export const nextTurn = (game, endHand = false) => {
 
 export const setTurn = (game, state) => {
   const turn = { ...game.turn, state };
-  console.log("Turn: ", turn);
   gameApi.updateGame({
     ...game,
     turn,
@@ -72,9 +67,6 @@ export async function buyWithId(
   const discard = await gameApi.popDiscard(gameId, () => {});
   const draw = await gameApi.popDrawCard(gameId, numberOfDrawCards, () => {});
 
-  console.log("draw: ", draw);
-  console.log("discard: ", discard);
-
   playerApi.pushCardToPlayerCardsInHand(playerId, parseInt(discard, 10));
   playerApi.pushCardToPlayerCardsInHand(playerId, draw);
   playerApi.setNumberOfRemainingCards(
@@ -91,17 +83,6 @@ export const performBuy = (game, currentPlayer, players) => {
     currentPlayer,
     Object.values(game.buyers),
     Object.values(game.opponents)
-  );
-
-  console.log(
-    "Current Player: ",
-    currentPlayer,
-    "Buyer: ",
-    buyer,
-    " players[buyer]: ",
-    players[buyer],
-    " players[buyer].numberOfRemainingCards: ",
-    players[buyer] ? players[buyer].numberOfRemainingCards : "test"
   );
 
   if (players[buyer])

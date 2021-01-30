@@ -5,8 +5,8 @@ function ScoreRow({ player }) {
   return (
     <tr>
       <td>{player.name}</td>
-      <td>{player.oldScore}</td>
-      <td>{player.score}</td>
+      <td>{player.oldScore || 0}</td>
+      <td>{player.score || 0}</td>
     </tr>
   );
 }

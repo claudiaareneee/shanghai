@@ -72,7 +72,7 @@ function PlayerBucket({
             <h5 className="name">{player.name}</h5>
           )}
           <div className="playerInfo">
-            <p>Score: {player.score}</p>
+            <p>Score: {player.score || 0}</p>
             <p>Remaining Cards: {player.numberOfRemainingCards}</p>
           </div>
         </Col>

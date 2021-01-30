@@ -23,6 +23,7 @@ export const createPlayer = (gameId, player) => {
 };
 
 export const updatePlayer = (gameId, player) => {
+  console.log("updatePlayer: ", player.name, " score: ", player.score);
   return database
     .ref()
     .child(playerBaseUrl + gameId + "/" + player.id)
@@ -77,6 +78,12 @@ export const getPlayerCardsInHandById = (id, onCardsReceived) => {
   });
 };
 
+export async function getPlayerCardsInHandByIdOnce(id, onCardsReceived) {
+  const cards = firebase.database().ref(cardsInHandBaseUrl + id);
+  const cardsSnapshot = await cards.once("value");
+  onCardsReceived(cardsSnapshot.val() || []);
+}
+
 export const setPlayerCardsOnTable = (id, gameId, cards) => {
   return database.ref(cardsOnTableBaseUrl + gameId + "/" + id).set(cards);
 };
@@ -89,17 +96,15 @@ export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
 };
 
 export const calculateScores = (gameId, players) => {
-  console.log("players: ", Object.keys(players));
   Object.keys(players).forEach((key) => {
-    console.log("player: ", players[key]);
-    getPlayerCardsInHandById(key, (cards) => {
+    getPlayerCardsInHandByIdOnce(key, (cards) => {
       const newScore = scorePlayer(
-        players[key].score,
+        players[key].score || 0,
         cards.map((card) => parseInt(card, 10))
       );
       updatePlayer(gameId, {
         ...players[key],
-        oldScore: players[key].score,
+        oldScore: players[key].score || 0,
         score: newScore,
       });
     });

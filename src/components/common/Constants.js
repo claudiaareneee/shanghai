@@ -8,3 +8,4 @@ export const CARDSLIDE_STRETCH_X = 1;
 export const GROUP_1_COLOR = "EE6123";
 export const GROUP_2_COLOR = "00916E";
 export const GROUP_3_COLOR = "FA003F";
+export const GROUP_COLORS = [GROUP_1_COLOR, GROUP_2_COLOR, GROUP_3_COLOR];
