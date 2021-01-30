@@ -7,11 +7,7 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import {
-  GROUP_1_COLOR,
-  GROUP_2_COLOR,
-  GROUP_3_COLOR,
-} from "../common/Constants";
+import { GROUP_COLORS } from "../common/Constants";
 import NextHandModal from "./NextHandModal";
 
 function GamePage() {
@@ -26,11 +22,6 @@ function GamePage() {
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
-  });
-  const [cardSelections, setCardSelections] = useState({
-    [GROUP_1_COLOR]: [],
-    [GROUP_2_COLOR]: [],
-    [GROUP_3_COLOR]: [],
   });
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
@@ -93,34 +84,19 @@ function GamePage() {
   function handlePlayerCardClicked({ target }) {
     console.log("player card clicked");
     if (turnState === "Play" && selection.selecting) {
-      let isSelected = false;
       const newCardsInHand = cardsInHand.map((card) => {
         if (card.id.toString() === target.id) {
-          card.selected = !card.selected;
-          isSelected = card.selected;
-          card.selectedColor = selection.color;
+          console.log("card.selected: ", card.selected);
+          return {
+            ...card,
+            selected: !card.selected,
+            selectedColor: selection.color,
+          };
         }
         return card;
       });
-
-      const newCardSelections = !isSelected
-        ? cardSelections[selection.color].length === 1
-          ? { ...cardSelections, [selection.color]: [] }
-          : {
-              ...cardSelections,
-              [selection.color]: [
-                cardSelections[selection.color].filter(
-                  (id) => id === target.id
-                ),
-              ],
-            }
-        : {
-            ...cardSelections,
-            [selection.color]: [...cardSelections[selection.color], target.id],
-          };
-
+      console.log("newCardsInHand: ", cardsInHand);
       setCardsInHand(newCardsInHand);
-      setCardSelections(newCardSelections);
     }
 
     if (turnState === "Discard") {
@@ -306,23 +282,14 @@ function GamePage() {
   };
 
   const handleLayDown = () => {
-    let cardsToRemove = [];
-
-    Object.values(cardSelections).forEach((value) => {
-      cardsToRemove = [...cardsToRemove, ...value];
-    });
-
-    setCardSelections({
-      [GROUP_1_COLOR]: [],
-      [GROUP_2_COLOR]: [],
-      [GROUP_3_COLOR]: [],
-    });
-
-    const newCardsInHand = cardsInHand.filter(
-      (card) => !cardsToRemove.includes(card.id.toString())
+    const selectedCards = GROUP_COLORS.map((color) =>
+      cardsInHand
+        .filter((card) => card.selected && card.selectedColor === color)
+        .map((card) => card.id)
     );
+    playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
 
-    playerApi.setPlayerCardsOnTable(player, game.id, cardSelections);
+    const newCardsInHand = cardsInHand.filter((card) => !card.selected);
     playerApi.setPlayerCardsInHand(
       player,
       game.id,
