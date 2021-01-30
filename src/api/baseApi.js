@@ -13,6 +13,7 @@ export const setDeal = (game, numberOfDecks) => {
       deal.players[playerId]
     );
 
+    // todo, shouldn't be setting score here
     playerApi.updatePlayer(game.id, {
       id: game.opponents[playerId],
       oldScore: 0,
@@ -31,6 +32,7 @@ export const setDeal = (game, numberOfDecks) => {
   });
 
   gameApi.clearDiscard(game.id);
+  gameApi.clearCardsOnTable(game.id);
 };
 
 export const nextTurn = (game, endHand = false) => {
@@ -59,3 +61,59 @@ export const discardCardWithId = (gameId, playerId, playerCards, card) => {
   gameApi.pushToDiscard(gameId, card);
   playerApi.setPlayerCardsInHand(playerId, gameId, playerCards);
 };
+
+export async function buyWithId(
+  gameId,
+  playerId,
+  numberOfPlayerCards,
+  numberOfDrawCards
+) {
+  // pop discard and draw and push them to the player who bought
+  const discard = await gameApi.popDiscard(gameId, () => {});
+  const draw = await gameApi.popDrawCard(gameId, numberOfDrawCards, () => {});
+
+  console.log("draw: ", draw);
+  console.log("discard: ", discard);
+
+  playerApi.pushCardToPlayerCardsInHand(playerId, parseInt(discard, 10));
+  playerApi.pushCardToPlayerCardsInHand(playerId, draw);
+  playerApi.setNumberOfRemainingCards(
+    gameId,
+    playerId,
+    numberOfPlayerCards + 2
+  );
+}
+
+export const performBuy = (game, currentPlayer, players) => {
+  if (!game.buyers) return;
+
+  const buyer = tools.selectBuyer(
+    currentPlayer,
+    Object.values(game.buyers),
+    Object.values(game.opponents)
+  );
+
+  console.log(
+    "Current Player: ",
+    currentPlayer,
+    "Buyer: ",
+    buyer,
+    " players[buyer]: ",
+    players[buyer],
+    " players[buyer].numberOfRemainingCards: ",
+    players[buyer] ? players[buyer].numberOfRemainingCards : "test"
+  );
+
+  if (players[buyer])
+    buyWithId(
+      game.id,
+      buyer,
+      players[buyer].numberOfRemainingCards || 0,
+      game.numberOfDrawCards
+    );
+
+  gameApi.clearBuyers(game.id);
+};
+// export const buyWithId = (gameId, playerId) => {
+//   discard = await gameApi.popDiscard()
+// }

@@ -46,8 +46,8 @@ function GamePage() {
       });
       playerApi.getPlayerCardsInHandById(player, (players) => {
         setCardsInHand(
-          players.map((card, index) =>
-            players[index].highlight
+          Object.values(players).map((card, index) =>
+            !players[index] || players[index].highlight
               ? { id: parseInt(card, 10) }
               : { id: parseInt(card, 10), highlight: false }
           )
@@ -211,6 +211,8 @@ function GamePage() {
           newCards.map((card) => card.id)
         );
 
+        baseApi.performBuy(game, player, players);
+
         setTurnState("Play");
         baseApi.nextTurn(game);
       });
@@ -333,6 +335,12 @@ function GamePage() {
   const handleNextHandClick = () => {
     baseApi.setDeal(game, 2);
     setDiscard([]);
+    setCardsOnTable([]);
+  };
+
+  const handleBuyClicked = () => {
+    toast.info("ooo buy");
+    gameApi.pushBuyer(game.id, player);
   };
 
   return (
@@ -361,6 +369,7 @@ function GamePage() {
             highlightDraw={highlightDraw}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onLayDown={handleLayDown}
+            onBuyClicked={handleBuyClicked}
           />
         </Col>
 

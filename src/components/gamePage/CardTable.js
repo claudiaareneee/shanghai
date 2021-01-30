@@ -29,6 +29,7 @@ function CardTable({
   onTurnButtonClicked,
   onSelectionButtonClicked,
   onLayDown,
+  onBuyClicked,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -98,9 +99,7 @@ function CardTable({
         <Col>
           <Buys
             numberOfBuys={numberOfBuys}
-            onClick={() => {
-              console.log("BUYY!");
-            }}
+            onClick={onBuyClicked}
             disabled={game.turn && game.turn.player === player}
           />
         </Col>

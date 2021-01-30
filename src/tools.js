@@ -124,3 +124,17 @@ export const getPointsOfCard = (card) => {
   if (cardNumberInSuit >= 9) return 10;
   return 5;
 };
+
+export const selectBuyer = (currentPlayer, buyers, opponents) => {
+  // console.log("current player: ", currentPlayer);
+  // console.log("buyers: ", buyers);
+  // console.log("opponents: ", opponents);
+  const startIndex = opponents.indexOf(currentPlayer);
+
+  for (let i = startIndex + 1; i < opponents.length + startIndex; i++) {
+    if (buyers.includes(opponents[i % opponents.length]))
+      return opponents[i % opponents.length];
+  }
+
+  return null;
+};

@@ -8,6 +8,7 @@ const baseUrl = "/dev/";
 const gameBaseUrl = baseUrl + "games/";
 const discardBaseUrl = baseUrl + "discard/";
 const drawBaseUrl = baseUrl + "draw/";
+const cardsOnTableBaseUrl = baseUrl + "cardsOnTable/";
 
 export const createGame = (game) => {
   const newKey = database.ref().child(gameBaseUrl).push().key;
@@ -67,35 +68,63 @@ export const setDraw = (gameId, cards) => {
   return database.ref(drawBaseUrl + gameId).set(cards);
 };
 
-export const popDrawCard = (gameId, numberOfDrawCards, onDrawRecieved) => {
+export async function popDrawCard(gameId, numberOfDrawCards, onDrawRecieved) {
   const ref = database.ref(drawBaseUrl + gameId);
 
-  ref
-    .orderByKey()
-    .limitToLast(1)
-    .once("value")
-    .then((snapshot) => {
-      onDrawRecieved(snapshot.val());
-      ref.child(Object.keys(snapshot.val())[0]).remove();
-    });
+  const drawSnapshot = await ref.orderByKey().limitToLast(1).once("value");
+  const draw = drawSnapshot.val();
 
+  onDrawRecieved(draw);
+
+  ref.child(Object.keys(draw)[0]).remove();
   updateGame({ id: gameId, numberOfDrawCards: numberOfDrawCards - 1 });
-};
 
-export const popDiscard = (gameId, onDiscardReceived) => {
+  return Object.values(draw)[0];
+}
+
+export async function popDiscard(gameId, onDiscardReceived) {
   const ref = database.ref(discardBaseUrl + gameId);
 
-  ref
-    .orderByKey()
-    .limitToLast(1)
-    .once("value")
-    .then((snapshot) => {
-      onDiscardReceived(snapshot.val());
-      ref.child(Object.keys(snapshot.val())[0]).remove();
-    });
-};
+  const discardSnapshot = await ref.orderByKey().limitToLast(1).once("value");
+  const discard = discardSnapshot.val();
+
+  onDiscardReceived(discard);
+
+  ref.child(Object.keys(discard)[0]).remove();
+  return Object.values(discard)[0];
+}
 
 export const clearDiscard = (gameId) => {
   const ref = database.ref(discardBaseUrl + gameId);
   ref.remove();
+};
+
+export const clearCardsOnTable = (gameId) => {
+  const ref = database.ref(cardsOnTableBaseUrl + gameId);
+  ref.remove();
+};
+
+export const pushBuyer = (gameId, playerId) => {
+  return database
+    .ref(gameBaseUrl + gameId)
+    .child("buyers")
+    .push(playerId);
+};
+
+export async function clearBuyers(gameId) {
+  console.log("clearing");
+  const ref = database.ref(gameBaseUrl + gameId).child("buyers");
+  const buyersSnap = await ref.once("value");
+  Object.keys(buyersSnap.val()).forEach((buyer) => {
+    console.log("buyer: ", buyer);
+    ref.child(buyer).remove();
+  });
+}
+
+export const clearBuyer = (gameId, playerId) => {
+  return database
+    .ref(gameBaseUrl + gameId)
+    .child("buyers")
+    .child(playerId)
+    .remove();
 };
