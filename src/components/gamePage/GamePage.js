@@ -91,6 +91,7 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
+    console.log("player card clicked");
     if (turnState === "Play" && selection.selecting) {
       let isSelected = false;
       const newCardsInHand = cardsInHand.map((card) => {
@@ -141,13 +142,12 @@ function GamePage() {
         setTurnState("Wait");
       } else {
         toast.success("congratz 🦑, you just went out");
+        setTurnState("EndOfHand");
+        console.log("end of hand calculating scores");
         playerApi.calculateScores(game.id, players);
         baseApi.nextTurn(game, true);
-        setTurnState("EndOfHand");
-        // setModalShow(true);
       }
     }
-    console.log("card clicked");
   }
 
   function handlePlayerCardHovered({ target }) {
@@ -161,8 +161,6 @@ function GamePage() {
   }
 
   function handleDiscardClicked({ target }) {
-    console.log("discard");
-
     if (turnState === "Draw")
       gameApi.popDiscard(game.id, (card) => {
         const newCards = [
@@ -194,8 +192,6 @@ function GamePage() {
   }
 
   function handleDrawClicked({ target }) {
-    console.log("draw");
-
     if (turnState === "Draw")
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
@@ -339,6 +335,7 @@ function GamePage() {
   };
 
   const handleNextHandClick = () => {
+    console.log("handleNextHandClick called, players:", players);
     baseApi.setDeal(game, 2);
     setDiscard([]);
     setCardsOnTable([]);
