@@ -340,6 +340,7 @@ function GamePage() {
 
         <Col className="SidebarCol" xs lg="5">
           <Sidebar
+            user={player}
             turn={game.turn}
             players={players}
             onDrop={onDropCardsOnTable}

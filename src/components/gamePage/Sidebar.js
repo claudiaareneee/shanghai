@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import PlayerBucket from "./PlayerBucket";
 
 function Sidebar({
+  user,
   players,
   cardsOnTable,
   onCardClicked,
@@ -19,6 +20,7 @@ function Sidebar({
         <PlayerBucket
           key={key}
           turn={turn}
+          user={user}
           player={players[key]}
           cards={cardsOnTable[key]}
           onCardClicked={onCardClicked}

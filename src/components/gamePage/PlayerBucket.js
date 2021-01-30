@@ -52,6 +52,7 @@ CardsPlayed.propTypes = {
 };
 
 function PlayerBucket({
+  user,
   player,
   cards,
   onCardClicked,
@@ -66,10 +67,12 @@ function PlayerBucket({
         <Col>
           {turn.player === player.id ? (
             <h5 className="name">
-              {player.name} ({turn.state})
+              {player.id === user ? "⭐️" : ""} {player.name} ({turn.state})
             </h5>
           ) : (
-            <h5 className="name">{player.name}</h5>
+            <h5 className="name">
+              {player.id === user ? "⭐️" : ""} {player.name}
+            </h5>
           )}
           <div className="playerInfo">
             <p>Score: {player.score || 0}</p>
