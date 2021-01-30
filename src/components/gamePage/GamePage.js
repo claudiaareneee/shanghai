@@ -320,6 +320,12 @@ function GamePage() {
       cardsToRemove = [...cardsToRemove, ...value];
     });
 
+    setCardSelections({
+      [GROUP_1_COLOR]: [],
+      [GROUP_2_COLOR]: [],
+      [GROUP_3_COLOR]: [],
+    });
+
     const newCardsInHand = cardsInHand.filter(
       (card) => !cardsToRemove.includes(card.id.toString())
     );
