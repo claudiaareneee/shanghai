@@ -40,6 +40,14 @@ export const getPlayers = (gameId, onPlayersReceived) => {
   });
 };
 
+export const cleanUpGetPlayers = (gameId) => {
+  const player = firebase
+    .database()
+    .ref()
+    .child(playerBaseUrl + gameId);
+  player.off();
+};
+
 export const getPlayerById = (playerId, gameId, onPlayerReceived) => {
   const player = firebase
     .database()
