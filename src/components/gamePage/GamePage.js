@@ -82,8 +82,6 @@ function GamePage() {
             break;
         }
       }
-      // console.log("buyers: ", Object.values(game.buyers));
-      // console.log("opponents: ", Object.values(game.opponents));
     }
   }, [room, game, player]);
 
