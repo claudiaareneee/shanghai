@@ -75,16 +75,11 @@ function GamePage() {
             break;
         }
       }
-      console.log("useEffect showPlayers: ", showPlayers);
     }
-  }, [room, game, player, showPlayers]);
+  }, [room, game, player]);
 
   function handleDropdownClicked(playerId) {
-    const showCards = players[playerId].showCards ? false : true;
     const showPlayer = showPlayers[playerId] ? false : true;
-    const newShow = { ...showPlayers, [playerId]: showPlayer };
-    console.log(newShow);
-    setPlayers({ ...players, [playerId]: { ...players[playerId], showCards } });
     setShowPlayers({ ...showPlayers, [playerId]: showPlayer });
   }
 
@@ -275,12 +270,10 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
-      toast.success("got to here");
     }
   };
 
   const handleSelectionButtonClicked = (type, color) => {
-    toast.info(color + " " + type + " selected");
     setSelection({ ...selection, selecting: true, color });
   };
 
