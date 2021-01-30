@@ -143,7 +143,6 @@ function GamePage() {
       } else {
         toast.success("congratz 🦑, you just went out");
         setTurnState("EndOfHand");
-        console.log("end of hand calculating scores");
         playerApi.calculateScores(game.id, players);
         baseApi.nextTurn(game, true);
       }
@@ -297,9 +296,6 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
-
-      console.log(cardsOnTable[player]);
-      console.log(newPlayerCardsOnTable);
       toast.success("got to here");
     }
   };
@@ -335,7 +331,6 @@ function GamePage() {
   };
 
   const handleNextHandClick = () => {
-    console.log("handleNextHandClick called, players:", players);
     baseApi.setDeal(game, 2);
     setDiscard([]);
     setCardsOnTable([]);

@@ -96,16 +96,12 @@ export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
 };
 
 export const calculateScores = (gameId, players) => {
-  console.log("calculateScores called");
   Object.keys(players).forEach((key) => {
     getPlayerCardsInHandByIdOnce(key, (cards) => {
-      console.log(players[key].name);
-      console.log(players[key].score);
       const newScore = scorePlayer(
         players[key].score || 0,
         cards.map((card) => parseInt(card, 10))
       );
-      console.log(newScore);
       updatePlayer(gameId, {
         ...players[key],
         oldScore: players[key].score || 0,
