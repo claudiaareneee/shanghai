@@ -30,7 +30,14 @@ function ScoreTable({ players }) {
   );
 }
 
-function NextHandModal({ show, players, turnState, onHide, onNextHandClick }) {
+function NextHandModal({
+  gameId,
+  show,
+  players,
+  turnState,
+  onHide,
+  onNextHandClick,
+}) {
   return (
     <Modal
       show={show}
@@ -43,12 +50,15 @@ function NextHandModal({ show, players, turnState, onHide, onNextHandClick }) {
       <Modal.Header style={{ color: "#282c34" }} closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {/* For better or worse, this hand is over! */}
-          Scores
+          Game stats
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ color: "#282c34" }}>
         {/* <h4>Champion this round</h4>
         <h4>Scores</h4> */}
+        <h4>Room Code</h4>
+        <p>{gameId}</p>
+        <h4>Scores</h4>
         <p>Hand, score, who went out, maybe the cards on the table</p>
         <ScoreTable players={players} />
       </Modal.Body>

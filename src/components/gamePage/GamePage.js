@@ -353,6 +353,7 @@ function GamePage() {
         </Col>
       </Row>
       <NextHandModal
+        gameId={game.id || ""}
         show={modalShow}
         turnState={turnState}
         players={players}
