@@ -33,7 +33,7 @@ function Sidebar({
         style={{ float: "right", margin: ".5rem" }}
         onClick={onScoreCardClicked}
       >
-        View Score Card
+        View Game Stats
       </button>
     </div>
   );

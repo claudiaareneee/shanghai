@@ -23,6 +23,7 @@ function GamePage() {
     selecting: false,
     color: "",
   });
+  const [comment, setComment] = useState("");
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -308,6 +309,17 @@ function GamePage() {
     gameApi.pushBuyer(game.id, player);
   };
 
+  const handleCommentChanged = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmitComment = () => {
+    if (comment !== "") {
+      baseApi.addComment(game.id, player, comment);
+      setComment("");
+    }
+  };
+
   return (
     <div className="GamePage">
       <Row>
@@ -357,8 +369,11 @@ function GamePage() {
         show={modalShow}
         turnState={turnState}
         players={players}
+        comment={comment}
         onHide={() => setModalShow(false)}
         onNextHandClick={handleNextHandClick}
+        onSubmitComment={handleSubmitComment}
+        onCommentChange={handleCommentChanged}
       />
     </div>
   );

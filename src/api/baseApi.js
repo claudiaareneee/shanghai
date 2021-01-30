@@ -1,6 +1,13 @@
 import * as tools from "../tools";
 import * as gameApi from "./gameApi";
 import * as playerApi from "./playerApi";
+import firebase from "./firebase.config";
+import "firebase/database";
+
+const database = firebase.database();
+
+const baseUrl = "/dev/";
+const commentsUrl = baseUrl + "comments/";
 
 export const setDeal = (game, numberOfDecks) => {
   const deal = tools.dealCards(game.opponents, numberOfDecks);
@@ -95,6 +102,7 @@ export const performBuy = (game, currentPlayer, players) => {
 
   gameApi.clearBuyers(game.id);
 };
-// export const buyWithId = (gameId, playerId) => {
-//   discard = await gameApi.popDiscard()
-// }
+
+export const addComment = (gameId, playerId, comment) => {
+  return database.ref(commentsUrl + gameId + "-" + playerId).push(comment);
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Modal } from "react-bootstrap";
+import { Table, Modal, Form } from "react-bootstrap";
 
 function ScoreRow({ player }) {
   return (
@@ -35,8 +35,11 @@ function NextHandModal({
   show,
   players,
   turnState,
+  comment,
   onHide,
   onNextHandClick,
+  onSubmitComment,
+  onCommentChange,
 }) {
   return (
     <Modal
@@ -54,13 +57,28 @@ function NextHandModal({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ color: "#282c34" }}>
-        {/* <h4>Champion this round</h4>
-        <h4>Scores</h4> */}
-        <h4>Room Code</h4>
+        {/* <h5>Champion this round</h5>
+        <h5>Scores</h5> */}
+        <h5>Room Code</h5>
         <p>{gameId}</p>
-        <h4>Scores</h4>
+        <h5>Scores</h5>
         <p>Hand, score, who went out, maybe the cards on the table</p>
         <ScoreTable players={players} />
+        <h5>Comments</h5>
+        <p>
+          Here's a place to add a comment 💬 or suggestion 💡 or to report a bug
+          🐛
+        </p>
+        <textarea
+          className="form-control"
+          rows={3}
+          value={comment}
+          onChange={onCommentChange}
+          style={{ marginBottom: "1rem" }}
+        />
+        <button className="btn btn-info" onClick={onSubmitComment}>
+          Submit
+        </button>
       </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
         {turnState === "EndOfHand" ? (
