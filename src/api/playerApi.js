@@ -89,9 +89,7 @@ export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
 };
 
 export const calculateScores = (gameId, players) => {
-  console.log("players: ", Object.keys(players));
   Object.keys(players).forEach((key) => {
-    console.log("player: ", players[key]);
     getPlayerCardsInHandById(key, (cards) => {
       const newScore = scorePlayer(
         players[key].score || 0,
