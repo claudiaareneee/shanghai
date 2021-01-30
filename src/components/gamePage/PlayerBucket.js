@@ -54,6 +54,7 @@ CardsPlayed.propTypes = {
 function PlayerBucket({
   user,
   player,
+  showPlayer,
   cards,
   onCardClicked,
   onDropdownClicked,
@@ -80,7 +81,7 @@ function PlayerBucket({
           </div>
         </Col>
         <Col xs lg={2}>
-          {player.showCards ? (
+          {showPlayer ? (
             <i
               className="fas fa-lg fa-chevron-circle-up"
               onClick={() => onDropdownClicked(player.id)}
@@ -93,7 +94,7 @@ function PlayerBucket({
           )}
         </Col>
       </Row>
-      {player.showCards ? (
+      {showPlayer ? (
         <CardsPlayed
           cards={cards}
           onCardClicked={() => onCardClicked(player.id)}

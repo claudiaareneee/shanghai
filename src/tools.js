@@ -66,9 +66,7 @@ export const nextTurn = (opponents, endOfHand, turn = {}) => {
 
 export const scorePlayer = (playerScore, cards) => {
   // 54 cards in one deck, A, 2, 3, ..., J, Q, K
-  console.log("scorePlayer called");
   const newScore = cards.reduce((p, c) => p + getPointsOfCard(c), 0);
-  console.log(playerScore, " + ", newScore, " = ", playerScore + newScore);
   return playerScore + newScore;
 };
 

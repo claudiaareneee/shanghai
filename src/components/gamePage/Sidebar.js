@@ -6,6 +6,7 @@ import PlayerBucket from "./PlayerBucket";
 function Sidebar({
   user,
   players,
+  showPlayers,
   cardsOnTable,
   onCardClicked,
   onDropdownClicked,
@@ -22,6 +23,7 @@ function Sidebar({
           turn={turn}
           user={user}
           player={players[key]}
+          showPlayer={showPlayers[key]}
           cards={cardsOnTable[key]}
           onCardClicked={onCardClicked}
           onDropdownClicked={onDropdownClicked}

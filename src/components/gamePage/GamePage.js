@@ -19,6 +19,7 @@ function GamePage() {
   const [cardsInHand, setCardsInHand] = useState([]);
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
+  const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
@@ -74,20 +75,23 @@ function GamePage() {
             break;
         }
       }
+      console.log("useEffect showPlayers: ", showPlayers);
     }
-  }, [room, game, player]);
+  }, [room, game, player, showPlayers]);
 
   function handleDropdownClicked(playerId) {
     const showCards = players[playerId].showCards ? false : true;
+    const showPlayer = showPlayers[playerId] ? false : true;
+    const newShow = { ...showPlayers, [playerId]: showPlayer };
+    console.log(newShow);
     setPlayers({ ...players, [playerId]: { ...players[playerId], showCards } });
+    setShowPlayers({ ...showPlayers, [playerId]: showPlayer });
   }
 
   function handlePlayerCardClicked({ target }) {
-    console.log("player card clicked");
     if (turnState === "Play" && selection.selecting) {
       const newCardsInHand = cardsInHand.map((card) => {
         if (card.id.toString() === target.id) {
-          console.log("card.selected: ", card.selected);
           return {
             ...card,
             selected: !card.selected,
@@ -96,7 +100,6 @@ function GamePage() {
         }
         return card;
       });
-      console.log("newCardsInHand: ", cardsInHand);
       setCardsInHand(newCardsInHand);
     }
 
@@ -250,7 +253,6 @@ function GamePage() {
     console.log("drag:", index);
     console.log("drop:", index);
     console.log("association", association);
-    console.log(cardsOnTable);
 
     const cardId = event.dataTransfer.getData("id");
 
@@ -355,6 +357,7 @@ function GamePage() {
             user={player}
             turn={game.turn}
             players={players}
+            showPlayers={showPlayers}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
