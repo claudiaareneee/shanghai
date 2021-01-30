@@ -126,9 +126,6 @@ export const getPointsOfCard = (card) => {
 };
 
 export const selectBuyer = (currentPlayer, buyers, opponents) => {
-  // console.log("current player: ", currentPlayer);
-  // console.log("buyers: ", buyers);
-  // console.log("opponents: ", opponents);
   const startIndex = opponents.indexOf(currentPlayer);
 
   for (let i = startIndex + 1; i < opponents.length + startIndex; i++) {

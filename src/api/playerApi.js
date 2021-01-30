@@ -94,12 +94,12 @@ export const calculateScores = (gameId, players) => {
     console.log("player: ", players[key]);
     getPlayerCardsInHandById(key, (cards) => {
       const newScore = scorePlayer(
-        players[key].score,
+        players[key].score || 0,
         cards.map((card) => parseInt(card, 10))
       );
       updatePlayer(gameId, {
         ...players[key],
-        oldScore: players[key].score,
+        oldScore: players[key].score || 0,
         score: newScore,
       });
     });
