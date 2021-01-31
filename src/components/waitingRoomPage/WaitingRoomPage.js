@@ -25,6 +25,8 @@ function WaitingRoomPage({ history }) {
         setPlayers(players);
       });
 
+      if (!game.decks) setGame({ ...game, decks: numberOfDecks });
+
       setRedirectToPlayPage(game.turn ? true : false);
     }
     // TODO: re-enable this and figure out why it's not pushing
@@ -32,7 +34,7 @@ function WaitingRoomPage({ history }) {
     //   gameApi.cleanUpGetGameById(game.id);
     //   playerApi.cleanUpGetPlayers(game.id);
     // };
-  }, [room, game]);
+  }, [room, game, numberOfDecks]);
 
   function handleClick(event) {
     event.preventDefault();

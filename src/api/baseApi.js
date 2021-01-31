@@ -10,8 +10,15 @@ const baseUrl = "/dev/";
 const commentsUrl = baseUrl + "comments/";
 
 export const setDeal = (game) => {
-  const deal = tools.dealCards(game.opponents, game.decks);
-  const turn = tools.nextTurn(tools.snapshotToArray(game.opponents));
+  console.log("decks:", game.decks);
+  const deal = tools.dealCards(game.opponents, parseInt(game.decks, 10));
+  const hand = tools.getHand(game.hand ? game.hand.round : 0);
+  const turn = tools.nextTurn(
+    tools.snapshotToArray(game.opponents),
+    false,
+    {},
+    hand.round
+  );
 
   for (let playerId in game.opponents) {
     playerApi.setPlayerCardsInHand(
@@ -30,7 +37,7 @@ export const setDeal = (game) => {
   gameApi.setDraw(game.id, deal.draw);
   gameApi.updateGame({
     ...game,
-    hand: tools.getHand(game.hand ? game.hand.round : 0),
+    hand,
     turn,
     numberOfDrawCards: deal.draw.length,
   });
