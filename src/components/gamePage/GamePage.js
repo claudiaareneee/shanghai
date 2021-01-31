@@ -276,7 +276,7 @@ function GamePage() {
   };
 
   const handleNextHandClick = () => {
-    baseApi.setDeal(game, 2);
+    baseApi.setDeal(game);
     setDiscard([]);
     setCardsOnTable([]);
   };

@@ -9,8 +9,8 @@ const database = firebase.database();
 const baseUrl = "/dev/";
 const commentsUrl = baseUrl + "comments/";
 
-export const setDeal = (game, numberOfDecks) => {
-  const deal = tools.dealCards(game.opponents, numberOfDecks);
+export const setDeal = (game) => {
+  const deal = tools.dealCards(game.opponents, game.decks);
   const turn = tools.nextTurn(tools.snapshotToArray(game.opponents));
 
   for (let playerId in game.opponents) {

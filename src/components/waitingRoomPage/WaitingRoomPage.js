@@ -37,13 +37,14 @@ function WaitingRoomPage({ history }) {
   function handleClick(event) {
     event.preventDefault();
     if (numberOfDecks !== "") {
-      baseApi.setDeal(game, numberOfDecks);
+      baseApi.setDeal(game);
       history.push("/play");
     }
   }
 
   function handleChange({ target }) {
     setNumberOfDecks(target.value);
+    setGame({ ...game, decks: target.value });
   }
 
   return (
