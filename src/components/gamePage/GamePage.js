@@ -123,7 +123,9 @@ function GamePage() {
   }
 
   function handleCardHovered({ target }) {
-    setHighlightedCard(parseInt(target.id, 10));
+    const id = parseInt(target.id, 10);
+    const newHighlightedCard = highlightedCard === id ? -1 : id;
+    setHighlightedCard(newHighlightedCard);
   }
 
   function handleDiscardClicked({ target }) {
