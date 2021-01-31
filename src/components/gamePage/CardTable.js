@@ -74,16 +74,25 @@ function CardTable({
       </Row>
 
       <Row className="PlayerHand">
-        <CardSet
-          cards={playerCards}
-          source="front"
-          highlightedCard={highlightedCard}
-          onCardClicked={onPlayerCardClicked}
-          onCardHovered={onCardHovered}
-          onDragStart={onDragStart}
-          onDragOver={onDragOver}
-          onDrop={onDrop}
-        />
+        {playerCards.length > 0 ? (
+          <CardSet
+            cards={playerCards}
+            source="front"
+            highlightedCard={highlightedCard}
+            onCardClicked={onPlayerCardClicked}
+            onCardHovered={onCardHovered}
+            onDragStart={onDragStart}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+          />
+        ) : (
+          <h3 style={{ justifyContent: "center", width: "100%" }}>
+            Congrats! You went out!{" "}
+            <span role="img" aria-label="fire">
+              🔥🔥🔥
+            </span>
+          </h3>
+        )}
       </Row>
 
       {turnState === "Play" && !cardsOnTable[player] ? (
