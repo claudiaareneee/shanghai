@@ -117,6 +117,7 @@ function GamePage() {
         toast.success("congratz 🦑, you just went out");
         setTurnState("EndOfHand");
         playerApi.calculateScores(game.id, players);
+        playerApi.setNumberOfRemainingCards(game.id, player, 0);
         baseApi.nextTurn(game, true);
       }
     }

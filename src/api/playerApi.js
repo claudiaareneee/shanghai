@@ -23,7 +23,16 @@ export const createPlayer = (gameId, player) => {
 };
 
 export const updatePlayer = (gameId, player) => {
-  console.log("updatePlayer: ", player.name, " score: ", player.score);
+  // console.log(
+  //   "updatePlayer: ",
+  //   player.name,
+  //   " score: ",
+  //   player.score,
+  //   "player remaining cards: ",
+  //   player.numberOfRemainingCards,
+  //   "player:",
+  //   player
+  // );
   return database
     .ref()
     .child(playerBaseUrl + gameId + "/" + player.id)
@@ -119,7 +128,7 @@ export const calculateScores = (gameId, players) => {
         cards.map((card) => parseInt(card, 10))
       );
       updatePlayer(gameId, {
-        ...players[key],
+        id: players[key].id,
         oldScore: players[key].score || 0,
         score: newScore,
       });
