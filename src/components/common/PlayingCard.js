@@ -52,6 +52,7 @@ function PlayingCard({
         onDragStart={(e) => onDragStart(e, index, id)}
         onDragOver={(e) => onDragOver(e)}
         onDrop={(e) => {
+          e.preventDefault();
           onDrop(e, index, association);
         }}
         // onMouseDownCapture={(event) => console.log(event.nativeEvent)}

@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Modal, Form } from "react-bootstrap";
+import { Table, Modal } from "react-bootstrap";
 
 function ScoreRow({ player }) {
   return (
