@@ -355,6 +355,19 @@ function GamePage() {
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
       />
+      <button
+        onClick={() => {
+          const selectedCards = GROUP_COLORS.map((color) =>
+            cardsInHand
+              .filter((card) => card.selected && card.selectedColor === color)
+              .map((card) => card.id)
+          );
+          playerApi.testSetPCOT(selectedCards);
+        }}
+      >
+        {" "}
+        here's a test{" "}
+      </button>
     </div>
   );
 }

@@ -133,3 +133,19 @@ export const selectBuyer = (currentPlayer, buyers, opponents) => {
 
   return null;
 };
+
+export const sortCards = (cards) => {
+  return cards.sort((left, right) => {
+    console.log(
+      "left:",
+      left,
+      "left % 54:",
+      left % 54,
+      "right:",
+      right,
+      "right % 54:",
+      right % 54
+    );
+    return (left % 54) - (right % 54);
+  });
+};

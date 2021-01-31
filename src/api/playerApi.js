@@ -2,6 +2,7 @@ import firebase from "./firebase.config";
 import { handleError } from "./apiUtils";
 import "firebase/database";
 import { scorePlayer } from "../tools";
+import * as tools from "../tools";
 
 const database = firebase.database();
 
@@ -111,6 +112,14 @@ export async function getPlayerCardsInHandByIdOnce(id, onCardsReceived) {
 
 export const setPlayerCardsOnTable = (id, gameId, cards) => {
   return database.ref(cardsOnTableBaseUrl + gameId + "/" + id).set(cards);
+};
+
+export const testSetPCOT = (cards) => {
+  const sortedCards = tools.sortCards(cards);
+  const sortedCardsWithNames = sortedCards.map((set) =>
+    set.map((card) => tools.getLongCardNameFromId(card))
+  );
+  console.log(sortedCardsWithNames);
 };
 
 export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
