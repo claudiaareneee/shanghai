@@ -16,7 +16,7 @@ export const getHand = (round) => {
     case 5:
       return { round: round + 1, books: 1, runs: 2 };
     case 6:
-      return { round: round + 1, books: 3, runs: 0 };
+      return { round: round + 1, books: 0, runs: 3 };
     default:
       return { round: round + 1, books: 0, runs: 0 };
   }
