@@ -76,9 +76,24 @@ function NextHandModal({
           onChange={onCommentChange}
           style={{ marginBottom: "1rem" }}
         />
-        <button className="btn btn-info" onClick={onSubmitComment}>
+        <button
+          className="btn btn-info"
+          onClick={onSubmitComment}
+          style={{ marginBottom: "1rem" }}
+        >
           Submit
         </button>
+        <p>
+          See this project on Github at{" "}
+          <a
+            href="https://github.com/claudiaareneee/shanghai"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Claudiaareneee/Shanghai
+          </a>
+          .
+        </p>
       </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
         {turnState === "EndOfHand" ? (
