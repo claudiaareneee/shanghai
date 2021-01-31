@@ -307,6 +307,7 @@ function GamePage() {
             discard={discard || []}
             playerCards={cardsInHand}
             highlightedCard={highlightedCard}
+            cardsOnTable={cardsOnTable}
             onPlayerCardClicked={handlePlayerCardClicked}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0

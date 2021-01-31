@@ -17,6 +17,7 @@ function CardTable({
   discard,
   numberOfBuys,
   highlightedCard,
+  cardsOnTable,
   onCardHovered,
   onPlayerCardClicked,
   onDragStart,
@@ -85,7 +86,7 @@ function CardTable({
         />
       </Row>
 
-      {turnState === "Play" ? (
+      {turnState === "Play" && !cardsOnTable[player] ? (
         <SetSelection
           hand={game.hand}
           onClick={onSelectionButtonClicked}
