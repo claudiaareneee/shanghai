@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Modal } from "react-bootstrap";
+import { Table, Modal, Form } from "react-bootstrap";
 
 function ScoreRow({ player }) {
   return (
@@ -30,7 +30,17 @@ function ScoreTable({ players }) {
   );
 }
 
-function NextHandModal({ show, players, turnState, onHide, onNextHandClick }) {
+function NextHandModal({
+  gameId,
+  show,
+  players,
+  turnState,
+  comment,
+  onHide,
+  onNextHandClick,
+  onSubmitComment,
+  onCommentChange,
+}) {
   return (
     <Modal
       show={show}
@@ -43,14 +53,47 @@ function NextHandModal({ show, players, turnState, onHide, onNextHandClick }) {
       <Modal.Header style={{ color: "#282c34" }} closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
           {/* For better or worse, this hand is over! */}
-          Scores
+          Game stats
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ color: "#282c34" }}>
-        {/* <h4>Champion this round</h4>
-        <h4>Scores</h4> */}
+        {/* <h5>Champion this round</h5>
+        <h5>Scores</h5> */}
+        <h5>Room Code</h5>
+        <p>{gameId}</p>
+        <h5>Scores</h5>
         <p>Hand, score, who went out, maybe the cards on the table</p>
         <ScoreTable players={players} />
+        <h5>Comments</h5>
+        <p>
+          Here's a place to add a comment 💬 or suggestion 💡 or to report a bug
+          🐛
+        </p>
+        <textarea
+          className="form-control"
+          rows={3}
+          value={comment}
+          onChange={onCommentChange}
+          style={{ marginBottom: "1rem" }}
+        />
+        <button
+          className="btn btn-info"
+          onClick={onSubmitComment}
+          style={{ marginBottom: "1rem" }}
+        >
+          Submit
+        </button>
+        <p>
+          See this project on Github at{" "}
+          <a
+            href="https://github.com/claudiaareneee/shanghai"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Claudiaareneee/Shanghai
+          </a>
+          .
+        </p>
       </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
         {turnState === "EndOfHand" ? (

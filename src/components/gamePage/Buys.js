@@ -24,15 +24,6 @@ function Buys({ numberOfBuys, onClick, disabled }) {
           ))
         ) : (
           <>
-            <Button
-              disabled={true}
-              variant="outline-success"
-              size="lg"
-              onClick={() => onClick()}
-              style={{ marginRight: ".5rem" }}
-            >
-              $$$
-            </Button>
             <p
               className="align-bottom"
               style={{ marginTop: "auto", marginBottom: "auto" }}

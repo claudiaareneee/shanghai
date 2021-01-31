@@ -44,6 +44,11 @@ export const getGameById = (id, onGamesRecieved) => {
   });
 };
 
+export const cleanUpGetGameById = (id) => {
+  const game = firebase.database().ref(gameBaseUrl + id);
+  game.off();
+};
+
 export const getGameByIdOnce = (id) => {
   return database.ref(gameBaseUrl + id).once("value");
 };

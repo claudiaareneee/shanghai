@@ -27,6 +27,11 @@ function WaitingRoomPage({ history }) {
 
       setRedirectToPlayPage(game.turn ? true : false);
     }
+    // TODO: re-enable this and figure out why it's not pushing
+    // return () => {
+    //   gameApi.cleanUpGetGameById(game.id);
+    //   playerApi.cleanUpGetPlayers(game.id);
+    // };
   }, [room, game]);
 
   function handleClick(event) {

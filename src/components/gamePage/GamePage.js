@@ -19,10 +19,12 @@ function GamePage() {
   const [cardsInHand, setCardsInHand] = useState([]);
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
+  const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: false,
     color: "",
   });
+  const [comment, setComment] = useState("");
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -77,16 +79,14 @@ function GamePage() {
   }, [room, game, player]);
 
   function handleDropdownClicked(playerId) {
-    const showCards = players[playerId].showCards ? false : true;
-    setPlayers({ ...players, [playerId]: { ...players[playerId], showCards } });
+    const showPlayer = showPlayers[playerId] ? false : true;
+    setShowPlayers({ ...showPlayers, [playerId]: showPlayer });
   }
 
   function handlePlayerCardClicked({ target }) {
-    console.log("player card clicked");
     if (turnState === "Play" && selection.selecting) {
       const newCardsInHand = cardsInHand.map((card) => {
         if (card.id.toString() === target.id) {
-          console.log("card.selected: ", card.selected);
           return {
             ...card,
             selected: !card.selected,
@@ -95,7 +95,6 @@ function GamePage() {
         }
         return card;
       });
-      console.log("newCardsInHand: ", cardsInHand);
       setCardsInHand(newCardsInHand);
     }
 
@@ -249,7 +248,6 @@ function GamePage() {
     console.log("drag:", index);
     console.log("drop:", index);
     console.log("association", association);
-    console.log(cardsOnTable);
 
     const cardId = event.dataTransfer.getData("id");
 
@@ -272,12 +270,10 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
-      toast.success("got to here");
     }
   };
 
   const handleSelectionButtonClicked = (type, color) => {
-    toast.info(color + " " + type + " selected");
     setSelection({ ...selection, selecting: true, color });
   };
 
@@ -306,6 +302,17 @@ function GamePage() {
   const handleBuyClicked = () => {
     toast.info("ooo buy");
     gameApi.pushBuyer(game.id, player);
+  };
+
+  const handleCommentChanged = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmitComment = () => {
+    if (comment !== "") {
+      baseApi.addComment(game.id, player, comment);
+      setComment("");
+    }
   };
 
   return (
@@ -340,8 +347,10 @@ function GamePage() {
 
         <Col className="SidebarCol" xs lg="5">
           <Sidebar
+            user={player}
             turn={game.turn}
             players={players}
+            showPlayers={showPlayers}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
@@ -352,11 +361,15 @@ function GamePage() {
         </Col>
       </Row>
       <NextHandModal
+        gameId={game.id || ""}
         show={modalShow}
         turnState={turnState}
         players={players}
+        comment={comment}
         onHide={() => setModalShow(false)}
         onNextHandClick={handleNextHandClick}
+        onSubmitComment={handleSubmitComment}
+        onCommentChange={handleCommentChanged}
       />
     </div>
   );

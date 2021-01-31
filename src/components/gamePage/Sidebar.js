@@ -4,7 +4,9 @@ import PropTypes from "prop-types";
 import PlayerBucket from "./PlayerBucket";
 
 function Sidebar({
+  user,
   players,
+  showPlayers,
   cardsOnTable,
   onCardClicked,
   onDropdownClicked,
@@ -19,7 +21,9 @@ function Sidebar({
         <PlayerBucket
           key={key}
           turn={turn}
+          user={user}
           player={players[key]}
+          showPlayer={showPlayers[key]}
           cards={cardsOnTable[key]}
           onCardClicked={onCardClicked}
           onDropdownClicked={onDropdownClicked}
@@ -31,7 +35,7 @@ function Sidebar({
         style={{ float: "right", margin: ".5rem" }}
         onClick={onScoreCardClicked}
       >
-        View Score Card
+        View Game Stats
       </button>
     </div>
   );

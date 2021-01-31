@@ -40,6 +40,14 @@ export const getPlayers = (gameId, onPlayersReceived) => {
   });
 };
 
+export const cleanUpGetPlayers = (gameId) => {
+  const player = firebase
+    .database()
+    .ref()
+    .child(playerBaseUrl + gameId);
+  player.off();
+};
+
 export const getPlayerById = (playerId, gameId, onPlayerReceived) => {
   const player = firebase
     .database()
@@ -69,6 +77,14 @@ export const setNumberOfRemainingCards = (
     .child(playerBaseUrl + gameId + "/" + id)
     .child("numberOfRemainingCards")
     .set(numberOfRemainingCards);
+};
+
+export const setBuys = (gameId, id, buys) => {
+  return database
+    .ref()
+    .child(playerBaseUrl + gameId + "/" + id)
+    .child("buys")
+    .set(buys);
 };
 
 export const getPlayerCardsInHandById = (id, onCardsReceived) => {
