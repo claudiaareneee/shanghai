@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
 function CardStack({
+  numberOfCardsInDeck,
   numberOfCards,
   source,
   highlight,
@@ -39,7 +40,7 @@ function CardStack({
       ))}
       <PlayingCard
         key={numberOfBottomCards}
-        id={numberOfBottomCards}
+        id={numberOfCardsInDeck}
         xTranslation={
           constants.CARDSTACK_STRETCH_X * (numberOfBottomCards + offset)
         }
@@ -47,7 +48,7 @@ function CardStack({
         source={source}
         onCardHovered={onCardHovered}
         onCardClicked={onCardClicked}
-        highlight={highlight}
+        highlight={highlight === numberOfCardsInDeck}
       />
     </div>
   ) : (

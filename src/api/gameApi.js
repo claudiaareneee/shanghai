@@ -39,7 +39,7 @@ export const addPlayerToGame = (game, playerId) => {
 
 export const getGameById = (id, onGamesRecieved) => {
   const game = firebase.database().ref(gameBaseUrl + id);
-  game.on("value", function (snapshot) {
+  game.on("value", (snapshot) => {
     if (snapshot.val() != null) onGamesRecieved(snapshot.val());
   });
 };
@@ -63,8 +63,7 @@ export const pushToDiscard = (gameId, card) => {
 
 export const getDiscard = (gameId, onDiscardReceived) => {
   const discard = firebase.database().ref(discardBaseUrl + gameId);
-  discard.on("value", function (snapshot) {
-    // if (snapshot.val() != null) onDiscardReceived(snapshot.val());
+  discard.on("value", (snapshot) => {
     onDiscardReceived(snapshot.val());
   });
 };

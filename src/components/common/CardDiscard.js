@@ -6,7 +6,7 @@ import * as constants from "./Constants";
 function CardDiscard({
   cards,
   source,
-  highlight,
+  highlightedCard,
   onCardHovered,
   onCardClicked,
 }) {
@@ -43,7 +43,7 @@ function CardDiscard({
           transformOrigin="0% 50%"
           source={source}
           association={{ location: "discard" }}
-          highlight={card.highlight}
+          highlight={card.id === highlightedCard}
           onCardClicked={index === cards.length - 1 ? onCardClicked : () => {}}
           onCardHovered={index === cards.length - 1 ? onCardHovered : () => {}}
         />

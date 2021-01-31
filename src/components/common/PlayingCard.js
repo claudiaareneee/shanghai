@@ -35,7 +35,7 @@ function PlayingCard({
     source === "placeholder"
       ? CardSources.placeholder[0]
       : source === "back"
-      ? CardSources.backs[Math.floor(id / 54)]
+      ? CardSources.backs[0]
       : CardSources.fronts[id % 54];
 
   return (

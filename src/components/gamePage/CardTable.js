@@ -15,12 +15,11 @@ function CardTable({
   player,
   playerCards,
   discard,
-  highlightDraw,
   numberOfBuys,
-  onDrawHovered,
-  onDiscardHovered,
+  highlightedCard,
+  cardsOnTable,
+  onCardHovered,
   onPlayerCardClicked,
-  onPlayerCardHovered,
   onDragStart,
   onDragOver,
   onDrop,
@@ -52,7 +51,8 @@ function CardTable({
           <CardDiscard
             cards={discard}
             source="front"
-            onCardHovered={onDiscardHovered}
+            highlightedCard={highlightedCard}
+            onCardHovered={onCardHovered}
             onCardClicked={onDiscardClicked}
           />
         </Col>
@@ -66,26 +66,37 @@ function CardTable({
                 : game.numberOfDrawCards
             }
             source="back"
-            highlight={highlightDraw}
-            onCardHovered={onDrawHovered}
+            numberOfCardsInDeck={parseInt(game.decks, 10) * 54}
+            highlight={highlightedCard}
+            onCardHovered={onCardHovered}
             onCardClicked={onDrawClicked}
           />
         </Col>
       </Row>
 
       <Row className="PlayerHand">
-        <CardSet
-          cards={playerCards}
-          source="front"
-          onCardClicked={onPlayerCardClicked}
-          onCardHovered={onPlayerCardHovered}
-          onDragStart={onDragStart}
-          onDragOver={onDragOver}
-          onDrop={onDrop}
-        />
+        {playerCards.length > 0 ? (
+          <CardSet
+            cards={playerCards}
+            source="front"
+            highlightedCard={highlightedCard}
+            onCardClicked={onPlayerCardClicked}
+            onCardHovered={onCardHovered}
+            onDragStart={onDragStart}
+            onDragOver={onDragOver}
+            onDrop={onDrop}
+          />
+        ) : (
+          <h3 style={{ justifyContent: "center", width: "100%" }}>
+            Congrats! You went out!{" "}
+            <span role="img" aria-label="fire">
+              🔥🔥🔥
+            </span>
+          </h3>
+        )}
       </Row>
 
-      {turnState === "Play" ? (
+      {turnState === "Play" && !cardsOnTable[player] ? (
         <SetSelection
           hand={game.hand}
           onClick={onSelectionButtonClicked}
@@ -99,6 +110,7 @@ function CardTable({
         <Col>
           <Buys
             numberOfBuys={numberOfBuys}
+            laidDown={cardsOnTable[player]}
             onClick={onBuyClicked}
             disabled={game.turn && game.turn.player === player}
           />

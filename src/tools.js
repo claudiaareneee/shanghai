@@ -16,7 +16,7 @@ export const getHand = (round) => {
     case 5:
       return { round: round + 1, books: 1, runs: 2 };
     case 6:
-      return { round: round + 1, books: 3, runs: 0 };
+      return { round: round + 1, books: 0, runs: 3 };
     default:
       return { round: round + 1, books: 0, runs: 0 };
   }
@@ -44,7 +44,7 @@ export function dealCards(opponents, numberOfDecks) {
   return deal;
 }
 
-export const nextTurn = (opponents, endOfHand, turn = {}) => {
+export const nextTurn = (opponents, endOfHand, turn = {}, round = 1) => {
   let state = "";
   let playerIndex = turn.player ? opponents.indexOf(turn.player) : 0;
   let player = turn.player;
@@ -58,7 +58,7 @@ export const nextTurn = (opponents, endOfHand, turn = {}) => {
     player = opponents[(playerIndex + 1) % opponents.length];
   } else {
     state = "drawing";
-    player = opponents[0];
+    player = opponents[(round - 1) % opponents.length];
   }
 
   return { player, state };

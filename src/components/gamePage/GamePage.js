@@ -15,8 +15,8 @@ function GamePage() {
   const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
-  const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
+  const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
@@ -39,11 +39,9 @@ function GamePage() {
       });
       playerApi.getPlayerCardsInHandById(player, (players) => {
         setCardsInHand(
-          Object.values(players).map((card, index) =>
-            !players[index] || players[index].highlight
-              ? { id: parseInt(card, 10) }
-              : { id: parseInt(card, 10), highlight: false }
-          )
+          Object.values(players).map((card) => ({
+            id: parseInt(card, 10),
+          }))
         );
       });
       gameApi.getDiscard(game.id, (_discard) => {
@@ -61,8 +59,7 @@ function GamePage() {
       );
 
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
-
-      if (player === game.turn.player) {
+      else if (player === game.turn.player) {
         switch (game.turn.state) {
           case "playing":
             setTurnState("Play");
@@ -74,9 +71,13 @@ function GamePage() {
             setTurnState("Draw");
             break;
         }
-      }
+      } else setTurnState("Wait");
+
+      // I could see this being problematic
+      if (game.turn.state === "drawing" && turnState === "EndOfHand")
+        setDiscard([]);
     }
-  }, [room, game, player]);
+  }, [room, game, player, turnState]);
 
   function handleDropdownClicked(playerId) {
     const showPlayer = showPlayers[playerId] ? false : true;
@@ -119,19 +120,16 @@ function GamePage() {
         toast.success("congratz 🦑, you just went out");
         setTurnState("EndOfHand");
         playerApi.calculateScores(game.id, players);
+        playerApi.setNumberOfRemainingCards(game.id, player, 0);
         baseApi.nextTurn(game, true);
       }
     }
   }
 
-  function handlePlayerCardHovered({ target }) {
-    setCardsInHand(
-      cardsInHand.map((card) =>
-        card.id === parseInt(target.id, 10)
-          ? { ...card, highlight: !card.highlight }
-          : { ...card }
-      )
-    );
+  function handleCardHovered({ target }) {
+    const id = parseInt(target.id, 10);
+    const newHighlightedCard = highlightedCard === id ? -1 : id;
+    setHighlightedCard(newHighlightedCard);
   }
 
   function handleDiscardClicked({ target }) {
@@ -155,16 +153,6 @@ function GamePage() {
       });
   }
 
-  function handleDiscardHovered({ target }) {
-    setDiscard(
-      discard.map((card) =>
-        card.id === parseInt(target.id, 10)
-          ? { ...card, highlight: !card.highlight }
-          : { ...card }
-      )
-    );
-  }
-
   function handleDrawClicked({ target }) {
     if (turnState === "Draw")
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
@@ -186,10 +174,6 @@ function GamePage() {
         setTurnState("Play");
         baseApi.nextTurn(game);
       });
-  }
-
-  function handleDrawHovered({ target }) {
-    setHighlightDraw(!highlightDraw);
   }
 
   function handleTurnButtonClicked({ target }) {
@@ -237,6 +221,7 @@ function GamePage() {
     }
 
     setCardsInHand(cards);
+
     playerApi.setPlayerCardsInHand(
       player,
       game.id,
@@ -294,7 +279,7 @@ function GamePage() {
   };
 
   const handleNextHandClick = () => {
-    baseApi.setDeal(game, 2);
+    baseApi.setDeal(game);
     setDiscard([]);
     setCardsOnTable([]);
   };
@@ -325,8 +310,9 @@ function GamePage() {
             player={player}
             discard={discard || []}
             playerCards={cardsInHand}
+            highlightedCard={highlightedCard}
+            cardsOnTable={cardsOnTable}
             onPlayerCardClicked={handlePlayerCardClicked}
-            onPlayerCardHovered={handlePlayerCardHovered}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
@@ -334,11 +320,9 @@ function GamePage() {
             onDragOver={onDragOver}
             onDrop={onDrop}
             onDrawClicked={handleDrawClicked}
-            onDrawHovered={handleDrawHovered}
+            onCardHovered={handleCardHovered}
             onDiscardClicked={handleDiscardClicked}
-            onDiscardHovered={handleDiscardHovered}
             onTurnButtonClicked={handleTurnButtonClicked}
-            highlightDraw={highlightDraw}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onLayDown={handleLayDown}
             onBuyClicked={handleBuyClicked}

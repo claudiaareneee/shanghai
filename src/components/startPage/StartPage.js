@@ -30,12 +30,15 @@ function StartPage({ history }) {
     });
   }
 
-  function formIsValid() {
+  function formIsValid(game) {
     const _errors = {};
 
     if (!form.name) _errors.name = "Name is required";
     if (form.selection === "join" && !form.room)
       _errors.room = "Room is required";
+    if (form.selection === "join" && !game)
+      _errors.room =
+        "This room code is invalid. Please check that it has been inputted correctly";
 
     setErrors(_errors);
 
@@ -58,19 +61,25 @@ function StartPage({ history }) {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    if (!formIsValid()) return;
 
     // TODO: Check for existing name -- this player already exists, would you like to join as them?
+    if (form.selection === "create") if (!formIsValid(null)) return;
+
     if (form.selection === "join") {
       const game = await (await gameApi.getGameByIdOnce(form.room)).val();
-      if (game.hand != null) {
+      if (!formIsValid(game)) return;
+
+      const inProgress = game.hand != null;
+      if (inProgress) {
         var answer = window.confirm(
           "This game is already in progress. Would you like to join as a spectator?"
         );
         if (answer) {
           history.push("/WaitingRoom");
-          return;
+          localStorage.setItem("uid", "spectator");
+          localStorage.setItem("room", game.id);
         }
+        return;
       }
     }
 
