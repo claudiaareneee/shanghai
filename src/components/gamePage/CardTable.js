@@ -15,8 +15,8 @@ function CardTable({
   player,
   playerCards,
   discard,
-  highlightDraw,
   numberOfBuys,
+  highlightedCard,
   onDrawHovered,
   onDiscardHovered,
   onPlayerCardClicked,
@@ -52,6 +52,7 @@ function CardTable({
           <CardDiscard
             cards={discard}
             source="front"
+            highlightedCard={highlightedCard}
             onCardHovered={onDiscardHovered}
             onCardClicked={onDiscardClicked}
           />
@@ -66,7 +67,7 @@ function CardTable({
                 : game.numberOfDrawCards
             }
             source="back"
-            highlight={highlightDraw}
+            highlight={highlightedCard}
             onCardHovered={onDrawHovered}
             onCardClicked={onDrawClicked}
           />
@@ -77,6 +78,7 @@ function CardTable({
         <CardSet
           cards={playerCards}
           source="front"
+          highlightedCard={highlightedCard}
           onCardClicked={onPlayerCardClicked}
           onCardHovered={onPlayerCardHovered}
           onDragStart={onDragStart}

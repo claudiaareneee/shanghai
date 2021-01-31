@@ -7,6 +7,7 @@ function CardSet({
   cards,
   source,
   association,
+  highlightedCard,
   onCardClicked,
   onCardHovered,
   onDragStart,
@@ -43,7 +44,7 @@ function CardSet({
           association={association}
           onCardClicked={onCardClicked}
           onCardHovered={onCardHovered}
-          highlight={card.highlight}
+          highlight={card.id === highlightedCard}
           selected={card.selected}
           selectedColor={card.selectedColor}
           onDragStart={onDragStart}

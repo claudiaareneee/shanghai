@@ -47,7 +47,7 @@ function CardStack({
         source={source}
         onCardHovered={onCardHovered}
         onCardClicked={onCardClicked}
-        highlight={highlight}
+        highlight={highlight === numberOfBottomCards}
       />
     </div>
   ) : (

@@ -15,8 +15,8 @@ function GamePage() {
   const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
-  const [highlightDraw, setHighlightDraw] = useState(false);
   const [cardsInHand, setCardsInHand] = useState([]);
+  const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
@@ -39,11 +39,9 @@ function GamePage() {
       });
       playerApi.getPlayerCardsInHandById(player, (players) => {
         setCardsInHand(
-          Object.values(players).map((card, index) =>
-            !players[index] || players[index].highlight
-              ? { id: parseInt(card, 10) }
-              : { id: parseInt(card, 10), highlight: false }
-          )
+          Object.values(players).map((card) => ({
+            id: parseInt(card, 10),
+          }))
         );
       });
       gameApi.getDiscard(game.id, (_discard) => {
@@ -125,13 +123,7 @@ function GamePage() {
   }
 
   function handlePlayerCardHovered({ target }) {
-    setCardsInHand(
-      cardsInHand.map((card) =>
-        card.id === parseInt(target.id, 10)
-          ? { ...card, highlight: !card.highlight }
-          : { ...card }
-      )
-    );
+    setHighlightedCard(parseInt(target.id, 10));
   }
 
   function handleDiscardClicked({ target }) {
@@ -156,13 +148,7 @@ function GamePage() {
   }
 
   function handleDiscardHovered({ target }) {
-    setDiscard(
-      discard.map((card) =>
-        card.id === parseInt(target.id, 10)
-          ? { ...card, highlight: !card.highlight }
-          : { ...card }
-      )
-    );
+    setHighlightedCard(parseInt(target.id, 10));
   }
 
   function handleDrawClicked({ target }) {
@@ -189,7 +175,7 @@ function GamePage() {
   }
 
   function handleDrawHovered({ target }) {
-    setHighlightDraw(!highlightDraw);
+    setHighlightedCard(parseInt(target.id, 10));
   }
 
   function handleTurnButtonClicked({ target }) {
@@ -325,6 +311,7 @@ function GamePage() {
             player={player}
             discard={discard || []}
             playerCards={cardsInHand}
+            highlightedCard={highlightedCard}
             onPlayerCardClicked={handlePlayerCardClicked}
             onPlayerCardHovered={handlePlayerCardHovered}
             numberOfBuys={
@@ -338,7 +325,6 @@ function GamePage() {
             onDiscardClicked={handleDiscardClicked}
             onDiscardHovered={handleDiscardHovered}
             onTurnButtonClicked={handleTurnButtonClicked}
-            highlightDraw={highlightDraw}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onLayDown={handleLayDown}
             onBuyClicked={handleBuyClicked}
