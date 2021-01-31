@@ -79,6 +79,14 @@ export const setNumberOfRemainingCards = (
     .set(numberOfRemainingCards);
 };
 
+export const setBuys = (gameId, id, buys) => {
+  return database
+    .ref()
+    .child(playerBaseUrl + gameId + "/" + id)
+    .child("buys")
+    .set(buys);
+};
+
 export const getPlayerCardsInHandById = (id, onCardsReceived) => {
   const cards = firebase.database().ref(cardsInHandBaseUrl + id);
   cards.on("value", function (snapshot) {

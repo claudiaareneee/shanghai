@@ -78,6 +78,7 @@ function PlayerBucket({
           <div className="playerInfo">
             <p>Score: {player.score || 0}</p>
             <p>Remaining Cards: {player.numberOfRemainingCards}</p>
+            <p>Remaining Buys: {player.buys}</p>
           </div>
         </Col>
         <Col xs lg={2}>

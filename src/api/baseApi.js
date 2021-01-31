@@ -68,7 +68,8 @@ export async function buyWithId(
   gameId,
   playerId,
   numberOfPlayerCards,
-  numberOfDrawCards
+  numberOfDrawCards,
+  numberOfBuys
 ) {
   // pop discard and draw and push them to the player who bought
   const discard = await gameApi.popDiscard(gameId, () => {});
@@ -81,6 +82,7 @@ export async function buyWithId(
     playerId,
     numberOfPlayerCards + 2
   );
+  playerApi.setBuys(gameId, playerId, numberOfBuys - 1);
 }
 
 export const performBuy = (game, currentPlayer, players) => {
@@ -97,7 +99,8 @@ export const performBuy = (game, currentPlayer, players) => {
       game.id,
       buyer,
       players[buyer].numberOfRemainingCards || 0,
-      game.numberOfDrawCards
+      game.numberOfDrawCards,
+      players[buyer].buys || 0
     );
 
   gameApi.clearBuyers(game.id);
