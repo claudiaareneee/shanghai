@@ -122,7 +122,7 @@ function GamePage() {
     }
   }
 
-  function handlePlayerCardHovered({ target }) {
+  function handleCardHovered({ target }) {
     setHighlightedCard(parseInt(target.id, 10));
   }
 
@@ -147,10 +147,6 @@ function GamePage() {
       });
   }
 
-  function handleDiscardHovered({ target }) {
-    setHighlightedCard(parseInt(target.id, 10));
-  }
-
   function handleDrawClicked({ target }) {
     if (turnState === "Draw")
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
@@ -172,10 +168,6 @@ function GamePage() {
         setTurnState("Play");
         baseApi.nextTurn(game);
       });
-  }
-
-  function handleDrawHovered({ target }) {
-    setHighlightedCard(parseInt(target.id, 10));
   }
 
   function handleTurnButtonClicked({ target }) {
@@ -313,7 +305,6 @@ function GamePage() {
             playerCards={cardsInHand}
             highlightedCard={highlightedCard}
             onPlayerCardClicked={handlePlayerCardClicked}
-            onPlayerCardHovered={handlePlayerCardHovered}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
@@ -321,9 +312,8 @@ function GamePage() {
             onDragOver={onDragOver}
             onDrop={onDrop}
             onDrawClicked={handleDrawClicked}
-            onDrawHovered={handleDrawHovered}
+            onCardHovered={handleCardHovered}
             onDiscardClicked={handleDiscardClicked}
-            onDiscardHovered={handleDiscardHovered}
             onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onLayDown={handleLayDown}
