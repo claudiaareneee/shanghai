@@ -217,6 +217,7 @@ function GamePage() {
     }
 
     setCardsInHand(cards);
+
     playerApi.setPlayerCardsInHand(
       player,
       game.id,
