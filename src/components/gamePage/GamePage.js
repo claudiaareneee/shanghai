@@ -59,8 +59,7 @@ function GamePage() {
       );
 
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
-
-      if (player === game.turn.player) {
+      else if (player === game.turn.player) {
         switch (game.turn.state) {
           case "playing":
             setTurnState("Play");
@@ -72,9 +71,13 @@ function GamePage() {
             setTurnState("Draw");
             break;
         }
-      }
+      } else setTurnState("Wait");
+
+      // I could see this being problematic
+      if (game.turn.state === "drawing" && turnState === "EndOfHand")
+        setDiscard([]);
     }
-  }, [room, game, player]);
+  }, [room, game, player, turnState]);
 
   function handleDropdownClicked(playerId) {
     const showPlayer = showPlayers[playerId] ? false : true;

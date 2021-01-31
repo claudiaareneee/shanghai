@@ -66,7 +66,7 @@ function CardTable({
                 : game.numberOfDrawCards
             }
             source="back"
-            numberOfCardsInDeck={parseInt(game.decks, 10) * 52}
+            numberOfCardsInDeck={parseInt(game.decks, 10) * 54}
             highlight={highlightedCard}
             onCardHovered={onCardHovered}
             onCardClicked={onDrawClicked}
