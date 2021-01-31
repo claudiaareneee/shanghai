@@ -74,7 +74,11 @@ function StartPage({ history }) {
         var answer = window.confirm(
           "This game is already in progress. Would you like to join as a spectator?"
         );
-        if (answer) history.push("/WaitingRoom");
+        if (answer) {
+          history.push("/WaitingRoom");
+          localStorage.setItem("uid", "spectator");
+          localStorage.setItem("room", game.id);
+        }
         return;
       }
     }
