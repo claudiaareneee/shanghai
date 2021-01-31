@@ -100,6 +100,7 @@ function CardTable({
         <Col>
           <Buys
             numberOfBuys={numberOfBuys}
+            laidDown={cardsOnTable[player]}
             onClick={onBuyClicked}
             disabled={game.turn && game.turn.player === player}
           />
