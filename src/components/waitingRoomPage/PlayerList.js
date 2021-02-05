@@ -17,8 +17,6 @@ function PlayerList({
   onClickChange,
   onClickCancel,
 }) {
-  console.log(players);
-  console.log(playerName);
   return (
     <>
       <h2>Room code: {gameId}</h2>
