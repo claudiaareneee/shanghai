@@ -5,7 +5,20 @@ import PropTypes from "prop-types";
 import { Button, Col, Row } from "react-bootstrap";
 import { Hearts } from "@agney/react-loading";
 
-function PlayerList({ players, onClick, gameId, numberOfDecks, onChange }) {
+function PlayerList({
+  playerName,
+  newName,
+  players,
+  onClick,
+  gameId,
+  numberOfDecks,
+  onChange,
+  onNameChange,
+  onClickChange,
+  onClickCancel,
+}) {
+  console.log(players);
+  console.log(playerName);
   return (
     <>
       <h2>Room code: {gameId}</h2>
@@ -15,7 +28,29 @@ function PlayerList({ players, onClick, gameId, numberOfDecks, onChange }) {
           <ListGroup>
             {Object.keys(players).map((key) => (
               <ListGroup.Item key={key} variant="info">
-                {players[key].name}
+                {players[key].name === playerName ? (
+                  <div className="form-inline">
+                    <input
+                      value={newName}
+                      className="form-control mr-2"
+                      onChange={onNameChange}
+                    />
+                    <button
+                      className="btn btn-primary ml-2 mr-2"
+                      onClick={onClickChange}
+                    >
+                      Change Name
+                    </button>
+                    <button
+                      className="btn btn-danger ml-2"
+                      onClick={onClickCancel}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  players[key].name
+                )}
               </ListGroup.Item>
             ))}
           </ListGroup>
