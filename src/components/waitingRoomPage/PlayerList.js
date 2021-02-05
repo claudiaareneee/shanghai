@@ -35,18 +35,24 @@ function PlayerList({
                       className="form-control mr-2"
                       onChange={onNameChange}
                     />
-                    <button
-                      className="btn btn-primary ml-2 mr-2"
-                      onClick={onClickChange}
-                    >
-                      Change Name
-                    </button>
-                    <button
-                      className="btn btn-danger ml-2"
-                      onClick={onClickCancel}
-                    >
-                      Cancel
-                    </button>
+                    {playerName !== newName ? (
+                      <>
+                        <button
+                          className="btn btn-primary ml-2 mr-2"
+                          onClick={onClickChange}
+                        >
+                          Change Name
+                        </button>
+                        <button
+                          className="btn btn-danger ml-2"
+                          onClick={onClickCancel}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                 ) : (
                   players[key].name
