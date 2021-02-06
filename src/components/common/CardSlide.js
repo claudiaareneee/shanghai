@@ -19,7 +19,7 @@ function CardSlide({ cards, source, association, onCardClicked, onDrop }) {
   };
 
   return (
-    <div style={style}>
+    <div style={style} onDragOver={(e) => e.preventDefault()}>
       {cards.length > 0 ? (
         cards.map((card, index) => (
           <PlayingCard

@@ -208,11 +208,9 @@ function GamePage() {
 
   const onDrop = (event, cat, association) => {
     const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
-    const draggedCardAssociation = event.dataTransfer.getData("association");
     console.log("drag:", cardIndex);
     console.log("drop:", cat);
     console.log("association", association);
-    console.log("draggedCardAssociation", draggedCardAssociation);
 
     const card = cardsInHand[parseInt(cardIndex, 10)];
     const newArray = cardsInHand.filter((card, index) => {
@@ -241,6 +239,8 @@ function GamePage() {
     console.log("drag:", index);
     console.log("drop:", index);
     console.log("association", association);
+    const draggedCardAssociation = event.dataTransfer.getData("association");
+    console.log("draggedCardAssociation", draggedCardAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
@@ -248,7 +248,7 @@ function GamePage() {
       const newPlayerCardsOnTable = Object.values(
         cardsOnTable[association.location]
       ).map((set, index) => {
-        if (index === association.index) return [...set, cardId];
+        if (index === association.index) return [...set, parseInt(cardId, 10)];
         return set;
       });
 
