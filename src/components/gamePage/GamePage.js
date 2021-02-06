@@ -239,8 +239,8 @@ function GamePage() {
     setDragAssociation({});
   };
 
-  const removeCard = (cardsOnTable, index, association) => {
-    return Object.values(cardsOnTable[association.location]).map((set, i) => {
+  const removeCard = (cards, index, association) => {
+    return cards.map((set, i) => {
       if (i === association.index) {
         const newSet = [...set].filter((_, j) => j !== index);
         console.log("newset", newSet);
@@ -251,14 +251,14 @@ function GamePage() {
     });
   };
 
-  const addCard = (cardsOnTable, index, association, card) => {
-    return Object.values(cardsOnTable[association.location]).map((set, i) => {
+  const addCard = (cards, index, association, card) => {
+    return cards.map((set, i) => {
       if (i === association.index) {
         const newSet = [...set];
         const startArray = newSet.splice(0, index + 1);
         let cards =
           newSet.length > 0
-            ? [...startArray, card, newSet]
+            ? [...startArray, card, ...newSet]
             : [...startArray, card];
         return cards;
       }
@@ -268,39 +268,43 @@ function GamePage() {
 
   const onDropCardsOnTable = (event, newIndex, association) => {
     const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
-    console.log("drag:", oldIndex);
-    console.log("drop:", newIndex);
-    console.log("association", association);
-    console.log("dragAssociation", dragAssociation);
+    // console.log("drag:", oldIndex);
+    // console.log("drop:", newIndex);
+    // console.log("association", association);
+    // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
     if (dragAssociation.location !== "player") {
-      console.log("cards on table:", cardsOnTable);
       // remove card from original location
-      const newPlayerCardsInHandOldAssociation = removeCard(
-        cardsOnTable,
+      const newPlayerCardsOnTableOldAssociation = removeCard(
+        cardsOnTable[dragAssociation.location],
         oldIndex,
         dragAssociation
       );
 
       // add card to new location
-      const newPlayerCardsOnTableNewAssociation = addCard(
-        cardsOnTable,
-        newIndex,
-        association,
-        parseInt(cardId, 10)
-      );
-
-      console.log("old: ", newPlayerCardsInHandOldAssociation);
-      console.log("new: ", newPlayerCardsOnTableNewAssociation);
+      const newPlayerCardsOnTableNewAssociation =
+        dragAssociation.location === association.location
+          ? addCard(
+              newPlayerCardsOnTableOldAssociation,
+              newIndex,
+              association,
+              parseInt(cardId, 10)
+            )
+          : addCard(
+              cardsOnTable[association.location],
+              newIndex,
+              association,
+              parseInt(cardId, 10)
+            );
 
       // set cards on deck
       if (dragAssociation.location !== association.location) {
         playerApi.setPlayerCardsOnTable(
           dragAssociation.location,
           game.id,
-          newPlayerCardsInHandOldAssociation
+          newPlayerCardsOnTableOldAssociation
         );
       }
 
@@ -310,17 +314,12 @@ function GamePage() {
         newPlayerCardsOnTableNewAssociation
       );
     } else if (turnState === "Play" && cardsOnTable[player]) {
-      const newPlayerCardsOnTable = Object.values(
-        cardsOnTable[association.location]
-      ).map((set, i) => {
-        // if (i === association.index) return [...set, parseInt(cardId, 10)];
-        if (i === association.index) {
-          const startArray = set.splice(0, newIndex + 1);
-          let cards = [...startArray, parseInt(cardId, 10), ...set];
-          return cards;
-        }
-        return set;
-      });
+      const newPlayerCardsOnTable = addCard(
+        Object.values(cardsOnTable[association.location]),
+        newIndex,
+        association,
+        parseInt(cardId, 10)
+      );
 
       playerApi.setPlayerCardsOnTable(
         association.location,
