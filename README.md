@@ -1,29 +1,101 @@
-# Starter Kit for [Building Applications in React and Redux](http://www.pluralsight.com/author/cory-house) on Pluralsight
+[![Contributors][contributors-shield]][contributors-url]
+[![Forks][forks-shield]][forks-url]
+[![Stargazers][stars-shield]][stars-url]
+[![Issues][issues-shield]][issues-url]
+[![MIT License][license-shield]][license-url]
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
+# Shanghai
+
+This is a react based web app for playing a rummy style card game called Shanghai. The website is is live at:
+
+- Production: [https://hart-shanghai.herokuapp.com/](https://hart-shanghai.herokuapp.com/)
+- Dev: [https://shielded-eyrie-81823.herokuapp.com/](https://shielded-eyrie-81823.herokuapp.com/)
+
+## Built With
+
+The main technologies used in this project are:
+
+- [Bootstrap](https://getbootstrap.com/) - CSS framework
+- [React](https://reactjs.org/) and [create-react-app](https://create-react-app.dev/) - library for building user interfaces
+- [Firebase Realtime Database](https://firebase.google.com/docs/database/) - backend database
+- [Heroku](https://www.heroku.com/home) - pipeline and deployment
 
 ## Get Started
 
-1. **Install [Node 8](https://nodejs.org)** or newer. Need to run multiple versions of Node? Use [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)(https://github.com/coryhouse/pluralsight-redux-starter/archive/master.zip)
-2. **Navigate to this project's root directory on the command line.**
-3. **Install Node Packages.** - `npm install`
-4. **Install [React developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) and [Redux Dev Tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en)** in Chrome.
-5. Having issues? See below.
+Make sure you have the following installed:
 
-## Having Issues? Try these things first:
+1. Install [Node 8](https://nodejs.org) or newer. Need to run multiple versions of Node? Use [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
+2. Clone this repo:
+```git clone https://github.com/claudiaareneee/shanghai.git```
+3. Navigate to this project's root directory on the command line.
+4. Install Node packages
+```npm install```
+5. Install [React developer tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) and [Redux Dev Tools](https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en) in Chrome.
+6. Having issues? See below.
+
+## Having Issues? Try these things first
 
 1. Run `npm install` - If you forget to do this, you'll get an error when you try to start the app later.
 2. Don't run the project from a symbolic link. It will cause issues with file watches.
-3. Delete any .eslintrc in your user directory and disable any ESLint plugin / custom rules within your editor since these will conflict with the ESLint rules defined in the course.
-4. On Windows? Open your console as an administrator. This will assure the console has the necessary rights to perform installs.
-5. Ensure you do not have NODE_ENV=production in your env variables as it will not install the devDependencies. To check run this on the command line: `set NODE_ENV`. If it comes back as production, you need to clear this env variable.
-6. Nothing above work? Delete your node_modules folder and re-run npm install.
+3. On Windows? Open your console as an administrator. This will assure the console has the necessary rights to perform installs.
+4. Ensure you do not have NODE_ENV=production in your env variables as it will not install the devDependencies. To check run this on the command line: `set NODE_ENV`. If it comes back as production, you need to clear this env variable.
+5. Nothing above work? Delete your node_modules folder and re-run npm install.
+
+## Usage
+
+To run this project locally, run the following command:
+
+```bash
+npm run start-dev
+```
+
+Heroku requires a simple server to be spun up. Heroku runs:
+
+```bash
+npm start
+```
+
+## Roadmap
+
+See the [open issues](https://github.com/claudiaareneee/shanghai/issues) for a list of proposed features (and known issues).
+
+## Contributing
+
+Contributions are what make the open source community such an amazing place to be learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Contact
+
+Your Name - claudiaareneee@gmail.com
+
+Project Link: [https://github.com/claudiaareneee/shanghai/](https://github.com/claudiaareneee/shanghai/)
+
+## Acknowledgements
+
+- [React Toastify](https://www.npmjs.com/package/react-toastify)
+- [Othneildrew ReadMe Template](https://github.com/othneildrew/Best-README-Template)
 
 ### Production Dependencies
 
 | **Dependency**   | **Use**                                              |
 | ---------------- | ---------------------------------------------------- |
 | bootstrap        | CSS Framework                                        |
+| express          | Server library to help deploy to heroku              |
+| express-favicon  | Companion library for express                        |
+| firebase         | Firebase library for the backend database            |
 | immer            | Helper for working with immutable data               |
 | prop-types       | Declare types for props passed into React components |
+| node-sass        | Node.js bindings to libsass                          |
 | react            | React library                                        |
 | react-dom        | React library for DOM rendering                      |
 | react-redux      | Connects React components to Redux                   |
@@ -33,38 +105,18 @@
 | redux-thunk      | Async redux library                                  |
 | reselect         | Memoize selectors for performance                    |
 
-### Development Dependencies
-
-| **Dependency**                  | **Use**                                                          |
-| ------------------------------- | ---------------------------------------------------------------- |
-| @babel/core                     | Transpiles modern JavaScript so it runs cross-browser            |
-| babel-eslint                    | Lint modern JavaScript via ESLint                                |
-| babel-loader                    | Add Babel support to Webpack                                     |
-| babel-preset-react-app          | Babel preset for working in React. Used by create-react-app too. |
-| css-loader                      | Read CSS files via Webpack                                       |
-| cssnano                         | Minify CSS                                                       |
-| enzyme                          | Simplified JavaScript Testing utilities for React                |
-| enzyme-adapter-react-16         | Configure Enzyme to work with React 16                           |
-| eslint                          | Lints JavaScript                                                 |
-| eslint-loader                   | Run ESLint via Webpack                                           |
-| eslint-plugin-import            | Advanced linting of ES6 imports                                  |
-| eslint-plugin-react             | Adds additional React-related rules to ESLint                    |
-| fetch-mock                      | Mock fetch calls                                                 |
-| html-webpack-plugin             | Generate HTML file via webpack                                   |
-| http-server                     | Lightweight HTTP server to serve the production build locally    |
-| jest                            | Automated testing framework                                      |
-| json-server                     | Quickly create mock API that simulates create, update, delete    |
-| mini-css-extract-plugin         | Extract imported CSS to a separate file via Webpack              |
-| node-fetch                      | Make HTTP calls via fetch using Node - Used by fetch-mock        |
-| npm-run-all                     | Display results of multiple commands on single command line      |
-| postcss-loader                  | Post-process CSS via Webpack                                     |
-| react-test-renderer             | Render React components for testing                              |
-| react-testing-library           | Test React components                                            |
-| redux-immutable-state-invariant | Warn when Redux state is mutated                                 |
-| redux-mock-store                | Mock Redux store for testing                                     |
-| rimraf                          | Delete files and folders                                         |
-| style-loader                    | Insert imported CSS into app via Webpack                         |
-| webpack                         | Bundler with plugin ecosystem and integrated dev server          |
-| webpack-bundle-analyzer         | Generate report of what's in the app's production bundle         |
-| webpack-cli                     | Run Webpack via the command line                                 |
-| webpack-dev-server              | Serve app via Webpack                                            |
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+[contributors-shield]: https://img.shields.io/github/contributors/claudiaareneee/shanghai.svg?style=for-the-badge
+[contributors-url]: https://github.com/claudiaareneee/shanghai/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/claudiaareneee/shanghai.svg?style=for-the-badge
+[forks-url]: https://github.com/claudiaareneee/shanghai/network/members
+[stars-shield]: https://img.shields.io/github/stars/claudiaareneee/shanghai.svg?style=for-the-badge
+[stars-url]: https://github.com/claudiaareneee/shanghai/stargazers
+[issues-shield]: https://img.shields.io/github/issues/claudiaareneee/shanghai.svg?style=for-the-badge
+[issues-url]: https://github.com/claudiaareneee/shanghai/issues
+[license-shield]: https://img.shields.io/github/license/claudiaareneee/shanghai.svg?style=for-the-badge
+[license-url]: https://github.com/claudiaareneee/shanghai/blob/master/LICENSE.txt
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/claudia-nelson-23941616b
+[product-screenshot]: images/screenshot.png
