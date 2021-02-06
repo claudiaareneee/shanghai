@@ -12,6 +12,7 @@ function Sidebar({
   turn,
   onCardClicked,
   onDropdownClicked,
+  onDragStart,
   onDrop,
   onScoreCardClicked,
   onNextHandClick,
@@ -29,6 +30,7 @@ function Sidebar({
           cards={cardsOnTable[key]}
           onCardClicked={onCardClicked}
           onDropdownClicked={onDropdownClicked}
+          onDragStart={onDragStart}
           onDrop={onDrop}
         />
       ))}

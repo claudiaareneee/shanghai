@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import { GROUP_COLORS } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
+import * as tools from "./../../tools";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -25,6 +26,7 @@ function GamePage() {
     color: "",
   });
   const [comment, setComment] = useState("");
+  const [dragAssociation, setDragAssociation] = useState({});
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -195,10 +197,12 @@ function GamePage() {
     }
   }
 
-  const onDragStart = (event, index, id) => {
+  const onDragStart = (event, index, id, association) => {
     console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
+    setDragAssociation(association);
+    console.log("drag start assoc", association);
   };
 
   const onDragOver = (event) => {
@@ -232,22 +236,64 @@ function GamePage() {
       game.id,
       cards.map((card) => card.id)
     );
+
+    setDragAssociation({});
   };
 
-  const onDropCardsOnTable = (event, index, association) => {
-    console.log("drag:", index);
-    console.log("drop:", index);
-    console.log("association", association);
+  const onDropCardsOnTable = (event, newIndex, association) => {
+    const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
+    // console.log("drag:", oldIndex);
+    // console.log("drop:", newIndex);
+    // console.log("association", association);
+    // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
-    if (turnState === "Play" && cardsOnTable[player]) {
-      const newPlayerCardsOnTable = Object.values(
-        cardsOnTable[association.location]
-      ).map((set, index) => {
-        if (index === association.index) return [...set, cardId];
-        return set;
-      });
+    if (dragAssociation.location !== "player" && turnState === "Play") {
+      // remove card from original location
+      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaid(
+        cardsOnTable[dragAssociation.location],
+        oldIndex,
+        dragAssociation
+      );
+
+      // add card to new location
+      const newPlayerCardsOnTableNewAssociation =
+        dragAssociation.location === association.location
+          ? tools.addCardToCardsLaid(
+              newPlayerCardsOnTableOldAssociation,
+              newIndex,
+              association,
+              parseInt(cardId, 10)
+            )
+          : tools.addCardToCardsLaid(
+              cardsOnTable[association.location],
+              newIndex,
+              association,
+              parseInt(cardId, 10)
+            );
+
+      // set cards on deck
+      if (dragAssociation.location !== association.location) {
+        playerApi.setPlayerCardsOnTable(
+          dragAssociation.location,
+          game.id,
+          newPlayerCardsOnTableOldAssociation
+        );
+      }
+
+      playerApi.setPlayerCardsOnTable(
+        association.location,
+        game.id,
+        newPlayerCardsOnTableNewAssociation
+      );
+    } else if (turnState === "Play" && cardsOnTable[player]) {
+      const newPlayerCardsOnTable = tools.addCardToCardsLaid(
+        Object.values(cardsOnTable[association.location]),
+        newIndex,
+        association,
+        parseInt(cardId, 10)
+      );
 
       playerApi.setPlayerCardsOnTable(
         association.location,
@@ -260,6 +306,10 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+    } else {
+      toast.error(
+        "Oops! You can only move cards after drawing on your turn 🌵"
+      );
     }
   };
 
@@ -341,6 +391,7 @@ function GamePage() {
             players={players}
             showPlayers={showPlayers}
             turnState={turnState}
+            onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}

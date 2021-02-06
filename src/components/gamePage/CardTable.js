@@ -132,7 +132,6 @@ CardTable.propTypes = {
   discard: PropTypes.array.isRequired,
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
-  onPlayerCardHovered: PropTypes.func.isRequired,
   onSelectionButtonClicked: PropTypes.func.isRequired,
   onLayDown: PropTypes.func.isRequired,
 };
