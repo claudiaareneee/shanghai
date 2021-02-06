@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import { GROUP_COLORS } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
+import * as tools from "./../../tools";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -239,33 +240,6 @@ function GamePage() {
     setDragAssociation({});
   };
 
-  const removeCard = (cards, index, association) => {
-    return cards.map((set, i) => {
-      if (i === association.index) {
-        const newSet = [...set].filter((_, j) => j !== index);
-        console.log("newset", newSet);
-        return newSet;
-      }
-      console.log("newset", set);
-      return set;
-    });
-  };
-
-  const addCard = (cards, index, association, card) => {
-    return cards.map((set, i) => {
-      if (i === association.index) {
-        const newSet = [...set];
-        const startArray = newSet.splice(0, index + 1);
-        let cards =
-          newSet.length > 0
-            ? [...startArray, card, ...newSet]
-            : [...startArray, card];
-        return cards;
-      }
-      return set;
-    });
-  };
-
   const onDropCardsOnTable = (event, newIndex, association) => {
     const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
     // console.log("drag:", oldIndex);
@@ -277,7 +251,7 @@ function GamePage() {
 
     if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
-      const newPlayerCardsOnTableOldAssociation = removeCard(
+      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaid(
         cardsOnTable[dragAssociation.location],
         oldIndex,
         dragAssociation
@@ -286,13 +260,13 @@ function GamePage() {
       // add card to new location
       const newPlayerCardsOnTableNewAssociation =
         dragAssociation.location === association.location
-          ? addCard(
+          ? tools.addCardToCardsLaid(
               newPlayerCardsOnTableOldAssociation,
               newIndex,
               association,
               parseInt(cardId, 10)
             )
-          : addCard(
+          : tools.addCardToCardsLaid(
               cardsOnTable[association.location],
               newIndex,
               association,
@@ -314,7 +288,7 @@ function GamePage() {
         newPlayerCardsOnTableNewAssociation
       );
     } else if (turnState === "Play" && cardsOnTable[player]) {
-      const newPlayerCardsOnTable = addCard(
+      const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         Object.values(cardsOnTable[association.location]),
         newIndex,
         association,
@@ -332,6 +306,8 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+    } else {
+      toast.error("You can only move cards after drawing on your turn");
     }
   };
 
