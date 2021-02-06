@@ -335,23 +335,23 @@ function GamePage() {
             turn={game.turn}
             players={players}
             showPlayers={showPlayers}
+            turnState={turnState}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {
               setModalShow(true);
             }}
+            onNextHandClick={handleNextHandClick}
           />
         </Col>
       </Row>
       <NextHandModal
         gameId={game.id || ""}
         show={modalShow}
-        turnState={turnState}
         players={players}
         comment={comment}
         onHide={() => setModalShow(false)}
-        onNextHandClick={handleNextHandClick}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
       />

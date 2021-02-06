@@ -8,11 +8,13 @@ function Sidebar({
   players,
   showPlayers,
   cardsOnTable,
+  turnState,
+  turn,
   onCardClicked,
   onDropdownClicked,
   onDrop,
   onScoreCardClicked,
-  turn,
+  onNextHandClick,
 }) {
   return (
     <div className="Sidebar">
@@ -30,13 +32,22 @@ function Sidebar({
           onDrop={onDrop}
         />
       ))}
-      <button
-        className="btn btn-primary"
-        style={{ float: "right", margin: ".5rem" }}
-        onClick={onScoreCardClicked}
-      >
-        View Game Stats
-      </button>
+      <div className="form-inline justify-content-end">
+        {turnState === "EndOfHand" ? (
+          <button className="btn btn-success" onClick={onNextHandClick}>
+            Next Hand
+          </button>
+        ) : (
+          <></>
+        )}
+        <button
+          className="btn btn-primary"
+          style={{ float: "right", margin: ".5rem" }}
+          onClick={onScoreCardClicked}
+        >
+          View Game Stats
+        </button>
+      </div>
     </div>
   );
 }
