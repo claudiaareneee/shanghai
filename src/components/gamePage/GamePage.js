@@ -8,7 +8,7 @@ import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import { GROUP_COLORS } from "../common/Constants";
-import NextHandModal from "./NextHandModal";
+import GameStatsModal from "./GameStatsModal";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -335,23 +335,23 @@ function GamePage() {
             turn={game.turn}
             players={players}
             showPlayers={showPlayers}
+            turnState={turnState}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {
               setModalShow(true);
             }}
+            onNextHandClick={handleNextHandClick}
           />
         </Col>
       </Row>
-      <NextHandModal
+      <GameStatsModal
         gameId={game.id || ""}
         show={modalShow}
-        turnState={turnState}
         players={players}
         comment={comment}
         onHide={() => setModalShow(false)}
-        onNextHandClick={handleNextHandClick}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
       />

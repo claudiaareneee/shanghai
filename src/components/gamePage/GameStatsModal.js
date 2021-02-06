@@ -30,14 +30,12 @@ function ScoreTable({ players }) {
   );
 }
 
-function NextHandModal({
+function GameStatsModal({
   gameId,
   show,
   players,
-  turnState,
   comment,
   onHide,
-  onNextHandClick,
   onSubmitComment,
   onCommentChange,
 }) {
@@ -96,13 +94,6 @@ function NextHandModal({
         </p>
       </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
-        {turnState === "EndOfHand" ? (
-          <button className="btn btn-success" onClick={onNextHandClick}>
-            Next Hand
-          </button>
-        ) : (
-          <></>
-        )}
         <button className="btn btn-primary" onClick={onHide}>
           Close
         </button>
@@ -111,4 +102,4 @@ function NextHandModal({
   );
 }
 
-export default NextHandModal;
+export default GameStatsModal;
