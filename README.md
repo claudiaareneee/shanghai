@@ -116,7 +116,7 @@ Project Link: [https://github.com/claudiaareneee/shanghai/](https://github.com/c
 [issues-shield]: https://img.shields.io/github/issues/claudiaareneee/shanghai.svg?style=for-the-badge
 [issues-url]: https://github.com/claudiaareneee/shanghai/issues
 [license-shield]: https://img.shields.io/github/license/claudiaareneee/shanghai.svg?style=for-the-badge
-[license-url]: https://github.com/claudiaareneee/shanghai/blob/master/LICENSE.txt
+[license-url]: https://github.com/claudiaareneee/shanghai/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/claudia-nelson-23941616b
 [product-screenshot]: images/screenshot.png
