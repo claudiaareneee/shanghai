@@ -307,7 +307,9 @@ function GamePage() {
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
     } else {
-      toast.error("You can only move cards after drawing on your turn");
+      toast.error(
+        "Oops! You can only move cards after drawing on your turn 🌵"
+      );
     }
   };
 
