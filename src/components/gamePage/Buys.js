@@ -1,43 +1,24 @@
 import React from "react";
-import { Button, Row } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 
-function Buys({ numberOfBuys, laidDown, onClick, disabled }) {
+function Buys({ numberOfBuys, onClick, disabled }) {
   return (
     <>
-      <Row>
-        <h3 style={{ textAlign: "left" }}>Buys</h3>
-      </Row>
-      <Row>
-        {laidDown ? (
-          <p
-            className="align-bottom"
-            style={{ marginTop: "auto", marginBottom: "auto" }}
-          >
-            You've laid down! No buys left!
-          </p>
-        ) : numberOfBuys > 0 ? (
-          [...Array(numberOfBuys).keys()].map((key) => (
-            <Button
-              variant="outline-success"
-              size="lg"
-              key={key}
-              onClick={onClick}
-              disabled={disabled}
-              style={{ marginRight: ".5rem" }}
-            >
-              $$$
-            </Button>
-          ))
-        ) : (
-          <p
-            className="align-bottom"
-            style={{ marginTop: "auto", marginBottom: "auto" }}
-          >
-            No buys left
-          </p>
-        )}
-      </Row>
+      {numberOfBuys > 0 ? (
+        <Button
+          variant="outline-success"
+          size="lg"
+          onClick={onClick}
+          disabled={disabled}
+          style={{ margin: "0" }}
+        >
+          🥕 BUY 🥕
+        </Button>
+      ) : (
+        <p>No buys left</p>
+      )}
+      <p style={{ padding: "0", margin: "0" }}>({numberOfBuys} left)</p>
     </>
   );
 }
