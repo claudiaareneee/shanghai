@@ -30,7 +30,7 @@ function ScoreTable({ players }) {
   );
 }
 
-function NextHandModal({
+function GameStatsModal({
   gameId,
   show,
   players,
@@ -102,4 +102,4 @@ function NextHandModal({
   );
 }
 
-export default NextHandModal;
+export default GameStatsModal;
