@@ -8,7 +8,7 @@ import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import { GROUP_COLORS } from "../common/Constants";
-import NextHandModal from "./NextHandModal";
+import GameStatsModal from "./GameStatsModal";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -346,7 +346,7 @@ function GamePage() {
           />
         </Col>
       </Row>
-      <NextHandModal
+      <GameStatsModal
         gameId={game.id || ""}
         show={modalShow}
         players={players}
