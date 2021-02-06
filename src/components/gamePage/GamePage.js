@@ -195,10 +195,11 @@ function GamePage() {
     }
   }
 
-  const onDragStart = (event, index, id) => {
+  const onDragStart = (event, index, id, association) => {
     console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
+    event.dataTransfer.setData("association", association);
   };
 
   const onDragOver = (event) => {
@@ -207,9 +208,11 @@ function GamePage() {
 
   const onDrop = (event, cat, association) => {
     const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
+    const draggedCardAssociation = event.dataTransfer.getData("association");
     console.log("drag:", cardIndex);
     console.log("drop:", cat);
     console.log("association", association);
+    console.log("draggedCardAssociation", draggedCardAssociation);
 
     const card = cardsInHand[parseInt(cardIndex, 10)];
     const newArray = cardsInHand.filter((card, index) => {

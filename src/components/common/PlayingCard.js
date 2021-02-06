@@ -49,7 +49,7 @@ function PlayingCard({
         onClick={onCardClicked}
         onMouseOver={onCardHovered}
         onMouseOut={onCardHovered}
-        onDragStart={(e) => onDragStart(e, index, id)}
+        onDragStart={(e) => onDragStart(e, index, id, association)}
         onDragOver={(e) => onDragOver(e)}
         onDrop={(e) => {
           e.preventDefault();
