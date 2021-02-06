@@ -8,7 +8,8 @@ import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import { GROUP_COLORS } from "../common/Constants";
-import NextHandModal from "./NextHandModal";
+import GameStatsModal from "./GameStatsModal";
+import * as tools from "./../../tools";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -25,18 +26,21 @@ function GamePage() {
     color: "",
   });
   const [comment, setComment] = useState("");
+  const [dragAssociation, setDragAssociation] = useState({});
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
   useEffect(() => {
-    if (!game.id)
+    if (!game.id) {
+      // Initialize listeners
       gameApi.getGameById(room, (game) => {
         setGame(game);
       });
-    else {
-      playerApi.getPlayers(game.id, (players) => {
+
+      playerApi.getPlayers(room, (players) => {
         setPlayers(players);
       });
+
       playerApi.getPlayerCardsInHandById(player, (players) => {
         setCardsInHand(
           Object.values(players).map((card) => ({
@@ -44,7 +48,8 @@ function GamePage() {
           }))
         );
       });
-      gameApi.getDiscard(game.id, (_discard) => {
+
+      gameApi.getDiscard(room, (_discard) => {
         if (_discard)
           setDiscard(
             Object.keys(_discard).map((key, index) => ({
@@ -54,10 +59,10 @@ function GamePage() {
           );
       });
 
-      playerApi.getPlayerCardsOnTableById(game.id, (_cardsOnTable) =>
+      playerApi.getPlayerCardsOnTableById(room, (_cardsOnTable) =>
         setCardsOnTable(_cardsOnTable)
       );
-
+    } else {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
         switch (game.turn.state) {
@@ -74,8 +79,10 @@ function GamePage() {
       } else setTurnState("Wait");
 
       // I could see this being problematic
-      if (game.turn.state === "drawing" && turnState === "EndOfHand")
+      if (game.turn.state === "drawing" && turnState === "EndOfHand") {
         setDiscard([]);
+        setCardsOnTable([]);
+      }
     }
   }, [room, game, player, turnState]);
 
@@ -190,10 +197,12 @@ function GamePage() {
     }
   }
 
-  const onDragStart = (event, index, id) => {
+  const onDragStart = (event, index, id, association) => {
     console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
+    setDragAssociation(association);
+    console.log("drag start assoc", association);
   };
 
   const onDragOver = (event) => {
@@ -227,22 +236,64 @@ function GamePage() {
       game.id,
       cards.map((card) => card.id)
     );
+
+    setDragAssociation({});
   };
 
-  const onDropCardsOnTable = (event, index, association) => {
-    console.log("drag:", index);
-    console.log("drop:", index);
-    console.log("association", association);
+  const onDropCardsOnTable = (event, newIndex, association) => {
+    const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
+    // console.log("drag:", oldIndex);
+    // console.log("drop:", newIndex);
+    // console.log("association", association);
+    // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
-    if (turnState === "Play" && cardsOnTable[player]) {
-      const newPlayerCardsOnTable = Object.values(
-        cardsOnTable[association.location]
-      ).map((set, index) => {
-        if (index === association.index) return [...set, cardId];
-        return set;
-      });
+    if (dragAssociation.location !== "player" && turnState === "Play") {
+      // remove card from original location
+      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaid(
+        cardsOnTable[dragAssociation.location],
+        oldIndex,
+        dragAssociation
+      );
+
+      // add card to new location
+      const newPlayerCardsOnTableNewAssociation =
+        dragAssociation.location === association.location
+          ? tools.addCardToCardsLaid(
+              newPlayerCardsOnTableOldAssociation,
+              newIndex,
+              association,
+              parseInt(cardId, 10)
+            )
+          : tools.addCardToCardsLaid(
+              cardsOnTable[association.location],
+              newIndex,
+              association,
+              parseInt(cardId, 10)
+            );
+
+      // set cards on deck
+      if (dragAssociation.location !== association.location) {
+        playerApi.setPlayerCardsOnTable(
+          dragAssociation.location,
+          game.id,
+          newPlayerCardsOnTableOldAssociation
+        );
+      }
+
+      playerApi.setPlayerCardsOnTable(
+        association.location,
+        game.id,
+        newPlayerCardsOnTableNewAssociation
+      );
+    } else if (turnState === "Play" && cardsOnTable[player]) {
+      const newPlayerCardsOnTable = tools.addCardToCardsLaid(
+        Object.values(cardsOnTable[association.location]),
+        newIndex,
+        association,
+        parseInt(cardId, 10)
+      );
 
       playerApi.setPlayerCardsOnTable(
         association.location,
@@ -255,6 +306,10 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+    } else {
+      toast.error(
+        "Oops! You can only move cards after drawing on your turn 🌵"
+      );
     }
   };
 
@@ -335,23 +390,24 @@ function GamePage() {
             turn={game.turn}
             players={players}
             showPlayers={showPlayers}
+            turnState={turnState}
+            onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {
               setModalShow(true);
             }}
+            onNextHandClick={handleNextHandClick}
           />
         </Col>
       </Row>
-      <NextHandModal
+      <GameStatsModal
         gameId={game.id || ""}
         show={modalShow}
-        turnState={turnState}
         players={players}
         comment={comment}
         onHide={() => setModalShow(false)}
-        onNextHandClick={handleNextHandClick}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
       />

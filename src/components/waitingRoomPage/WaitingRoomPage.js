@@ -22,15 +22,16 @@ function WaitingRoomPage({ history }) {
   const uid = localStorage.getItem("uid");
 
   useEffect(() => {
-    if (!game.id)
-      gameApi.getGameById(localStorage.getItem("room"), (game) => {
+    if (!game.id) {
+      const room = localStorage.getItem("room");
+      gameApi.getGameById(room, (game) => {
         setGame(game);
       });
-    else {
-      playerApi.getPlayers(game.id, (players) => {
+
+      playerApi.getPlayers(room, (players) => {
         setPlayers(players);
       });
-
+    } else {
       if (!game.decks) setGame({ ...game, decks: numberOfDecks });
 
       setRedirectToPlayPage(game.turn ? true : false);

@@ -133,3 +133,30 @@ export const selectBuyer = (currentPlayer, buyers, opponents) => {
 
   return null;
 };
+
+export const removeCardFromCardsLaid = (cards, index, association) => {
+  return cards.map((set, i) => {
+    if (i === association.index) {
+      const newSet = [...set].filter((_, j) => j !== index);
+      console.log("newset", newSet);
+      return newSet;
+    }
+    console.log("newset", set);
+    return set;
+  });
+};
+
+export const addCardToCardsLaid = (cards, index, association, card) => {
+  return cards.map((set, i) => {
+    if (i === association.index) {
+      const newSet = [...set];
+      const startArray = newSet.splice(0, index + 1);
+      let cards =
+        newSet.length > 0
+          ? [...startArray, card, ...newSet]
+          : [...startArray, card];
+      return cards;
+    }
+    return set;
+  });
+};

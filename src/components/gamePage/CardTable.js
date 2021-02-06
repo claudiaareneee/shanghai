@@ -74,6 +74,17 @@ function CardTable({
         </Col>
       </Row>
 
+      <Row>
+        <Col>
+          {game.turn && game.turn.player !== player && !cardsOnTable[player] ? (
+            <Buys numberOfBuys={numberOfBuys} onClick={onBuyClicked} />
+          ) : (
+            <></>
+          )}
+        </Col>
+        <Col></Col>
+      </Row>
+
       <Row className="PlayerHand">
         {playerCards.length > 0 ? (
           <CardSet
@@ -107,14 +118,6 @@ function CardTable({
       )}
 
       <Row>
-        <Col>
-          <Buys
-            numberOfBuys={numberOfBuys}
-            laidDown={cardsOnTable[player]}
-            onClick={onBuyClicked}
-            disabled={game.turn && game.turn.player === player}
-          />
-        </Col>
         <Turn
           player={player}
           game={game}
@@ -129,7 +132,6 @@ CardTable.propTypes = {
   discard: PropTypes.array.isRequired,
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
-  onPlayerCardHovered: PropTypes.func.isRequired,
   onSelectionButtonClicked: PropTypes.func.isRequired,
   onLayDown: PropTypes.func.isRequired,
 };
