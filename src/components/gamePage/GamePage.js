@@ -275,7 +275,7 @@ function GamePage() {
 
     const cardId = event.dataTransfer.getData("id");
 
-    if (dragAssociation.location !== "player") {
+    if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
       const newPlayerCardsOnTableOldAssociation = removeCard(
         cardsOnTable[dragAssociation.location],
