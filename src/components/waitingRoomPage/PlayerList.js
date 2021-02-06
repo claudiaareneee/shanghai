@@ -59,16 +59,17 @@ function PlayerList({
             ))}
           </ListGroup>
           <p
-            className="d-flex justify-content-end"
-            style={{
-              display: "inline-flex",
-              width: "100%",
-              justifyContent: "right",
-            }}
+            className="d-flex justify-content-center"
+            style={{ width: "100%", padding: "0" }}
           >
-            Waiting for others to join
-            <Hearts width="40" style={{ paddingLeft: "4px" }} />
+            waiting for more to join
           </p>
+          <div
+            className="d-flex justify-content-center"
+            style={{ paddingBottom: "2rem" }}
+          >
+            <Hearts width="60" />
+          </div>
 
           <form onSubmit={onClick}>
             <div className="form-group row">
