@@ -3,8 +3,20 @@ import { ListGroup } from "react-bootstrap";
 import "./PlayerList.css";
 import PropTypes from "prop-types";
 import { Button, Col, Row } from "react-bootstrap";
+import { Hearts } from "@agney/react-loading";
 
-function PlayerList({ players, onClick, gameId, numberOfDecks, onChange }) {
+function PlayerList({
+  playerName,
+  newName,
+  players,
+  onClick,
+  gameId,
+  numberOfDecks,
+  onChange,
+  onNameChange,
+  onClickChange,
+  onClickCancel,
+}) {
   return (
     <>
       <h2>Room code: {gameId}</h2>
@@ -14,11 +26,51 @@ function PlayerList({ players, onClick, gameId, numberOfDecks, onChange }) {
           <ListGroup>
             {Object.keys(players).map((key) => (
               <ListGroup.Item key={key} variant="info">
-                {players[key].name}
+                {players[key].name === playerName ? (
+                  <div className="form-inline">
+                    <input
+                      value={newName}
+                      className="form-control mr-2"
+                      onChange={onNameChange}
+                    />
+                    {playerName !== newName ? (
+                      <>
+                        <button
+                          className="btn btn-primary ml-2 mr-2"
+                          onClick={onClickChange}
+                        >
+                          Change Name
+                        </button>
+                        <button
+                          className="btn btn-danger ml-2"
+                          onClick={onClickCancel}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                ) : (
+                  players[key].name
+                )}
               </ListGroup.Item>
             ))}
           </ListGroup>
-          <p>Waiting for others to join...</p>
+          <p
+            className="d-flex justify-content-center"
+            style={{ width: "100%", padding: "0" }}
+          >
+            waiting for more to join
+          </p>
+          <div
+            className="d-flex justify-content-center"
+            style={{ paddingBottom: "2rem" }}
+          >
+            <Hearts width="60" />
+          </div>
+
           <form onSubmit={onClick}>
             <div className="form-group row">
               <label htmlFor="numberOfDecks" className="col-sm">
