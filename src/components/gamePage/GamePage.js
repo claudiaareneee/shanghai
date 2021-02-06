@@ -29,14 +29,16 @@ function GamePage() {
   const player = localStorage.getItem("uid") || "";
 
   useEffect(() => {
-    if (!game.id)
+    if (!game.id) {
+      // Initialize listeners
       gameApi.getGameById(room, (game) => {
         setGame(game);
       });
-    else {
-      playerApi.getPlayers(game.id, (players) => {
+
+      playerApi.getPlayers(room, (players) => {
         setPlayers(players);
       });
+
       playerApi.getPlayerCardsInHandById(player, (players) => {
         setCardsInHand(
           Object.values(players).map((card) => ({
@@ -44,7 +46,8 @@ function GamePage() {
           }))
         );
       });
-      gameApi.getDiscard(game.id, (_discard) => {
+
+      gameApi.getDiscard(room, (_discard) => {
         if (_discard)
           setDiscard(
             Object.keys(_discard).map((key, index) => ({
@@ -54,10 +57,10 @@ function GamePage() {
           );
       });
 
-      playerApi.getPlayerCardsOnTableById(game.id, (_cardsOnTable) =>
+      playerApi.getPlayerCardsOnTableById(room, (_cardsOnTable) =>
         setCardsOnTable(_cardsOnTable)
       );
-
+    } else {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
         switch (game.turn.state) {
@@ -74,8 +77,9 @@ function GamePage() {
       } else setTurnState("Wait");
 
       // I could see this being problematic
-      if (game.turn.state === "drawing" && turnState === "EndOfHand")
+      if (game.turn.state === "drawing" && turnState === "EndOfHand") {
         setDiscard([]);
+      }
     }
   }, [room, game, player, turnState]);
 
