@@ -3,7 +3,14 @@ import PlayingCard from "./PlayingCard";
 import PropTypes from "prop-types";
 import * as constants from "./Constants";
 
-function CardSlide({ cards, source, association, onCardClicked, onDrop }) {
+function CardSlide({
+  cards,
+  source,
+  association,
+  onCardClicked,
+  onDragStart,
+  onDrop,
+}) {
   const offset = -1 * Math.floor(cards.length / 2.0);
   const containerHeight = constants.CARD_HEIGHT;
 
@@ -25,11 +32,13 @@ function CardSlide({ cards, source, association, onCardClicked, onDrop }) {
           <PlayingCard
             key={card}
             id={parseInt(card, 10)}
+            index={index}
             xTranslation={constants.CARDSLIDE_STRETCH_X * (index + offset)}
             source={source}
             association={association}
             onCardClicked={onCardClicked}
             onDrop={onDrop}
+            onDragStart={onDragStart}
           />
         ))
       ) : (

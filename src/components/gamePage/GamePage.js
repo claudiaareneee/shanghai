@@ -25,6 +25,7 @@ function GamePage() {
     color: "",
   });
   const [comment, setComment] = useState("");
+  const [dragAssociation, setDragAssociation] = useState({});
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -199,7 +200,8 @@ function GamePage() {
     console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
-    event.dataTransfer.setData("association", association);
+    setDragAssociation(association);
+    console.log("drag start assoc", association);
   };
 
   const onDragOver = (event) => {
@@ -233,22 +235,90 @@ function GamePage() {
       game.id,
       cards.map((card) => card.id)
     );
+
+    setDragAssociation({});
   };
 
-  const onDropCardsOnTable = (event, index, association) => {
-    console.log("drag:", index);
-    console.log("drop:", index);
+  const removeCard = (cardsOnTable, index, association) => {
+    return Object.values(cardsOnTable[association.location]).map((set, i) => {
+      if (i === association.index) {
+        const newSet = [...set].filter((_, j) => j !== index);
+        console.log("newset", newSet);
+        return newSet;
+      }
+      console.log("newset", set);
+      return set;
+    });
+  };
+
+  const addCard = (cardsOnTable, index, association, card) => {
+    return Object.values(cardsOnTable[association.location]).map((set, i) => {
+      if (i === association.index) {
+        const newSet = [...set];
+        const startArray = newSet.splice(0, index + 1);
+        let cards =
+          newSet.length > 0
+            ? [...startArray, card, newSet]
+            : [...startArray, card];
+        return cards;
+      }
+      return set;
+    });
+  };
+
+  const onDropCardsOnTable = (event, newIndex, association) => {
+    const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
+    console.log("drag:", oldIndex);
+    console.log("drop:", newIndex);
     console.log("association", association);
-    const draggedCardAssociation = event.dataTransfer.getData("association");
-    console.log("draggedCardAssociation", draggedCardAssociation);
+    console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
-    if (turnState === "Play" && cardsOnTable[player]) {
+    if (dragAssociation.location !== "player") {
+      console.log("cards on table:", cardsOnTable);
+      // remove card from original location
+      const newPlayerCardsInHandOldAssociation = removeCard(
+        cardsOnTable,
+        oldIndex,
+        dragAssociation
+      );
+
+      // add card to new location
+      const newPlayerCardsOnTableNewAssociation = addCard(
+        cardsOnTable,
+        newIndex,
+        association,
+        parseInt(cardId, 10)
+      );
+
+      console.log("old: ", newPlayerCardsInHandOldAssociation);
+      console.log("new: ", newPlayerCardsOnTableNewAssociation);
+
+      // set cards on deck
+      if (dragAssociation.location !== association.location) {
+        playerApi.setPlayerCardsOnTable(
+          dragAssociation.location,
+          game.id,
+          newPlayerCardsInHandOldAssociation
+        );
+      }
+
+      playerApi.setPlayerCardsOnTable(
+        association.location,
+        game.id,
+        newPlayerCardsOnTableNewAssociation
+      );
+    } else if (turnState === "Play" && cardsOnTable[player]) {
       const newPlayerCardsOnTable = Object.values(
         cardsOnTable[association.location]
-      ).map((set, index) => {
-        if (index === association.index) return [...set, parseInt(cardId, 10)];
+      ).map((set, i) => {
+        // if (i === association.index) return [...set, parseInt(cardId, 10)];
+        if (i === association.index) {
+          const startArray = set.splice(0, newIndex + 1);
+          let cards = [...startArray, parseInt(cardId, 10), ...set];
+          return cards;
+        }
         return set;
       });
 
@@ -344,6 +414,7 @@ function GamePage() {
             players={players}
             showPlayers={showPlayers}
             turnState={turnState}
+            onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
             onDropdownClicked={handleDropdownClicked}
