@@ -391,9 +391,11 @@ function GamePage() {
             players={players}
             showPlayers={showPlayers}
             turnState={turnState}
+            highlightedCard={highlightedCard}
             onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
+            onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {
               setModalShow(true);

@@ -7,9 +7,11 @@ function CardSlide({
   cards,
   source,
   association,
+  highlightedCard,
   onCardClicked,
   onDragStart,
   onDrop,
+  onCardHovered,
 }) {
   const offset = -1 * Math.floor(cards.length / 2.0);
   const containerHeight = constants.CARD_HEIGHT;
@@ -24,7 +26,6 @@ function CardSlide({
     marginTop: "1rem",
     marginBottom: "1rem",
   };
-
   return (
     <div style={style} onDragOver={(e) => e.preventDefault()}>
       {cards.length > 0 ? (
@@ -36,9 +37,11 @@ function CardSlide({
             xTranslation={constants.CARDSLIDE_STRETCH_X * (index + offset)}
             source={source}
             association={association}
+            highlight={parseInt(card, 10) === highlightedCard}
             onCardClicked={onCardClicked}
             onDrop={onDrop}
             onDragStart={onDragStart}
+            onCardHovered={onCardHovered}
           />
         ))
       ) : (
