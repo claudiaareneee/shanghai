@@ -78,6 +78,7 @@ function CardTable({
 
       {game.turn && game.turn.player === player ? (
         <Turn
+          turnState={turnState}
           selection={selection}
           onPlaySelectedYes={onPlaySelectedYes}
           onPlaySelectedNo={onPlaySelectedNo}
