@@ -1,6 +1,6 @@
 import React from "react";
 import "./CardTable.css";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
@@ -18,6 +18,7 @@ function CardTable({
   numberOfBuys,
   highlightedCard,
   cardsOnTable,
+  selection,
   onCardHovered,
   onPlayerCardClicked,
   onDragStart,
@@ -74,16 +75,42 @@ function CardTable({
         </Col>
       </Row>
 
-      <Row>
-        <Col>
-          {game.turn && game.turn.player !== player && !cardsOnTable[player] ? (
+      {game.turn && game.turn.player === player ? (
+        selection.selecting === "none" ? (
+          <Row>
+            <Col>
+              <h5>It's your turn!</h5>
+            </Col>
+          </Row>
+        ) : selection.selecting === "CardsToPlay" ? (
+          <Row>
+            <Col>
+              <h5 className="justify-content-center">
+                Would you like to play selected?
+              </h5>
+              <Button className="btn-primary m-2" onClick={onLayDown}>
+                Yes
+              </Button>
+              <Button className="btn-primary m-2">No</Button>
+            </Col>
+          </Row>
+        ) : (
+          <></>
+        )
+      ) : (
+        <></>
+      )}
+
+      {game.turn && game.turn.player !== player && !cardsOnTable[player] ? (
+        <Row>
+          <Col>
             <Buys numberOfBuys={numberOfBuys} onClick={onBuyClicked} />
-          ) : (
-            <></>
-          )}
-        </Col>
-        <Col></Col>
-      </Row>
+          </Col>
+          <Col></Col>
+        </Row>
+      ) : (
+        <></>
+      )}
 
       <Row className="PlayerHand">
         {playerCards.length > 0 ? (
@@ -107,9 +134,10 @@ function CardTable({
         )}
       </Row>
 
-      {turnState === "Play" && !cardsOnTable[player] ? (
+      {turnState === "Play" || turnState === "Discard" ? (
         <SetSelection
           hand={game.hand}
+          laidDown={!cardsOnTable[player]}
           onClick={onSelectionButtonClicked}
           onLayDown={onLayDown}
         />

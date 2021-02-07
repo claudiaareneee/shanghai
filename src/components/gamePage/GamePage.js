@@ -22,7 +22,7 @@ function GamePage() {
   const [modalShow, setModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
-    selecting: false,
+    selecting: "none",
     color: "",
   });
   const [comment, setComment] = useState("");
@@ -92,7 +92,7 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    if (turnState === "Play" && selection.selecting) {
+    if (turnState === "Play" && selection.selecting === "CardsToPlay") {
       const newCardsInHand = cardsInHand.map((card) => {
         if (card.id.toString() === target.id) {
           return {
@@ -185,7 +185,7 @@ function GamePage() {
 
   function handleTurnButtonClicked({ target }) {
     setTurnState(target.name);
-    setSelection({ ...selection, selecting: false });
+    setSelection({ ...selection, selecting: "none" });
 
     if (target.name === "Draw") {
       toast.success("🦄 Select draw card!");
@@ -314,7 +314,7 @@ function GamePage() {
   };
 
   const handleSelectionButtonClicked = (type, color) => {
-    setSelection({ ...selection, selecting: true, color });
+    setSelection({ ...selection, selecting: "CardsToPlay", color });
   };
 
   const handleLayDown = () => {
@@ -331,6 +331,8 @@ function GamePage() {
       game.id,
       newCardsInHand.map((card) => card.id)
     );
+
+    setSelection({ ...selection, selecting: "none" });
   };
 
   const handleNextHandClick = () => {
@@ -367,10 +369,11 @@ function GamePage() {
             playerCards={cardsInHand}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
-            onPlayerCardClicked={handlePlayerCardClicked}
+            selection={selection}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
+            onPlayerCardClicked={handlePlayerCardClicked}
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDrop={onDrop}

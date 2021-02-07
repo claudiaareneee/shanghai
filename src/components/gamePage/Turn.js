@@ -2,7 +2,6 @@ import React from "react";
 import { Col, Row } from "react-bootstrap";
 
 function Turn({ game, player, onTurnButtonClicked }) {
-  const canDraw = game.turn && game.turn.state === "drawing";
   const canPlay =
     game.turn &&
     (game.turn.state === "playing" || game.turn.state === "discarding");
@@ -11,15 +10,6 @@ function Turn({ game, player, onTurnButtonClicked }) {
     <Col>
       <h3 style={{ textAlign: "right" }}>It's your turn!</h3>
       <Row className="justify-content-end">
-        <button
-          className="btn btn-success"
-          style={{ marginRight: ".5rem" }}
-          onClick={onTurnButtonClicked}
-          disabled={!canDraw}
-          name="Draw"
-        >
-          Draw
-        </button>
         <button
           className="btn btn-danger"
           style={{ marginRight: ".5rem" }}

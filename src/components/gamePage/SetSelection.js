@@ -6,7 +6,7 @@ import {
   GROUP_3_COLOR,
 } from "../common/Constants";
 
-function SetSelection({ hand, onClick, onLayDown }) {
+function LayDownSelectionButtonGroup({ hand, onClick, onLayDown }) {
   const buttonStrings = [];
 
   for (let i = 0; i < hand.books; i++) buttonStrings.push("book");
@@ -41,6 +41,33 @@ function SetSelection({ hand, onClick, onLayDown }) {
         name="Play"
       >
         Lay down cards
+      </button>
+    </>
+  );
+}
+
+function SetSelection({ hand, laidDown, onClick, onLayDown }) {
+  return (
+    <>
+      {laidDown ? (
+        <LayDownSelectionButtonGroup
+          hand={hand}
+          onClick={onClick}
+          onLayDown={onLayDown}
+        />
+      ) : (
+        <></>
+      )}
+      <button
+        className="btn btn-warning"
+        onClick={() => {}}
+        style={{
+          marginRight: ".5rem",
+          display: "inline",
+        }}
+        name="SelectDiscard"
+      >
+        Select Discard
       </button>
     </>
   );
