@@ -7,7 +7,7 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS } from "../common/Constants";
+import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import * as tools from "./../../tools";
 
@@ -16,13 +16,14 @@ function GamePage() {
   const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
+  const [cardToDiscard, setCardToDiscard] = useState(-1);
   const [cardsInHand, setCardsInHand] = useState([]);
   const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
-    selecting: false,
+    selecting: "none",
     color: "",
   });
   const [comment, setComment] = useState("");
@@ -92,44 +93,21 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    if (turnState === "Play" && selection.selecting) {
+    if (selection.selecting !== "none") {
       const newCardsInHand = cardsInHand.map((card) => {
-        if (card.id.toString() === target.id) {
+        if (card.id.toString() === target.id)
           return {
             ...card,
             selected: !card.selected,
             selectedColor: selection.color,
           };
-        }
-        return card;
+        else if (selection.selecting === "Discard")
+          return { ...card, selected: false };
+        else return card;
       });
       setCardsInHand(newCardsInHand);
-    }
 
-    if (turnState === "Discard") {
-      gameApi.pushToDiscard(game.id, target.id);
-
-      const newCards = cardsInHand.filter(
-        (card) => card.id !== parseInt(target.id, 10)
-      );
-
-      setCardsInHand(newCards);
-      playerApi.setPlayerCardsInHand(
-        player,
-        game.id,
-        newCards.map((card) => card.id)
-      );
-
-      if (newCards.length !== 0) {
-        baseApi.nextTurn(game);
-        setTurnState("Wait");
-      } else {
-        toast.success("congratz 🦑, you just went out");
-        setTurnState("EndOfHand");
-        playerApi.calculateScores(game.id, players);
-        playerApi.setNumberOfRemainingCards(game.id, player, 0);
-        baseApi.nextTurn(game, true);
-      }
+      if (turnState === "Discard") setCardToDiscard(target.id);
     }
   }
 
@@ -185,7 +163,7 @@ function GamePage() {
 
   function handleTurnButtonClicked({ target }) {
     setTurnState(target.name);
-    setSelection({ ...selection, selecting: false });
+    setSelection({ ...selection, selecting: "none" });
 
     if (target.name === "Draw") {
       toast.success("🦄 Select draw card!");
@@ -313,24 +291,86 @@ function GamePage() {
     }
   };
 
-  const handleSelectionButtonClicked = (type, color) => {
-    setSelection({ ...selection, selecting: true, color });
+  const handleSelectionButtonClicked = (color) => {
+    const selecting = color === DISCARD_COLOR ? "Discard" : "Play";
+    setSelection({ ...selection, selecting, color });
+    setTurnState(selecting);
+
+    const turnState = selecting === "Discard" ? "discarding" : "playing";
+    console.log("turnState", turnState);
+    gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
-  const handleLayDown = () => {
-    const selectedCards = GROUP_COLORS.map((color) =>
-      cardsInHand
-        .filter((card) => card.selected && card.selectedColor === color)
-        .map((card) => card.id)
-    );
-    playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+  const handlePlaySelectedYes = () => {
+    if (selection.selecting === "Play") {
+      const selectedCards = GROUP_COLORS.map((color) =>
+        cardsInHand
+          .filter((card) => card.selected && card.selectedColor === color)
+          .map((card) => card.id)
+      );
 
-    const newCardsInHand = cardsInHand.filter((card) => !card.selected);
-    playerApi.setPlayerCardsInHand(
-      player,
-      game.id,
-      newCardsInHand.map((card) => card.id)
-    );
+      const numberOfSelectionsMade = selectedCards.reduce(
+        (p, c) => (c.length > 0 ? p + 1 : p),
+        0
+      );
+
+      if (numberOfSelectionsMade !== game.hand.books + game.hand.runs) {
+        toast.error(
+          `Uh oh, please select ${game.hand.books} books and ${game.hand.runs} runs`
+        );
+        return;
+      }
+
+      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+
+      const newCardsInHand = cardsInHand.filter((card) => !card.selected);
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCardsInHand.map((card) => card.id)
+      );
+    } else if (selection.selecting === "Discard") {
+      if (cardToDiscard === -1) {
+        toast.error(`Uh oh, please select a card to discard`);
+        return;
+      }
+
+      gameApi.pushToDiscard(game.id, cardToDiscard);
+
+      const newCards = cardsInHand.filter(
+        (card) => card.id !== parseInt(cardToDiscard, 10)
+      );
+
+      setCardsInHand(newCards);
+      setCardToDiscard(-1);
+
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCards.map((card) => card.id)
+      );
+
+      if (newCards.length !== 0) {
+        baseApi.nextTurn(game);
+        setTurnState("Wait");
+      } else {
+        toast.success("congratz 🦑, you just went out");
+        setTurnState("EndOfHand");
+        playerApi.calculateScores(game.id, players);
+        playerApi.setNumberOfRemainingCards(game.id, player, 0);
+        baseApi.nextTurn(game, true);
+      }
+    }
+    setSelection({ ...selection, selecting: "none" });
+  };
+
+  const handlePlaySelectedNo = () => {
+    const newCardsInHand = cardsInHand.map((card) => ({
+      ...card,
+      selected: false,
+    }));
+    setCardsInHand(newCardsInHand);
+    setSelection({ ...selection, selecting: "none" });
   };
 
   const handleNextHandClick = () => {
@@ -367,10 +407,11 @@ function GamePage() {
             playerCards={cardsInHand}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
-            onPlayerCardClicked={handlePlayerCardClicked}
+            selection={selection}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
+            onPlayerCardClicked={handlePlayerCardClicked}
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDrop={onDrop}
@@ -379,7 +420,8 @@ function GamePage() {
             onDiscardClicked={handleDiscardClicked}
             onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
-            onLayDown={handleLayDown}
+            onPlaySelectedYes={handlePlaySelectedYes}
+            onPlaySelectedNo={handlePlaySelectedNo}
             onBuyClicked={handleBuyClicked}
           />
         </Col>
@@ -391,9 +433,11 @@ function GamePage() {
             players={players}
             showPlayers={showPlayers}
             turnState={turnState}
+            highlightedCard={highlightedCard}
             onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             cardsOnTable={cardsOnTable}
+            onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {
               setModalShow(true);

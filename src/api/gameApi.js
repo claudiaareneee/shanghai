@@ -53,6 +53,13 @@ export const getGameByIdOnce = (id) => {
   return database.ref(gameBaseUrl + id).once("value");
 };
 
+export const setNextTurn = (id, turn) => {
+  return database
+    .ref(gameBaseUrl + id)
+    .child("turn")
+    .set(turn);
+};
+
 export const setDiscard = (gameId, cards) => {
   return database.ref(discardBaseUrl + gameId).set(cards);
 };

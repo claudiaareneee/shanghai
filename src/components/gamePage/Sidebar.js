@@ -10,12 +10,14 @@ function Sidebar({
   cardsOnTable,
   turnState,
   turn,
+  highlightedCard,
   onCardClicked,
   onDropdownClicked,
   onDragStart,
   onDrop,
   onScoreCardClicked,
   onNextHandClick,
+  onCardHovered,
 }) {
   return (
     <div className="Sidebar">
@@ -28,10 +30,12 @@ function Sidebar({
           player={players[key]}
           showPlayer={showPlayers[key]}
           cards={cardsOnTable[key]}
+          highlightedCard={highlightedCard}
           onCardClicked={onCardClicked}
           onDropdownClicked={onDropdownClicked}
           onDragStart={onDragStart}
           onDrop={onDrop}
+          onCardHovered={onCardHovered}
         />
       ))}
       <div className="form-inline justify-content-end">
