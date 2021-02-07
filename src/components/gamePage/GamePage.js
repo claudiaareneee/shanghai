@@ -308,6 +308,19 @@ function GamePage() {
           .filter((card) => card.selected && card.selectedColor === color)
           .map((card) => card.id)
       );
+
+      const numberOfSelectionsMade = selectedCards.reduce(
+        (p, c) => (c.length > 0 ? p + 1 : p),
+        0
+      );
+
+      if (numberOfSelectionsMade !== game.hand.books + game.hand.runs) {
+        toast.error(
+          `Uh oh, please select ${game.hand.books} books and ${game.hand.runs} runs`
+        );
+        return;
+      }
+
       playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
 
       const newCardsInHand = cardsInHand.filter((card) => !card.selected);
@@ -317,6 +330,11 @@ function GamePage() {
         newCardsInHand.map((card) => card.id)
       );
     } else if (selection.selecting === "Discard") {
+      if (cardToDiscard === -1) {
+        toast.error(`Uh oh, please select a card to discard`);
+        return;
+      }
+
       gameApi.pushToDiscard(game.id, cardToDiscard);
 
       const newCards = cardsInHand.filter(
@@ -324,6 +342,8 @@ function GamePage() {
       );
 
       setCardsInHand(newCards);
+      setCardToDiscard(-1);
+
       playerApi.setPlayerCardsInHand(
         player,
         game.id,

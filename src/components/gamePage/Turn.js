@@ -25,7 +25,7 @@ function Turn({ turnState, selection, onPlaySelectedYes, onPlaySelectedNo }) {
         ? "Would you like to play selected?"
         : "Would you like to discard selected?";
   }
-  //selection.selecting === "none" ?
+
   return (
     <>
       <Row>
