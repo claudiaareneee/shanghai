@@ -2,40 +2,53 @@ import React from "react";
 import { Col, Row, Button } from "react-bootstrap";
 
 function Turn({ turnState, selection, onPlaySelectedYes, onPlaySelectedNo }) {
+  let message = "";
+
+  if (selection.selecting === "none") {
+    switch (turnState) {
+      case "Draw":
+        message = "It's your turn! Select a draw card!";
+        break;
+      case "Play":
+        message = "Play cards or choose which card to discard.";
+        break;
+      case "Discard":
+        message = "Click 'Select Discard' to choose which card to discard.";
+        break;
+      default:
+        message = "";
+        break;
+    }
+  } else {
+    message =
+      selection.selecting === "Play"
+        ? "Would you like to play selected?"
+        : "Would you like to discard selected?";
+  }
+  //selection.selecting === "none" ?
   return (
     <>
-      {selection.selecting === "none" ? (
-        <Row>
-          <Col>
-            <h5>
-              It's your turn!
-              {turnState === "Draw"
-                ? " Select a draw card!"
-                : turnState === "Play"
-                ? " Play cards or choose which card to discard."
-                : turnState === "Discard"
-                ? " Click 'Select Discard' to choose which card to discard."
-                : ""}
-            </h5>
-          </Col>
-        </Row>
-      ) : (
-        <Row>
-          <Col>
-            <h5 className="justify-content-center">
-              {selection.selecting === "Play"
-                ? "Would you like to play selected?"
-                : "Would you like to discard selected?"}
-            </h5>
-            <Button className="btn-primary m-2" onClick={onPlaySelectedYes}>
+      <Row>
+        <Col>
+          <div className="d-flex flex-row justify-content-center">
+            <h5 className="align-self-center">{message}</h5>
+            <Button
+              className="btn-primary m-2"
+              onClick={onPlaySelectedYes}
+              hidden={selection.selecting === "none"}
+            >
               Yes
             </Button>
-            <Button className="btn-primary m-2" onClick={onPlaySelectedNo}>
+            <Button
+              className="btn-primary m-2"
+              onClick={onPlaySelectedNo}
+              hidden={selection.selecting === "none"}
+            >
               No
             </Button>
-          </Col>
-        </Row>
-      )}
+          </div>
+        </Col>
+      </Row>
     </>
   );
 }
