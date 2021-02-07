@@ -29,6 +29,7 @@ function GamePage() {
   });
   const [comment, setComment] = useState("");
   const [dragAssociation, setDragAssociation] = useState({});
+  const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -162,6 +163,16 @@ function GamePage() {
       });
   }
 
+  function handleCardOnTableClicked({ target }, association) {
+    const isJoker = target.id % 54 === 53 || target.id % 54 === 52;
+    if (cardsOnTable[player] && turnState === "Draw" && isJoker) {
+      console.log("can joker draw");
+      setDrawingJoker({ isDrawing: true, card: target.id, association });
+    } else {
+      console.log("can't draw this one");
+    }
+  }
+
   function handleTurnButtonClicked({ target }) {
     setTurnState(target.name);
     setSelection({ ...selection, selecting: "none" });
@@ -230,7 +241,7 @@ function GamePage() {
 
     if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
-      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaid(
+      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaidWithIndex(
         cardsOnTable[dragAssociation.location],
         oldIndex,
         dragAssociation
@@ -372,6 +383,40 @@ function GamePage() {
     }));
     setCardsInHand(newCardsInHand);
     setSelection({ ...selection, selecting: "none" });
+
+    if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
+  };
+
+  const handleDrawJokerYes = () => {
+    const cardId = parseInt(drawingJoker.card, 10);
+
+    const newCardsOnTable = tools.removeCardFromCardsLaidWithId(
+      cardsOnTable[drawingJoker.association.location],
+      cardId,
+      drawingJoker.association
+    );
+    console.log("drawingJoker: ", drawingJoker);
+    playerApi.setPlayerCardsOnTable(
+      drawingJoker.association.location,
+      game.id,
+      newCardsOnTable
+    );
+
+    const newCards = [...cardsInHand, { id: cardId }];
+    setCardsInHand(newCards);
+
+    playerApi.setPlayerCardsInHand(
+      player,
+      game.id,
+      newCards.map((card) => card.id)
+    );
+
+    setDrawingJoker({ isDrawing: false });
+    baseApi.nextTurn(game);
+  };
+
+  const handleDrawJokerNo = () => {
+    setDrawingJoker({ drawing: false });
   };
 
   const handleNextHandClick = () => {
@@ -412,6 +457,7 @@ function GamePage() {
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
+            drawingJoker={drawingJoker}
             onPlayerCardClicked={handlePlayerCardClicked}
             onDragStart={onDragStart}
             onDragOver={onDragOver}
@@ -423,6 +469,8 @@ function GamePage() {
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onPlaySelectedYes={handlePlaySelectedYes}
             onPlaySelectedNo={handlePlaySelectedNo}
+            onDrawJokerYes={handleDrawJokerYes}
+            onDrawJokerNo={handleDrawJokerNo}
             onBuyClicked={handleBuyClicked}
           />
         </Col>
@@ -435,9 +483,10 @@ function GamePage() {
             showPlayers={showPlayers}
             turnState={turnState}
             highlightedCard={highlightedCard}
+            cardsOnTable={cardsOnTable}
             onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
-            cardsOnTable={cardsOnTable}
+            onCardClicked={handleCardOnTableClicked}
             onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {

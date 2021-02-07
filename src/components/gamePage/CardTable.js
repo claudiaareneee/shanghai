@@ -19,6 +19,7 @@ function CardTable({
   highlightedCard,
   cardsOnTable,
   selection,
+  drawingJoker,
   onCardHovered,
   onPlayerCardClicked,
   onDragStart,
@@ -30,6 +31,8 @@ function CardTable({
   onSelectionButtonClicked,
   onPlaySelectedYes,
   onPlaySelectedNo,
+  onDrawJokerYes,
+  onDrawJokerNo,
   onBuyClicked,
 }) {
   return (
@@ -80,8 +83,11 @@ function CardTable({
         <Turn
           turnState={turnState}
           selection={selection}
+          drawingJoker={drawingJoker}
           onPlaySelectedYes={onPlaySelectedYes}
           onPlaySelectedNo={onPlaySelectedNo}
+          onDrawJokerYes={onDrawJokerYes}
+          onDrawJokerNo={onDrawJokerNo}
         />
       ) : (
         <></>

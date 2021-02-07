@@ -134,7 +134,7 @@ export const selectBuyer = (currentPlayer, buyers, opponents) => {
   return null;
 };
 
-export const removeCardFromCardsLaid = (cards, index, association) => {
+export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
   return cards.map((set, i) => {
     if (i === association.index) {
       const newSet = [...set].filter((_, j) => j !== index);
@@ -142,6 +142,21 @@ export const removeCardFromCardsLaid = (cards, index, association) => {
       return newSet;
     }
     console.log("newset", set);
+    return set;
+  });
+};
+
+export const removeCardFromCardsLaidWithId = (cards, id, association) => {
+  return cards.map((set, i) => {
+    if (i === association.index) {
+      const newSet = [...set].filter((card) => {
+        console.log("card", card, "id", id);
+        return card !== id;
+      });
+      // console.log("newset", newSet);
+      return newSet;
+    }
+    // console.log("newset", set);
     return set;
   });
 };

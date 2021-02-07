@@ -1,10 +1,22 @@
 import React from "react";
 import { Col, Row, Button } from "react-bootstrap";
 
-function Turn({ turnState, selection, onPlaySelectedYes, onPlaySelectedNo }) {
+function Turn({
+  turnState,
+  selection,
+  drawingJoker,
+  onPlaySelectedYes,
+  onPlaySelectedNo,
+  onDrawJokerYes,
+  onDrawJokerNo,
+}) {
+  const hideButtons = selection.selecting === "none" && !drawingJoker.isDrawing;
+
   let message = "";
 
-  if (selection.selecting === "none") {
+  if (drawingJoker.isDrawing) {
+    message = "Draw Joker?";
+  } else if (selection.selecting === "none") {
     switch (turnState) {
       case "Draw":
         message = "It's your turn! Select a draw card!";
@@ -34,15 +46,19 @@ function Turn({ turnState, selection, onPlaySelectedYes, onPlaySelectedNo }) {
             <h5 className="align-self-center">{message}</h5>
             <Button
               className="btn-primary m-2"
-              onClick={onPlaySelectedYes}
-              hidden={selection.selecting === "none"}
+              onClick={
+                drawingJoker.isDrawing ? onDrawJokerYes : onPlaySelectedYes
+              }
+              hidden={hideButtons}
             >
               Yes
             </Button>
             <Button
               className="btn-primary m-2"
-              onClick={onPlaySelectedNo}
-              hidden={selection.selecting === "none"}
+              onClick={
+                drawingJoker.isDrawing ? onDrawJokerNo : onPlaySelectedNo
+              }
+              hidden={hideButtons}
             >
               No
             </Button>
