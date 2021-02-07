@@ -113,7 +113,7 @@ function PlayerBucket({
         <CardsPlayed
           cards={cards}
           highlightedCard={highlightedCard}
-          onCardClicked={() => onCardClicked(player.id)}
+          onCardClicked={onCardClicked}
           onDrop={onDrop}
           onDragStart={onDragStart}
           player={player.id}
