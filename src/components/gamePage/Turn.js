@@ -14,7 +14,7 @@ function Turn({ selection, onPlaySelectedYes, onPlaySelectedNo }) {
         <Row>
           <Col>
             <h5 className="justify-content-center">
-              {selection.selecting === "CardsToPlay"
+              {selection.selecting === "Play"
                 ? "Would you like to play selected?"
                 : "Would you like to discard selected?"}
             </h5>

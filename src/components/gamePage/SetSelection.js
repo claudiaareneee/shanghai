@@ -54,10 +54,7 @@ function SetSelection({ hand, laidDown, onSelectionButtonClicked }) {
         onClick={() => {
           onSelectionButtonClicked(DISCARD_COLOR);
         }}
-        style={{
-          marginRight: ".5rem",
-          display: "inline",
-        }}
+        style={{ display: "inline" }}
         name="SelectDiscard"
       >
         Select Discard

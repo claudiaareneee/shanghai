@@ -93,7 +93,7 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    if (turnState === "Play" && selection.selecting !== "none") {
+    if (selection.selecting !== "none") {
       const newCardsInHand = cardsInHand.map((card) => {
         if (card.id.toString() === target.id)
           return {
@@ -101,35 +101,13 @@ function GamePage() {
             selected: !card.selected,
             selectedColor: selection.color,
           };
-        else if (selection.selecting === "Discarding")
+        else if (selection.selecting === "Discard")
           return { ...card, selected: false };
         else return card;
       });
       setCardsInHand(newCardsInHand);
-    } else if (turnState === "Discard") {
-      gameApi.pushToDiscard(game.id, target.id);
 
-      const newCards = cardsInHand.filter(
-        (card) => card.id !== parseInt(target.id, 10)
-      );
-
-      setCardsInHand(newCards);
-      playerApi.setPlayerCardsInHand(
-        player,
-        game.id,
-        newCards.map((card) => card.id)
-      );
-
-      if (newCards.length !== 0) {
-        baseApi.nextTurn(game);
-        setTurnState("Wait");
-      } else {
-        toast.success("congratz 🦑, you just went out");
-        setTurnState("EndOfHand");
-        playerApi.calculateScores(game.id, players);
-        playerApi.setNumberOfRemainingCards(game.id, player, 0);
-        baseApi.nextTurn(game, true);
-      }
+      if (turnState === "Discard") setCardToDiscard(target.id);
     }
   }
 
@@ -314,25 +292,55 @@ function GamePage() {
   };
 
   const handleSelectionButtonClicked = (color) => {
-    const selecting = color === DISCARD_COLOR ? "Discarding" : "CardsToPlay";
+    const selecting = color === DISCARD_COLOR ? "Discard" : "Play";
     setSelection({ ...selection, selecting, color });
+    setTurnState(selecting);
+
+    const turnState = selecting === "Discard" ? "discarding" : "playing";
+    console.log("turnState", turnState);
+    gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
   const handlePlaySelectedYes = () => {
-    const selectedCards = GROUP_COLORS.map((color) =>
-      cardsInHand
-        .filter((card) => card.selected && card.selectedColor === color)
-        .map((card) => card.id)
-    );
-    playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+    if (selection.selecting === "Play") {
+      const selectedCards = GROUP_COLORS.map((color) =>
+        cardsInHand
+          .filter((card) => card.selected && card.selectedColor === color)
+          .map((card) => card.id)
+      );
+      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
 
-    const newCardsInHand = cardsInHand.filter((card) => !card.selected);
-    playerApi.setPlayerCardsInHand(
-      player,
-      game.id,
-      newCardsInHand.map((card) => card.id)
-    );
+      const newCardsInHand = cardsInHand.filter((card) => !card.selected);
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCardsInHand.map((card) => card.id)
+      );
+    } else if (selection.selecting === "Discard") {
+      gameApi.pushToDiscard(game.id, cardToDiscard);
 
+      const newCards = cardsInHand.filter(
+        (card) => card.id !== parseInt(cardToDiscard, 10)
+      );
+
+      setCardsInHand(newCards);
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCards.map((card) => card.id)
+      );
+
+      if (newCards.length !== 0) {
+        baseApi.nextTurn(game);
+        setTurnState("Wait");
+      } else {
+        toast.success("congratz 🦑, you just went out");
+        setTurnState("EndOfHand");
+        playerApi.calculateScores(game.id, players);
+        playerApi.setNumberOfRemainingCards(game.id, player, 0);
+        baseApi.nextTurn(game, true);
+      }
+    }
     setSelection({ ...selection, selecting: "none" });
   };
 
