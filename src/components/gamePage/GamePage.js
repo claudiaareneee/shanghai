@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import * as tools from "./../../tools";
+import ForkMeOnGithub from "fork-me-on-github";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -454,6 +455,11 @@ function GamePage() {
         onHide={() => setModalShow(false)}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
+      />
+      <ForkMeOnGithub
+        repo="https://github.com/claudiaareneee/shanghai"
+        colorBackground="lightblue"
+        colorOctocat="black"
       />
     </div>
   );
