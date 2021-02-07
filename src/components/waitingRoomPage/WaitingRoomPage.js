@@ -8,6 +8,7 @@ import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
+import ForkMeOnGithub from "fork-me-on-github";
 
 function WaitingRoomPage({ history }) {
   const [numberOfDecks, setNumberOfDecks] = useState("2");
@@ -95,6 +96,12 @@ function WaitingRoomPage({ history }) {
           onClickChange={handleClickChange}
           onClickCancel={handleClickCancel}
           gameId={room || "loading ..."}
+        />
+
+        <ForkMeOnGithub
+          repo="https://github.com/claudiaareneee/shanghai"
+          colorBackground="lightblue"
+          colorOctocat="black"
         />
       </div>
     </>

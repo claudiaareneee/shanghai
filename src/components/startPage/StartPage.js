@@ -6,7 +6,7 @@ import Header from "../common/Header";
 import PropTypes from "prop-types";
 import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
-import { toast } from "react-toastify";
+import ForkMeOnGithub from "fork-me-on-github";
 
 function StartPage({ history }) {
   const [errors, setErrors] = useState({});
@@ -103,6 +103,12 @@ function StartPage({ history }) {
           />
         </div>
       </div>
+
+      <ForkMeOnGithub
+        repo="https://github.com/claudiaareneee/shanghai"
+        colorBackground="lightblue"
+        colorOctocat="black"
+      />
     </div>
   );
 }

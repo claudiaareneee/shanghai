@@ -11,6 +11,7 @@
     "express": "^4.17.1",
     "express-favicon": "^2.0.1",
     "firebase": "^8.2.6",
+    "fork-me-on-github": "^1.0.6",
     "immer": "^8.0.1",
     "node-sass": "^4.14.1",
     "path": "^0.12.7",
