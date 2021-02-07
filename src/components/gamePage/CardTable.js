@@ -28,7 +28,8 @@ function CardTable({
   onDiscardClicked,
   onTurnButtonClicked,
   onSelectionButtonClicked,
-  onLayDown,
+  onPlaySelectedYes,
+  onPlaySelectedNo,
   onBuyClicked,
 }) {
   return (
@@ -76,27 +77,11 @@ function CardTable({
       </Row>
 
       {game.turn && game.turn.player === player ? (
-        selection.selecting === "none" ? (
-          <Row>
-            <Col>
-              <h5>It's your turn!</h5>
-            </Col>
-          </Row>
-        ) : selection.selecting === "CardsToPlay" ? (
-          <Row>
-            <Col>
-              <h5 className="justify-content-center">
-                Would you like to play selected?
-              </h5>
-              <Button className="btn-primary m-2" onClick={onLayDown}>
-                Yes
-              </Button>
-              <Button className="btn-primary m-2">No</Button>
-            </Col>
-          </Row>
-        ) : (
-          <></>
-        )
+        <Turn
+          selection={selection}
+          onPlaySelectedYes={onPlaySelectedYes}
+          onPlaySelectedNo={onPlaySelectedNo}
+        />
       ) : (
         <></>
       )}
@@ -138,20 +123,19 @@ function CardTable({
         <SetSelection
           hand={game.hand}
           laidDown={!cardsOnTable[player]}
-          onClick={onSelectionButtonClicked}
-          onLayDown={onLayDown}
+          onSelectionButtonClicked={onSelectionButtonClicked}
         />
       ) : (
         <></>
       )}
 
-      <Row>
+      {/* <Row>
         <Turn
           player={player}
           game={game}
           onTurnButtonClicked={onTurnButtonClicked}
         />
-      </Row>
+      </Row> */}
     </div>
   );
 }
@@ -161,7 +145,7 @@ CardTable.propTypes = {
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
   onSelectionButtonClicked: PropTypes.func.isRequired,
-  onLayDown: PropTypes.func.isRequired,
+  onPlaySelectedYes: PropTypes.func.isRequired,
 };
 
 export default CardTable;

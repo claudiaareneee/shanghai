@@ -4,9 +4,10 @@ import {
   GROUP_1_COLOR,
   GROUP_2_COLOR,
   GROUP_3_COLOR,
+  DISCARD_COLOR,
 } from "../common/Constants";
 
-function LayDownSelectionButtonGroup({ hand, onClick, onLayDown }) {
+function LayDownSelectionButtonGroup({ hand, onSelectionButtonClicked }) {
   const buttonStrings = [];
 
   for (let i = 0; i < hand.books; i++) buttonStrings.push("book");
@@ -20,7 +21,9 @@ function LayDownSelectionButtonGroup({ hand, onClick, onLayDown }) {
         <button
           className="btn"
           key={index}
-          onClick={() => onClick(buttonStrings[index], selectionColors[index])}
+          onClick={() => {
+            onSelectionButtonClicked(selectionColors[index]);
+          }}
           style={{
             marginRight: ".5rem",
             backgroundColor: "#" + selectionColors[index],
@@ -31,36 +34,26 @@ function LayDownSelectionButtonGroup({ hand, onClick, onLayDown }) {
           Select {buttonStrings[index]} {index + 1}
         </button>
       ))}
-      <button
-        className="btn btn-primary"
-        onClick={onLayDown}
-        style={{
-          marginRight: ".5rem",
-          display: "inline",
-        }}
-        name="Play"
-      >
-        Lay down cards
-      </button>
     </>
   );
 }
 
-function SetSelection({ hand, laidDown, onClick, onLayDown }) {
+function SetSelection({ hand, laidDown, onSelectionButtonClicked }) {
   return (
     <>
       {laidDown ? (
         <LayDownSelectionButtonGroup
           hand={hand}
-          onClick={onClick}
-          onLayDown={onLayDown}
+          onSelectionButtonClicked={onSelectionButtonClicked}
         />
       ) : (
         <></>
       )}
       <button
         className="btn btn-warning"
-        onClick={() => {}}
+        onClick={() => {
+          onSelectionButtonClicked(DISCARD_COLOR);
+        }}
         style={{
           marginRight: ".5rem",
           display: "inline",

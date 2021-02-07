@@ -7,7 +7,7 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS } from "../common/Constants";
+import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import * as tools from "./../../tools";
 
@@ -16,6 +16,7 @@ function GamePage() {
   const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
+  const [cardToDiscard, setCardToDiscard] = useState(-1);
   const [cardsInHand, setCardsInHand] = useState([]);
   const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
@@ -92,21 +93,20 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    if (turnState === "Play" && selection.selecting === "CardsToPlay") {
+    if (turnState === "Play" && selection.selecting !== "none") {
       const newCardsInHand = cardsInHand.map((card) => {
-        if (card.id.toString() === target.id) {
+        if (card.id.toString() === target.id)
           return {
             ...card,
             selected: !card.selected,
             selectedColor: selection.color,
           };
-        }
-        return card;
+        else if (selection.selecting === "Discarding")
+          return { ...card, selected: false };
+        else return card;
       });
       setCardsInHand(newCardsInHand);
-    }
-
-    if (turnState === "Discard") {
+    } else if (turnState === "Discard") {
       gameApi.pushToDiscard(game.id, target.id);
 
       const newCards = cardsInHand.filter(
@@ -313,11 +313,12 @@ function GamePage() {
     }
   };
 
-  const handleSelectionButtonClicked = (type, color) => {
-    setSelection({ ...selection, selecting: "CardsToPlay", color });
+  const handleSelectionButtonClicked = (color) => {
+    const selecting = color === DISCARD_COLOR ? "Discarding" : "CardsToPlay";
+    setSelection({ ...selection, selecting, color });
   };
 
-  const handleLayDown = () => {
+  const handlePlaySelectedYes = () => {
     const selectedCards = GROUP_COLORS.map((color) =>
       cardsInHand
         .filter((card) => card.selected && card.selectedColor === color)
@@ -332,6 +333,15 @@ function GamePage() {
       newCardsInHand.map((card) => card.id)
     );
 
+    setSelection({ ...selection, selecting: "none" });
+  };
+
+  const handlePlaySelectedNo = () => {
+    const newCardsInHand = cardsInHand.map((card) => ({
+      ...card,
+      selected: false,
+    }));
+    setCardsInHand(newCardsInHand);
     setSelection({ ...selection, selecting: "none" });
   };
 
@@ -382,7 +392,8 @@ function GamePage() {
             onDiscardClicked={handleDiscardClicked}
             onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
-            onLayDown={handleLayDown}
+            onPlaySelectedYes={handlePlaySelectedYes}
+            onPlaySelectedNo={handlePlaySelectedNo}
             onBuyClicked={handleBuyClicked}
           />
         </Col>
