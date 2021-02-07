@@ -9,9 +9,11 @@ import "./PlayerBucket.css";
 function CardsPlayed({
   cards = [],
   player,
+  highlightedCard,
   onCardClicked,
   onDragStart,
   onDrop,
+  onCardHovered,
 }) {
   const containerHeight = constants.CARD_HEIGHT;
 
@@ -45,7 +47,9 @@ function CardsPlayed({
             index={index}
             cards={set}
             association={{ location: player, index: index }}
+            highlightedCard={highlightedCard}
             useStyle="slideStyle"
+            onCardHovered={onCardHovered}
           />
         );
       })}
@@ -63,10 +67,12 @@ function PlayerBucket({
   player,
   showPlayer,
   cards,
+  highlightedCard,
   onCardClicked,
   onDropdownClicked,
   onDragStart,
   onDrop,
+  onCardHovered,
   turn,
 }) {
   const style = turn.player === player.id ? { backgroundColor: "#0066cc" } : {};
@@ -106,10 +112,12 @@ function PlayerBucket({
       {showPlayer ? (
         <CardsPlayed
           cards={cards}
-          onCardClicked={() => onCardClicked(player.id)}
+          highlightedCard={highlightedCard}
+          onCardClicked={onCardClicked}
           onDrop={onDrop}
           onDragStart={onDragStart}
           player={player.id}
+          onCardHovered={onCardHovered}
         />
       ) : (
         <></>

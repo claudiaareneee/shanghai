@@ -7,26 +7,29 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS } from "../common/Constants";
+import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import * as tools from "./../../tools";
+import ForkMeOnGithub from "fork-me-on-github";
 
 function GamePage() {
   const [game, setGame] = useState({});
   const [turnState, setTurnState] = useState("Wait");
   const [players, setPlayers] = useState({});
   const [discard, setDiscard] = useState([]);
+  const [cardToDiscard, setCardToDiscard] = useState(-1);
   const [cardsInHand, setCardsInHand] = useState([]);
   const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [modalShow, setModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
-    selecting: false,
+    selecting: "none",
     color: "",
   });
   const [comment, setComment] = useState("");
   const [dragAssociation, setDragAssociation] = useState({});
+  const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -92,44 +95,21 @@ function GamePage() {
   }
 
   function handlePlayerCardClicked({ target }) {
-    if (turnState === "Play" && selection.selecting) {
+    if (selection.selecting !== "none") {
       const newCardsInHand = cardsInHand.map((card) => {
-        if (card.id.toString() === target.id) {
+        if (card.id.toString() === target.id)
           return {
             ...card,
             selected: !card.selected,
             selectedColor: selection.color,
           };
-        }
-        return card;
+        else if (selection.selecting === "Discard")
+          return { ...card, selected: false };
+        else return card;
       });
       setCardsInHand(newCardsInHand);
-    }
 
-    if (turnState === "Discard") {
-      gameApi.pushToDiscard(game.id, target.id);
-
-      const newCards = cardsInHand.filter(
-        (card) => card.id !== parseInt(target.id, 10)
-      );
-
-      setCardsInHand(newCards);
-      playerApi.setPlayerCardsInHand(
-        player,
-        game.id,
-        newCards.map((card) => card.id)
-      );
-
-      if (newCards.length !== 0) {
-        baseApi.nextTurn(game);
-        setTurnState("Wait");
-      } else {
-        toast.success("congratz 🦑, you just went out");
-        setTurnState("EndOfHand");
-        playerApi.calculateScores(game.id, players);
-        playerApi.setNumberOfRemainingCards(game.id, player, 0);
-        baseApi.nextTurn(game, true);
-      }
+      if (turnState === "Discard") setCardToDiscard(target.id);
     }
   }
 
@@ -183,9 +163,19 @@ function GamePage() {
       });
   }
 
+  function handleCardOnTableClicked({ target }, association) {
+    const isJoker = target.id % 54 === 53 || target.id % 54 === 52;
+    if (cardsOnTable[player] && turnState === "Draw" && isJoker) {
+      console.log("can joker draw");
+      setDrawingJoker({ isDrawing: true, card: target.id, association });
+    } else {
+      console.log("can't draw this one");
+    }
+  }
+
   function handleTurnButtonClicked({ target }) {
     setTurnState(target.name);
-    setSelection({ ...selection, selecting: false });
+    setSelection({ ...selection, selecting: "none" });
 
     if (target.name === "Draw") {
       toast.success("🦄 Select draw card!");
@@ -251,7 +241,7 @@ function GamePage() {
 
     if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
-      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaid(
+      const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaidWithIndex(
         cardsOnTable[dragAssociation.location],
         oldIndex,
         dragAssociation
@@ -313,24 +303,120 @@ function GamePage() {
     }
   };
 
-  const handleSelectionButtonClicked = (type, color) => {
-    setSelection({ ...selection, selecting: true, color });
+  const handleSelectionButtonClicked = (color) => {
+    const selecting = color === DISCARD_COLOR ? "Discard" : "Play";
+    setSelection({ ...selection, selecting, color });
+    setTurnState(selecting);
+
+    const turnState = selecting === "Discard" ? "discarding" : "playing";
+    console.log("turnState", turnState);
+    gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
-  const handleLayDown = () => {
-    const selectedCards = GROUP_COLORS.map((color) =>
-      cardsInHand
-        .filter((card) => card.selected && card.selectedColor === color)
-        .map((card) => card.id)
-    );
-    playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+  const handlePlaySelectedYes = () => {
+    if (selection.selecting === "Play") {
+      const selectedCards = GROUP_COLORS.map((color) =>
+        cardsInHand
+          .filter((card) => card.selected && card.selectedColor === color)
+          .map((card) => card.id)
+      );
 
-    const newCardsInHand = cardsInHand.filter((card) => !card.selected);
+      const numberOfSelectionsMade = selectedCards.reduce(
+        (p, c) => (c.length > 0 ? p + 1 : p),
+        0
+      );
+
+      if (numberOfSelectionsMade !== game.hand.books + game.hand.runs) {
+        toast.error(
+          `Uh oh, please select ${game.hand.books} books and ${game.hand.runs} runs`
+        );
+        return;
+      }
+
+      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+
+      const newCardsInHand = cardsInHand.filter((card) => !card.selected);
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCardsInHand.map((card) => card.id)
+      );
+    } else if (selection.selecting === "Discard") {
+      if (cardToDiscard === -1) {
+        toast.error(`Uh oh, please select a card to discard`);
+        return;
+      }
+
+      gameApi.pushToDiscard(game.id, cardToDiscard);
+
+      const newCards = cardsInHand.filter(
+        (card) => card.id !== parseInt(cardToDiscard, 10)
+      );
+
+      setCardsInHand(newCards);
+      setCardToDiscard(-1);
+
+      playerApi.setPlayerCardsInHand(
+        player,
+        game.id,
+        newCards.map((card) => card.id)
+      );
+
+      if (newCards.length !== 0) {
+        baseApi.nextTurn(game);
+        setTurnState("Wait");
+      } else {
+        toast.success("congratz 🦑, you just went out");
+        setTurnState("EndOfHand");
+        playerApi.calculateScores(game.id, players);
+        playerApi.setNumberOfRemainingCards(game.id, player, 0);
+        baseApi.nextTurn(game, true);
+      }
+    }
+    setSelection({ ...selection, selecting: "none" });
+  };
+
+  const handlePlaySelectedNo = () => {
+    const newCardsInHand = cardsInHand.map((card) => ({
+      ...card,
+      selected: false,
+    }));
+    setCardsInHand(newCardsInHand);
+    setSelection({ ...selection, selecting: "none" });
+
+    if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
+  };
+
+  const handleDrawJokerYes = () => {
+    const cardId = parseInt(drawingJoker.card, 10);
+
+    const newCardsOnTable = tools.removeCardFromCardsLaidWithId(
+      cardsOnTable[drawingJoker.association.location],
+      cardId,
+      drawingJoker.association
+    );
+    console.log("drawingJoker: ", drawingJoker);
+    playerApi.setPlayerCardsOnTable(
+      drawingJoker.association.location,
+      game.id,
+      newCardsOnTable
+    );
+
+    const newCards = [...cardsInHand, { id: cardId }];
+    setCardsInHand(newCards);
+
     playerApi.setPlayerCardsInHand(
       player,
       game.id,
-      newCardsInHand.map((card) => card.id)
+      newCards.map((card) => card.id)
     );
+
+    setDrawingJoker({ isDrawing: false });
+    baseApi.nextTurn(game);
+  };
+
+  const handleDrawJokerNo = () => {
+    setDrawingJoker({ drawing: false });
   };
 
   const handleNextHandClick = () => {
@@ -367,10 +453,12 @@ function GamePage() {
             playerCards={cardsInHand}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
-            onPlayerCardClicked={handlePlayerCardClicked}
+            selection={selection}
             numberOfBuys={
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
+            drawingJoker={drawingJoker}
+            onPlayerCardClicked={handlePlayerCardClicked}
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDrop={onDrop}
@@ -379,7 +467,10 @@ function GamePage() {
             onDiscardClicked={handleDiscardClicked}
             onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
-            onLayDown={handleLayDown}
+            onPlaySelectedYes={handlePlaySelectedYes}
+            onPlaySelectedNo={handlePlaySelectedNo}
+            onDrawJokerYes={handleDrawJokerYes}
+            onDrawJokerNo={handleDrawJokerNo}
             onBuyClicked={handleBuyClicked}
           />
         </Col>
@@ -391,9 +482,12 @@ function GamePage() {
             players={players}
             showPlayers={showPlayers}
             turnState={turnState}
+            highlightedCard={highlightedCard}
+            cardsOnTable={cardsOnTable}
             onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
-            cardsOnTable={cardsOnTable}
+            onCardClicked={handleCardOnTableClicked}
+            onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => {
               setModalShow(true);
@@ -410,6 +504,11 @@ function GamePage() {
         onHide={() => setModalShow(false)}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
+      />
+      <ForkMeOnGithub
+        repo="https://github.com/claudiaareneee/shanghai"
+        colorBackground="lightblue"
+        colorOctocat="black"
       />
     </div>
   );

@@ -84,6 +84,7 @@ Project Link: [https://github.com/claudiaareneee/shanghai/](https://github.com/c
 
 - [React Toastify](https://www.npmjs.com/package/react-toastify)
 - [Othneildrew ReadMe Template](https://github.com/othneildrew/Best-README-Template)
+- [Fork me on GitHub](https://github.com/whatthefoo/fork-me-on-github)
 
 ### Production Dependencies
 

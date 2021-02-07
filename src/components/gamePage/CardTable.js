@@ -1,6 +1,6 @@
 import React from "react";
 import "./CardTable.css";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Button } from "react-bootstrap";
 import PropTypes from "prop-types";
 import CardSet from "../common/CardSet";
 import CardDiscard from "../common/CardDiscard";
@@ -18,6 +18,8 @@ function CardTable({
   numberOfBuys,
   highlightedCard,
   cardsOnTable,
+  selection,
+  drawingJoker,
   onCardHovered,
   onPlayerCardClicked,
   onDragStart,
@@ -27,7 +29,10 @@ function CardTable({
   onDiscardClicked,
   onTurnButtonClicked,
   onSelectionButtonClicked,
-  onLayDown,
+  onPlaySelectedYes,
+  onPlaySelectedNo,
+  onDrawJokerYes,
+  onDrawJokerNo,
   onBuyClicked,
 }) {
   return (
@@ -74,16 +79,30 @@ function CardTable({
         </Col>
       </Row>
 
-      <Row>
-        <Col>
-          {game.turn && game.turn.player !== player && !cardsOnTable[player] ? (
+      {game.turn && game.turn.player === player ? (
+        <Turn
+          turnState={turnState}
+          selection={selection}
+          drawingJoker={drawingJoker}
+          onPlaySelectedYes={onPlaySelectedYes}
+          onPlaySelectedNo={onPlaySelectedNo}
+          onDrawJokerYes={onDrawJokerYes}
+          onDrawJokerNo={onDrawJokerNo}
+        />
+      ) : (
+        <></>
+      )}
+
+      {game.turn && game.turn.player !== player && !cardsOnTable[player] ? (
+        <Row>
+          <Col>
             <Buys numberOfBuys={numberOfBuys} onClick={onBuyClicked} />
-          ) : (
-            <></>
-          )}
-        </Col>
-        <Col></Col>
-      </Row>
+          </Col>
+          <Col></Col>
+        </Row>
+      ) : (
+        <></>
+      )}
 
       <Row className="PlayerHand">
         {playerCards.length > 0 ? (
@@ -107,23 +126,15 @@ function CardTable({
         )}
       </Row>
 
-      {turnState === "Play" && !cardsOnTable[player] ? (
+      {turnState === "Play" || turnState === "Discard" ? (
         <SetSelection
           hand={game.hand}
-          onClick={onSelectionButtonClicked}
-          onLayDown={onLayDown}
+          laidDown={!cardsOnTable[player]}
+          onSelectionButtonClicked={onSelectionButtonClicked}
         />
       ) : (
         <></>
       )}
-
-      <Row>
-        <Turn
-          player={player}
-          game={game}
-          onTurnButtonClicked={onTurnButtonClicked}
-        />
-      </Row>
     </div>
   );
 }
@@ -133,7 +144,7 @@ CardTable.propTypes = {
   playerCards: PropTypes.array.isRequired,
   onPlayerCardClicked: PropTypes.func.isRequired,
   onSelectionButtonClicked: PropTypes.func.isRequired,
-  onLayDown: PropTypes.func.isRequired,
+  onPlaySelectedYes: PropTypes.func.isRequired,
 };
 
 export default CardTable;

@@ -17,7 +17,7 @@ function App() {
         <Route component={NotFoundPage} />
       </Switch>
       <ToastContainer
-        position="top-center"
+        position="top-right"
         autoClose={10000}
         hideProgressBar={true}
         newestOnTop={false}

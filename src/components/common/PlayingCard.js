@@ -46,7 +46,7 @@ function PlayingCard({
         src={src}
         alt={id}
         draggable
-        onClick={onCardClicked}
+        onClick={(e) => onCardClicked(e, association)}
         onMouseOver={onCardHovered}
         onMouseOut={onCardHovered}
         onDragStart={(e) => onDragStart(e, index, id, association)}
