@@ -128,14 +128,6 @@ function CardTable({
       ) : (
         <></>
       )}
-
-      {/* <Row>
-        <Turn
-          player={player}
-          game={game}
-          onTurnButtonClicked={onTurnButtonClicked}
-        />
-      </Row> */}
     </div>
   );
 }
