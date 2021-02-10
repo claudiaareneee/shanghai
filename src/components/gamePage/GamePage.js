@@ -129,10 +129,8 @@ function GamePage() {
   function handleDiscardClicked({ target }) {
     if (turnState === "Draw")
       gameApi.popDiscard(game.id, (card) => {
-        const newCards = [
-          ...cardsInHand,
-          { id: parseInt(Object.values(card)[0], 10) },
-        ];
+        const cardId = parseInt(Object.values(card)[0], 10);
+        const newCards = [...cardsInHand, { id: cardId }];
 
         setCardsInHand(newCards);
 
@@ -141,6 +139,12 @@ function GamePage() {
           game.id,
           newCards.map((card) => card.id)
         );
+
+        gameApi.pushLogEntry(game.id, {
+          player: players[player].name,
+          gameEvent: GAME_EVENTS.drewDiscardPile,
+          card: cardId,
+        });
 
         if (discard.length === 1) setDiscard([]);
         baseApi.nextTurn(game);
@@ -162,6 +166,11 @@ function GamePage() {
           game.id,
           newCards.map((card) => card.id)
         );
+
+        gameApi.pushLogEntry(game.id, {
+          player: players[player].name,
+          gameEvent: GAME_EVENTS.drewDrawPile,
+        });
 
         baseApi.performBuy(game, player, players);
 
@@ -245,6 +254,7 @@ function GamePage() {
     // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
+    //TODO: game log
 
     if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
@@ -348,6 +358,11 @@ function GamePage() {
         game.id,
         newCardsInHand.map((card) => card.id)
       );
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.laidDown,
+      });
     } else if (selection.selecting === "Discard") {
       if (cardToDiscard === -1) {
         toast.error(`Uh oh, please select a card to discard`);
@@ -368,6 +383,12 @@ function GamePage() {
         game.id,
         newCards.map((card) => card.id)
       );
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.discard,
+        card: parseInt(cardToDiscard, 10),
+      });
 
       if (newCards.length !== 0) {
         baseApi.nextTurn(game);
@@ -418,6 +439,11 @@ function GamePage() {
       newCards.map((card) => card.id)
     );
 
+    gameApi.pushLogEntry(game.id, {
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.drewJoker,
+    });
+
     setDrawingJoker({ isDrawing: false });
     baseApi.nextTurn(game);
   };
@@ -432,16 +458,14 @@ function GamePage() {
       player: players[player].name,
       gameEvent: GAME_EVENTS.moveToNextHand,
     });
-    console.log({
-      player: players[player].name,
-      gameEvent: GAME_EVENTS.moveToNextHand,
-    });
     setCardsOnTable([]);
   };
 
   const handleBuyClicked = () => {
     toast.info("ooo buy");
     gameApi.pushBuyer(game.id, player);
+
+    //TODO: game log
   };
 
   const handleCommentChanged = (event) => {

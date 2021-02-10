@@ -12,6 +12,9 @@ export const GROUP_COLORS = [GROUP_1_COLOR, GROUP_2_COLOR, GROUP_3_COLOR];
 export const DISCARD_COLOR = "F0AD4E";
 export const GAME_EVENTS = {
   moveToNextHand: "moveToNextHand",
-  draw: "draw",
+  drewDrawPile: "drewDrawPile",
+  drewDiscardPile: "drewDiscardPile",
+  drewJoker: "drewJoker",
+  laidDown: "laidDown",
   discard: "discard",
 };
