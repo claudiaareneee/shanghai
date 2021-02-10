@@ -547,6 +547,7 @@ function GamePage() {
             turnState={turnState}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
+            lastLogMessage={logEntries[logEntries.length - 1] || {}}
             onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             onCardClicked={handleCardOnTableClicked}
