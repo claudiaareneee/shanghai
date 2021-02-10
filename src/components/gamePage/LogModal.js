@@ -36,11 +36,12 @@ function LogMessage({ logEntry }) {
       );
 
     case GAME_EVENTS.drewJoker:
+      // todo: say from which pile
       return (
         <p>
           <strong style={{ color: "blue" }}>{logEntry.player}</strong> drew a{" "}
           <strong>Joker</strong> from{" "}
-          <strong style={{ color: "orange" }}>{logEntry.opponent}</strong>
+          <strong style={{ color: "blue" }}>{logEntry.opponent}</strong>
         </p>
       );
     case GAME_EVENTS.laidDown:
@@ -56,6 +57,31 @@ function LogMessage({ logEntry }) {
           a <strong style={{ color }}>{card}</strong>
         </p>
       );
+    case GAME_EVENTS.playedCards:
+      //Todo: say which cards
+      return (
+        <p>
+          <strong style={{ color: "blue" }}>{logEntry.player}</strong> played
+          cards on{" "}
+          <strong style={{ color: "blue" }}>{logEntry.opponent}</strong>
+        </p>
+      );
+    case GAME_EVENTS.wentOut:
+      return (
+        <p>
+          <strong style={{ color: "blue" }}>{logEntry.player}</strong>{" "}
+          <strong style={{ color: "green" }}>went out!!</strong>
+        </p>
+      );
+    case GAME_EVENTS.gameStarted:
+      return (
+        <p>
+          <strong>
+            Game started. Best of luck, and let the games begin 😈!
+          </strong>
+        </p>
+      );
+
     default:
       return <></>;
   }
@@ -77,9 +103,11 @@ function LogModal({ show, onHide, logEntries }) {
           Game Log
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ color: "#282c34" }}>
-        {logEntries.map((logEntry) => (
-          <Row>
+      <Modal.Body
+        style={{ color: "#282c34", paddingLeft: "2rem", paddingRight: "2rem" }}
+      >
+        {logEntries.map((logEntry, index) => (
+          <Row key={index}>
             <LogMessage logEntry={logEntry} />
           </Row>
         ))}

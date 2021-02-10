@@ -71,7 +71,6 @@ function GamePage() {
 
       gameApi.getLogEntriesById(room, (entries) => {
         if (entries) setLogEntries(Object.values(entries));
-        console.log(Object.values(entries));
       });
     } else {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
@@ -294,6 +293,8 @@ function GamePage() {
         game.id,
         newPlayerCardsOnTableNewAssociation
       );
+
+      // todo: game event for moving cards log
     } else if (turnState === "Play" && cardsOnTable[player]) {
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         Object.values(cardsOnTable[association.location]),
@@ -313,6 +314,18 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+
+      console.log(
+        "players[association.location]",
+        players[association.location]
+      );
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.playedCards,
+        card: cardId,
+        opponent: players[association.location].name,
+      });
     } else {
       toast.error(
         "Oops! You can only move cards after drawing on your turn 🌵"
@@ -398,6 +411,12 @@ function GamePage() {
         setTurnState("EndOfHand");
         playerApi.calculateScores(game.id, players);
         playerApi.setNumberOfRemainingCards(game.id, player, 0);
+
+        gameApi.pushLogEntry(game.id, {
+          player: players[player].name,
+          gameEvent: GAME_EVENTS.wentOut,
+        });
+
         baseApi.nextTurn(game, true);
       }
     }
@@ -442,6 +461,7 @@ function GamePage() {
     gameApi.pushLogEntry(game.id, {
       player: players[player].name,
       gameEvent: GAME_EVENTS.drewJoker,
+      opponent: players[drawingJoker.association.location].name,
     });
 
     setDrawingJoker({ isDrawing: false });

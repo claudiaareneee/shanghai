@@ -17,4 +17,7 @@ export const GAME_EVENTS = {
   drewJoker: "drewJoker",
   laidDown: "laidDown",
   discard: "discard",
+  playedCards: "playedCards",
+  wentOut: "wentOut",
+  gameStarted: "gameStarted",
 };
