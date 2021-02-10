@@ -9,6 +9,7 @@ import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
 import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
+import LogModal from "./LogModal";
 import * as tools from "./../../tools";
 import ForkMeOnGithub from "fork-me-on-github";
 
@@ -21,7 +22,8 @@ function GamePage() {
   const [cardsInHand, setCardsInHand] = useState([]);
   const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [statsModalShow, setStatsModalShow] = React.useState(false);
+  const [logModalShow, setLogModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: "none",
@@ -487,19 +489,27 @@ function GamePage() {
             onCardClicked={handleCardOnTableClicked}
             onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
-            onScoreCardClicked={() => {
-              setModalShow(true);
-            }}
+            onScoreCardClicked={() => setStatsModalShow(true)}
+            onLogClicked={() => setLogModalShow(true)}
             onNextHandClick={handleNextHandClick}
           />
         </Col>
       </Row>
       <GameStatsModal
         gameId={game.id || ""}
-        show={modalShow}
+        show={statsModalShow}
         players={players}
         comment={comment}
-        onHide={() => setModalShow(false)}
+        onHide={() => setStatsModalShow(false)}
+        onSubmitComment={handleSubmitComment}
+        onCommentChange={handleCommentChanged}
+      />
+      <LogModal
+        gameId={game.id || ""}
+        show={logModalShow}
+        players={players}
+        comment={comment}
+        onHide={() => setLogModalShow(false)}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
       />

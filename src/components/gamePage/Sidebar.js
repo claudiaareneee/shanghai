@@ -16,6 +16,7 @@ function Sidebar({
   onDragStart,
   onDrop,
   onScoreCardClicked,
+  onLogClicked,
   onNextHandClick,
   onCardHovered,
 }) {
@@ -53,7 +54,7 @@ function Sidebar({
         <button
           className="btn btn-info"
           style={{ float: "right", marginLeft: ".5rem" }}
-          onClick={onScoreCardClicked}
+          onClick={onLogClicked}
           title="Open game log"
         >
           <i className="fas fa-book" aria-hidden="true"></i>
