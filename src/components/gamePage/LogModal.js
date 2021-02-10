@@ -62,7 +62,6 @@ function LogMessage({ logEntry }) {
 }
 
 function LogModal({ show, onHide, logEntries }) {
-  console.log("logEntries:", logEntries);
   return (
     <Modal
       show={show}
