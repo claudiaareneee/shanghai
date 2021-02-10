@@ -20,4 +20,6 @@ export const GAME_EVENTS = {
   playedCards: "playedCards",
   wentOut: "wentOut",
   gameStarted: "gameStarted",
+  wantsToBuy: "wantsToBuy",
+  bought: "bought",
 };

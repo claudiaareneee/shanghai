@@ -82,6 +82,21 @@ function LogMessage({ logEntry }) {
         </p>
       );
 
+    case GAME_EVENTS.wantsToBuy:
+      return (
+        <p>
+          <strong style={{ color: "blue" }}>{logEntry.player}</strong> wants to
+          buy a <strong style={{ color }}>{card}</strong>
+        </p>
+      );
+    case GAME_EVENTS.bought:
+      return (
+        <p>
+          <strong style={{ color: "blue" }}>{logEntry.player}</strong> bought a{" "}
+          <strong style={{ color }}>{card}</strong>
+        </p>
+      );
+
     default:
       return <></>;
   }

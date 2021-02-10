@@ -171,7 +171,12 @@ function GamePage() {
           gameEvent: GAME_EVENTS.drewDrawPile,
         });
 
-        baseApi.performBuy(game, player, players);
+        baseApi.performBuy(
+          game,
+          player,
+          players,
+          discard[discard.length - 1].id
+        );
 
         setTurnState("Play");
         baseApi.nextTurn(game);
