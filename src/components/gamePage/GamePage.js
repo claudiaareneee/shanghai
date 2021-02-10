@@ -83,7 +83,6 @@ function GamePage() {
 
       // I could see this being problematic
       if (game.turn.state === "drawing" && turnState === "EndOfHand") {
-        setDiscard([]);
         setCardsOnTable([]);
       }
     }
@@ -421,7 +420,6 @@ function GamePage() {
 
   const handleNextHandClick = () => {
     baseApi.setDeal(game);
-    setDiscard([]);
     setCardsOnTable([]);
   };
 

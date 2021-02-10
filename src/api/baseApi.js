@@ -42,7 +42,7 @@ export const setDeal = (game) => {
     numberOfDrawCards: deal.draw.length,
   });
 
-  gameApi.clearDiscard(game.id);
+  gameApi.setDiscard(game.id, deal.discard);
   gameApi.clearCardsOnTable(game.id);
 };
 
