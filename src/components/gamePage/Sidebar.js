@@ -40,18 +40,31 @@ function Sidebar({
       ))}
       <div className="form-inline justify-content-end">
         {turnState === "EndOfHand" ? (
-          <button className="btn btn-success" onClick={onNextHandClick}>
-            Next Hand
+          <button
+            className="btn btn-success"
+            onClick={onNextHandClick}
+            title="Move to next hand"
+          >
+            shuffle <i className="fas fa-random" aria-hidden="true"></i>
           </button>
         ) : (
           <></>
         )}
         <button
+          className="btn btn-info"
+          style={{ float: "right", marginLeft: ".5rem" }}
+          onClick={onScoreCardClicked}
+          title="Open game log"
+        >
+          <i className="fas fa-book" aria-hidden="true"></i>
+        </button>
+        <button
           className="btn btn-primary"
           style={{ float: "right", margin: ".5rem" }}
           onClick={onScoreCardClicked}
+          title="Open game stats"
         >
-          View Game Stats
+          <i className="fas fa-info-circle" aria-hidden="true"></i>
         </button>
       </div>
     </div>
