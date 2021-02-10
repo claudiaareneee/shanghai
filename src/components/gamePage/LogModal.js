@@ -1,15 +1,8 @@
 import React from "react";
 import { Table, Modal } from "react-bootstrap";
 
-function GameStatsModal({
-  gameId,
-  show,
-  players,
-  comment,
-  onHide,
-  onSubmitComment,
-  onCommentChange,
-}) {
+function LogModal({ show, onHide, logEntries }) {
+  console.log("logEntries:", logEntries);
   return (
     <Modal
       show={show}
@@ -25,7 +18,13 @@ function GameStatsModal({
           Game Log
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body style={{ color: "#282c34" }}></Modal.Body>
+      <Modal.Body style={{ color: "#282c34" }}>
+        {logEntries.map((entry) => (
+          <>
+            player: {entry.player} event: {entry.gameEvent}
+          </>
+        ))}
+      </Modal.Body>
       <Modal.Footer style={{ color: "#282c34" }}>
         <button className="btn btn-primary" onClick={onHide}>
           Close
@@ -35,4 +34,4 @@ function GameStatsModal({
   );
 }
 
-export default GameStatsModal;
+export default LogModal;

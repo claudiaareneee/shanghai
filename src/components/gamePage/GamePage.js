@@ -7,7 +7,7 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
+import { GROUP_COLORS, DISCARD_COLOR, GAME_EVENTS } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import LogModal from "./LogModal";
 import * as tools from "./../../tools";
@@ -32,6 +32,7 @@ function GamePage() {
   const [comment, setComment] = useState("");
   const [dragAssociation, setDragAssociation] = useState({});
   const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
+  const [logEntries, setLogEntries] = useState([]);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -67,6 +68,11 @@ function GamePage() {
       playerApi.getPlayerCardsOnTableById(room, (_cardsOnTable) =>
         setCardsOnTable(_cardsOnTable)
       );
+
+      gameApi.getLogEntriesById(room, (entries) => {
+        if (entries) setLogEntries(Object.values(entries));
+        console.log(Object.values(entries));
+      });
     } else {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
@@ -422,6 +428,14 @@ function GamePage() {
 
   const handleNextHandClick = () => {
     baseApi.setDeal(game);
+    gameApi.pushLogEntry(game.id, {
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.moveToNextHand,
+    });
+    console.log({
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.moveToNextHand,
+    });
     setCardsOnTable([]);
   };
 
@@ -505,13 +519,9 @@ function GamePage() {
         onCommentChange={handleCommentChanged}
       />
       <LogModal
-        gameId={game.id || ""}
         show={logModalShow}
-        players={players}
-        comment={comment}
         onHide={() => setLogModalShow(false)}
-        onSubmitComment={handleSubmitComment}
-        onCommentChange={handleCommentChanged}
+        logEntries={logEntries}
       />
       <ForkMeOnGithub
         repo="https://github.com/claudiaareneee/shanghai"
