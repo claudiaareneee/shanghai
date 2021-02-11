@@ -9,6 +9,7 @@ const gameBaseUrl = baseUrl + "games/";
 const discardBaseUrl = baseUrl + "discard/";
 const drawBaseUrl = baseUrl + "draw/";
 const cardsOnTableBaseUrl = baseUrl + "cardsOnTable/";
+const logBaseUrl = baseUrl + "gameLog/";
 
 export const createGame = (game) => {
   const newKey = database.ref().child(gameBaseUrl).push().key;
@@ -134,4 +135,14 @@ export const clearBuyer = (gameId, playerId) => {
     .child("buyers")
     .child(playerId)
     .remove();
+};
+
+export const pushLogEntry = (gameId, logEntry) => {
+  database.ref(logBaseUrl + gameId).push(logEntry);
+};
+
+export const getLogEntriesById = (gameId, onLogEntries) => {
+  database.ref(logBaseUrl + gameId).on("value", (snapshot) => {
+    if (snapshot.val() != null) onLogEntries(snapshot.val());
+  });
 };

@@ -7,8 +7,9 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS, DISCARD_COLOR } from "../common/Constants";
+import { GROUP_COLORS, DISCARD_COLOR, GAME_EVENTS } from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
+import LogModal from "./LogModal";
 import * as tools from "./../../tools";
 import ForkMeOnGithub from "fork-me-on-github";
 
@@ -21,7 +22,8 @@ function GamePage() {
   const [cardsInHand, setCardsInHand] = useState([]);
   const [highlightedCard, setHighlightedCard] = useState(-1);
   const [cardsOnTable, setCardsOnTable] = useState([]);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [statsModalShow, setStatsModalShow] = React.useState(false);
+  const [logModalShow, setLogModalShow] = React.useState(false);
   const [showPlayers, setShowPlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: "none",
@@ -30,6 +32,7 @@ function GamePage() {
   const [comment, setComment] = useState("");
   const [dragAssociation, setDragAssociation] = useState({});
   const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
+  const [logEntries, setLogEntries] = useState([]);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -65,6 +68,10 @@ function GamePage() {
       playerApi.getPlayerCardsOnTableById(room, (_cardsOnTable) =>
         setCardsOnTable(_cardsOnTable)
       );
+
+      gameApi.getLogEntriesById(room, (entries) => {
+        if (entries) setLogEntries(Object.values(entries));
+      });
     } else {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
@@ -121,10 +128,8 @@ function GamePage() {
   function handleDiscardClicked({ target }) {
     if (turnState === "Draw")
       gameApi.popDiscard(game.id, (card) => {
-        const newCards = [
-          ...cardsInHand,
-          { id: parseInt(Object.values(card)[0], 10) },
-        ];
+        const cardId = parseInt(Object.values(card)[0], 10);
+        const newCards = [...cardsInHand, { id: cardId }];
 
         setCardsInHand(newCards);
 
@@ -133,6 +138,12 @@ function GamePage() {
           game.id,
           newCards.map((card) => card.id)
         );
+
+        gameApi.pushLogEntry(game.id, {
+          player: players[player].name,
+          gameEvent: GAME_EVENTS.drewDiscardPile,
+          card: cardId,
+        });
 
         if (discard.length === 1) setDiscard([]);
         baseApi.nextTurn(game);
@@ -155,7 +166,17 @@ function GamePage() {
           newCards.map((card) => card.id)
         );
 
-        baseApi.performBuy(game, player, players);
+        gameApi.pushLogEntry(game.id, {
+          player: players[player].name,
+          gameEvent: GAME_EVENTS.drewDrawPile,
+        });
+
+        baseApi.performBuy(
+          game,
+          player,
+          players,
+          discard[discard.length - 1].id
+        );
 
         setTurnState("Play");
         baseApi.nextTurn(game);
@@ -276,6 +297,8 @@ function GamePage() {
         game.id,
         newPlayerCardsOnTableNewAssociation
       );
+
+      // todo: game event for moving cards log
     } else if (turnState === "Play" && cardsOnTable[player]) {
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         Object.values(cardsOnTable[association.location]),
@@ -295,6 +318,18 @@ function GamePage() {
         .map((card) => card.id);
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+
+      console.log(
+        "players[association.location]",
+        players[association.location]
+      );
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.playedCards,
+        card: cardId,
+        opponent: players[association.location].name,
+      });
     } else {
       toast.error(
         "Oops! You can only move cards after drawing on your turn 🌵"
@@ -340,6 +375,11 @@ function GamePage() {
         game.id,
         newCardsInHand.map((card) => card.id)
       );
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.laidDown,
+      });
     } else if (selection.selecting === "Discard") {
       if (cardToDiscard === -1) {
         toast.error(`Uh oh, please select a card to discard`);
@@ -361,6 +401,12 @@ function GamePage() {
         newCards.map((card) => card.id)
       );
 
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.discard,
+        card: parseInt(cardToDiscard, 10),
+      });
+
       if (newCards.length !== 0) {
         baseApi.nextTurn(game);
         setTurnState("Wait");
@@ -369,6 +415,12 @@ function GamePage() {
         setTurnState("EndOfHand");
         playerApi.calculateScores(game.id, players);
         playerApi.setNumberOfRemainingCards(game.id, player, 0);
+
+        gameApi.pushLogEntry(game.id, {
+          player: players[player].name,
+          gameEvent: GAME_EVENTS.wentOut,
+        });
+
         baseApi.nextTurn(game, true);
       }
     }
@@ -410,6 +462,12 @@ function GamePage() {
       newCards.map((card) => card.id)
     );
 
+    gameApi.pushLogEntry(game.id, {
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.drewJoker,
+      opponent: players[drawingJoker.association.location].name,
+    });
+
     setDrawingJoker({ isDrawing: false });
     baseApi.nextTurn(game);
   };
@@ -420,6 +478,10 @@ function GamePage() {
 
   const handleNextHandClick = () => {
     baseApi.setDeal(game);
+    gameApi.pushLogEntry(game.id, {
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.moveToNextHand,
+    });
     setCardsOnTable([]);
   };
 
@@ -482,26 +544,31 @@ function GamePage() {
             turnState={turnState}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
+            lastLogMessage={logEntries[logEntries.length - 1] || {}}
             onDragStart={onDragStart}
             onDrop={onDropCardsOnTable}
             onCardClicked={handleCardOnTableClicked}
             onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
-            onScoreCardClicked={() => {
-              setModalShow(true);
-            }}
+            onScoreCardClicked={() => setStatsModalShow(true)}
+            onLogClicked={() => setLogModalShow(true)}
             onNextHandClick={handleNextHandClick}
           />
         </Col>
       </Row>
       <GameStatsModal
         gameId={game.id || ""}
-        show={modalShow}
+        show={statsModalShow}
         players={players}
         comment={comment}
-        onHide={() => setModalShow(false)}
+        onHide={() => setStatsModalShow(false)}
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
+      />
+      <LogModal
+        show={logModalShow}
+        onHide={() => setLogModalShow(false)}
+        logEntries={logEntries}
       />
       <ForkMeOnGithub
         repo="https://github.com/claudiaareneee/shanghai"

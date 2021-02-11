@@ -1,4 +1,5 @@
 import * as tools from "../tools";
+import { GAME_EVENTS } from "../components/common/Constants";
 import * as gameApi from "./gameApi";
 import * as playerApi from "./playerApi";
 import firebase from "./firebase.config";
@@ -92,13 +93,21 @@ export async function buyWithId(
   playerApi.setBuys(gameId, playerId, numberOfBuys - 1);
 }
 
-export const performBuy = (game, currentPlayer, players) => {
+export const performBuy = (game, currentPlayer, players, card) => {
   if (!game.buyers) return;
 
   const buyer = tools.selectBuyer(
     currentPlayer,
     Object.values(game.buyers),
     Object.values(game.opponents)
+  );
+
+  Object.values(game.buyers).forEach((_buyer) =>
+    gameApi.pushLogEntry(game.id, {
+      player: players[_buyer].name,
+      gameEvent: GAME_EVENTS.wantsToBuy,
+      card,
+    })
   );
 
   if (players[buyer])
@@ -109,6 +118,12 @@ export const performBuy = (game, currentPlayer, players) => {
       game.numberOfDrawCards,
       players[buyer].buys || 0
     );
+
+  gameApi.pushLogEntry(game.id, {
+    player: players[buyer].name,
+    gameEvent: GAME_EVENTS.bought,
+    card,
+  });
 
   gameApi.clearBuyers(game.id);
 };
