@@ -89,10 +89,21 @@ function PlayerBucket({
               {player.id === user ? "⭐️" : ""} {player.name}
             </h5>
           )}
-          <div className="playerInfo">
+          <div className="playerInfo" style={{ textAlign: "left" }}>
             <p>Score: {player.score || 0}</p>
             <p>Cards left: {player.numberOfRemainingCards}</p>
             <p>Buys left: {player.buys}</p>
+            {cards.length > 0 ? (
+              <p>
+                <i
+                  className="fa fa-arrow-down"
+                  aria-hidden="true"
+                  title="Laid down"
+                ></i>
+              </p>
+            ) : (
+              <></>
+            )}
           </div>
         </Col>
         <Col xs lg={2}>
