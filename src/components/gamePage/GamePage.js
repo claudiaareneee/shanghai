@@ -258,7 +258,6 @@ function GamePage() {
     // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
-    //TODO: game log
 
     if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
@@ -489,8 +488,6 @@ function GamePage() {
   const handleBuyClicked = () => {
     toast.info("ooo buy");
     gameApi.pushBuyer(game.id, player);
-
-    //TODO: game log
   };
 
   const handleCommentChanged = (event) => {
