@@ -19,6 +19,7 @@ function LogModal({ show, onHide, logEntries }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
+        scrollable
         style={{ color: "#282c34", paddingLeft: "2rem", paddingRight: "2rem" }}
       >
         {logEntries.map((logEntry, index) => (
