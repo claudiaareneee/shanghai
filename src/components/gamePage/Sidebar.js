@@ -34,11 +34,11 @@ function Sidebar({
           paddingRight: "1.5rem",
         }}
       >
-        <div className="mr-auto p-2">
+        <div className="mr-auto p-2" style={{ textAlign: "left" }}>
           <h5 style={{ textAlign: "left" }}>Last Play:</h5>
           <LogMessage logEntry={lastLogMessage} />
         </div>
-        <div className="p-2 form-inline justify-content-end align-self-start">
+        <div className="p-2 form-inline justify-content-end align-self-start d-flex flex-nowrap">
           {turnState === "EndOfHand" ? (
             <button
               className="btn btn-success"
