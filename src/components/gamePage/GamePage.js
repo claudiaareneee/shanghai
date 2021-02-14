@@ -303,6 +303,12 @@ function GamePage() {
 
       // todo: game event for moving cards log
     } else if (turnState === "Play" && cardsOnTable[player]) {
+      if (cardsInHand.length === 1) {
+        console.log("here");
+        toast.error("Cannot play card. Must have a card to discard");
+        return;
+      }
+
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         Object.values(cardsOnTable[association.location]),
         newIndex,
@@ -370,9 +376,14 @@ function GamePage() {
         return;
       }
 
-      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
-
       const newCardsInHand = cardsInHand.filter((card) => !card.selected);
+
+      if (newCardsInHand.length === 0) {
+        toast.error("Uh oh! You need at least one card to discard!");
+        return;
+      }
+
+      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
       playerApi.setPlayerCardsInHand(
         player,
         game.id,
