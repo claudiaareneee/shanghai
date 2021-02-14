@@ -115,7 +115,10 @@ function GamePage() {
       });
       setCardsInHand(newCardsInHand);
 
-      if (turnState === "Discard") setCardToDiscard(target.id);
+      if (turnState === "Discard") {
+        if (cardToDiscard !== target.id) setCardToDiscard(target.id);
+        else setCardToDiscard(-1);
+      }
     }
   }
 
