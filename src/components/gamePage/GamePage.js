@@ -447,6 +447,7 @@ function GamePage() {
     }));
     setCardsInHand(newCardsInHand);
     setSelection({ ...selection, selecting: "none" });
+    gameApi.setNextTurn(game.id, { ...game.turn, state: "playing" });
 
     if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
   };
