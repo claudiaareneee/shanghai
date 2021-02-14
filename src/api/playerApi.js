@@ -49,6 +49,17 @@ export const getPlayers = (gameId, onPlayersReceived) => {
   });
 };
 
+export async function getPlayersOnce(gameId, onPlayersReceived = () => {}) {
+  const player = firebase
+    .database()
+    .ref()
+    .child(playerBaseUrl + gameId);
+
+  const snapshot = await player.once("value");
+  onPlayersReceived(snapshot.val() || []);
+  return snapshot.val();
+}
+
 export const cleanUpGetPlayers = (gameId) => {
   const player = firebase
     .database()

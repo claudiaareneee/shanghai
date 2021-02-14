@@ -115,7 +115,10 @@ function GamePage() {
       });
       setCardsInHand(newCardsInHand);
 
-      if (turnState === "Discard") setCardToDiscard(target.id);
+      if (turnState === "Discard") {
+        if (cardToDiscard !== target.id) setCardToDiscard(target.id);
+        else setCardToDiscard(-1);
+      }
     }
   }
 
@@ -300,6 +303,11 @@ function GamePage() {
 
       // todo: game event for moving cards log
     } else if (turnState === "Play" && cardsOnTable[player]) {
+      if (cardsInHand.length === 1) {
+        toast.error("Cannot play card. Must have a card to discard");
+        return;
+      }
+
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         Object.values(cardsOnTable[association.location]),
         newIndex,
@@ -367,9 +375,14 @@ function GamePage() {
         return;
       }
 
-      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
-
       const newCardsInHand = cardsInHand.filter((card) => !card.selected);
+
+      if (newCardsInHand.length === 0) {
+        toast.error("Uh oh! You need at least one card to discard!");
+        return;
+      }
+
+      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
       playerApi.setPlayerCardsInHand(
         player,
         game.id,
@@ -435,6 +448,9 @@ function GamePage() {
     setCardsInHand(newCardsInHand);
     setSelection({ ...selection, selecting: "none" });
 
+    if (turnState === "Discard")
+      gameApi.setNextTurn(game.id, { ...game.turn, state: "playing" });
+
     if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
   };
 
@@ -487,6 +503,8 @@ function GamePage() {
 
   const handleBuyClicked = () => {
     toast.info("ooo buy");
+    if (game.buyers && Object.values(game.buyers).includes(player)) return;
+
     gameApi.pushBuyer(game.id, player);
   };
 
