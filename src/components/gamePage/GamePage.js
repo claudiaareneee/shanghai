@@ -304,7 +304,6 @@ function GamePage() {
       // todo: game event for moving cards log
     } else if (turnState === "Play" && cardsOnTable[player]) {
       if (cardsInHand.length === 1) {
-        console.log("here");
         toast.error("Cannot play card. Must have a card to discard");
         return;
       }
