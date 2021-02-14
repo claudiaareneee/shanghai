@@ -67,10 +67,12 @@ export const setTurn = (game, state) => {
   });
 };
 
-export const discardCardWithId = (gameId, playerId, playerCards, card) => {
+export async function discardCardWithId(gameId, playerId, playerCards, card) {
+  // in case something weird happened
+  await gameApi.clearBuyers(gameId);
   gameApi.pushToDiscard(gameId, card);
   playerApi.setPlayerCardsInHand(playerId, gameId, playerCards);
-};
+}
 
 export async function buyWithId(
   gameId,

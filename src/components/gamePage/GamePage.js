@@ -487,6 +487,8 @@ function GamePage() {
 
   const handleBuyClicked = () => {
     toast.info("ooo buy");
+    if (game.buyers && Object.values(game.buyers).includes(player)) return;
+
     gameApi.pushBuyer(game.id, player);
   };
 
