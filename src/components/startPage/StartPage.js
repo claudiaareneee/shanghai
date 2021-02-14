@@ -67,11 +67,28 @@ function StartPage({ history }) {
 
     if (form.selection === "join") {
       const game = await (await gameApi.getGameByIdOnce(form.room)).val();
+      const players = await playerApi.getPlayersOnce(form.room);
+
       if (!formIsValid(game)) return;
 
-      const inProgress = game.hand != null;
-      if (inProgress) {
-        var answer = window.confirm(
+      const existingPlayer = Object.values(players).find(
+        (player) => player.name === form.name
+      );
+
+      if (existingPlayer) {
+        let answer = window.confirm(
+          "This player already exists. Would you like to join as this player?"
+        );
+        if (answer) {
+          history.push("/WaitingRoom");
+          localStorage.setItem("uid", existingPlayer.id);
+          localStorage.setItem("room", game.id);
+          localStorage.setItem("name", form.name);
+          return;
+        }
+      } else if (game.hand != null) {
+        // Checking if game is in progress
+        let answer = window.confirm(
           "This game is already in progress. Would you like to join as a spectator?"
         );
         if (answer) {
