@@ -8,6 +8,7 @@ import * as gameApi from "../../api/gameApi";
 import * as playerApi from "../../api/playerApi";
 import { Redirect } from "react-router-dom";
 import { toast } from "react-toastify";
+import { GAME_EVENTS } from "../common/Constants";
 import ForkMeOnGithub from "fork-me-on-github";
 
 function WaitingRoomPage({ history }) {
@@ -49,6 +50,11 @@ function WaitingRoomPage({ history }) {
     if (numberOfDecks !== "") {
       baseApi.setDeal(game);
       history.push("/play");
+
+      gameApi.pushLogEntry(game.id, {
+        player: playerName,
+        gameEvent: GAME_EVENTS.gameStarted,
+      });
     }
   }
 
