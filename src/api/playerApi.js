@@ -5,7 +5,7 @@ import { scorePlayer } from "../tools";
 
 const database = firebase.database();
 
-const baseUrl = "/dev/";
+const baseUrl = "/prod/";
 const playerBaseUrl = baseUrl + "players/";
 const cardsInHandBaseUrl = baseUrl + "cardsInHand/";
 const cardsOnTableBaseUrl = baseUrl + "cardsOnTable/";

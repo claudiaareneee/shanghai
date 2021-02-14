@@ -7,7 +7,7 @@ import "firebase/database";
 
 const database = firebase.database();
 
-const baseUrl = "/dev/";
+const baseUrl = "/prod/";
 const commentsUrl = baseUrl + "comments/";
 
 export const setDeal = (game) => {

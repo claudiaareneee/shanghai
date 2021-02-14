@@ -4,7 +4,7 @@ import "firebase/database";
 
 const database = firebase.database();
 
-const baseUrl = "/dev/";
+const baseUrl = "/prod/";
 const gameBaseUrl = baseUrl + "games/";
 const discardBaseUrl = baseUrl + "discard/";
 const drawBaseUrl = baseUrl + "draw/";
