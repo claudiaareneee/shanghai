@@ -90,7 +90,7 @@ function PlayerBucket({
             </h5>
           )}
           <div className="playerInfo" style={{ textAlign: "left" }}>
-            <p>Score: {player.score || 0}</p>
+            <p>Score: {player.scoreTotal || 0}</p>
             <p>Cards left: {player.numberOfRemainingCards}</p>
             <p>Buys left: {player.buys}</p>
             {cards.length > 0 ? (

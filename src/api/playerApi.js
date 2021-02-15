@@ -131,18 +131,34 @@ export const getPlayerCardsOnTableById = (gameId, onCardsReceived) => {
   });
 };
 
-export const calculateScores = (gameId, players) => {
+export const pushScore = (gameId, round, playerId, score) => {
+  return database
+    .ref()
+    .child(playerBaseUrl + gameId)
+    .child(playerId)
+    .child("score")
+    .child(round)
+    .set(score);
+};
+
+export const setScoreTotal = (gameId, playerId, score) => {
+  return database
+    .ref()
+    .child(playerBaseUrl + gameId)
+    .child(playerId)
+    .child("scoreTotal")
+    .set(score);
+};
+
+export const calculateScores = (gameId, players, round) => {
   Object.keys(players).forEach((key) => {
     getPlayerCardsInHandByIdOnce(key, (cards) => {
       const newScore = scorePlayer(
-        players[key].score || 0,
+        0,
         cards.map((card) => parseInt(card, 10))
       );
-      updatePlayer(gameId, {
-        id: players[key].id,
-        oldScore: players[key].score || 0,
-        score: newScore,
-      });
+      pushScore(gameId, round, key, newScore);
+      setScoreTotal(gameId, key, (players[key].scoreTotal || 0) + newScore);
     });
   });
 };

@@ -426,7 +426,7 @@ function GamePage() {
       } else {
         toast.success("congratz 🦑, you just went out");
         setTurnState("EndOfHand");
-        playerApi.calculateScores(game.id, players);
+        playerApi.calculateScores(game.id, players, game.hand.round);
         playerApi.setNumberOfRemainingCards(game.id, player, 0);
 
         gameApi.pushLogEntry(game.id, {
