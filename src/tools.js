@@ -190,6 +190,8 @@ const jokers = [52, 53, 106, 107];
 const run4EndWithJoker = [96, 97, 98, 45, 53];
 const run5EndsWithHighAce = [35, 90, 37, 38, 26];
 
+const unsortedRun5EndsWithHighAce = [37, 38, 35, 26, 90];
+
 function isBook(cards) {
   if (cards.length < 3)
     throw new Error("There needs to be at least three cards");
@@ -214,9 +216,9 @@ function isBook(cards) {
 
 function isRun(cards) {
   //pretending cards are already sorted
-  console.group();
-  cards.forEach((card) => console.log(getLongCardNameFromId(card % 54)));
-  console.groupEnd();
+  // console.group();
+  // cards.forEach((card) => console.log(getLongCardNameFromId(card % 54)));
+  // console.groupEnd();
 
   if (cards.length < 4)
     throw new Error("There needs to be at least four cards");
@@ -224,7 +226,7 @@ function isRun(cards) {
   //check for jokers
   const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
   const regularCards = cards.filter((card) => getSuitAsInt(card % 54) !== 4);
-  console.log("jokers", jokers, "regular", regularCards);
+  // console.log("jokers", jokers, "regular", regularCards);
 
   if (regularCards.length < 2)
     throw new Error("There needs to be at least two natural (non-joker) cards");
@@ -237,7 +239,7 @@ function isRun(cards) {
   regularCards.forEach((card, index) => {
     let cardNumber = card % 54;
     const cardSuit = getSuitAsInt(cardNumber);
-    console.log(getLongCardNameFromId(cardNumber));
+    // console.log(getLongCardNameFromId(cardNumber));
     if (cardSuit !== initialCardSuit)
       throw new Error("Cards in run need to be the same suit");
 
@@ -247,22 +249,63 @@ function isRun(cards) {
     }
 
     const difference = cardNumber - previousCard;
-    console.log("diff", difference);
+    // console.log("diff", difference);
     previousCard = cardNumber;
 
     unusedJokers = unusedJokers - (difference - 1);
-    console.log("unused jokers in seq", unusedJokers);
+    // console.log("unused jokers in seq", unusedJokers);
 
     if (unusedJokers < 0) throw new Error("Missing cards in sequence");
   });
 
-  console.log("unused jokers", unusedJokers);
+  // console.log("unused jokers", unusedJokers);
 
   if (unusedJokers > 0)
     throw new Error("Runs cannot start or end with a Joker");
 
   return true;
 }
+
+//for sorting:
+
+function sortCardsLowToHigh(cards) {
+  const aces = cards.filter((card) => getCardNumber(card % 54) === "A");
+
+  if (aces.length > 2)
+    // This isn't a run
+    return cards;
+
+  const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
+  const remainingCards = cards.filter(
+    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card % 54) !== 4
+  );
+
+  const sortedLowToHigh = remainingCards.sort((a, b) => {
+    console.log("a", a, "b", b);
+    return (a % 54) - (b % 54);
+  });
+
+  if (aces.length === 0) return [...sortedLowToHigh, ...jokers];
+  else if (aces.length === 2)
+    return [aces[0], ...sortedLowToHigh, aces[1], ...jokers];
+  else {
+    try {
+      const lowAceRun = [aces[0], ...sortedLowToHigh, ...jokers];
+      isRun(lowAceRun);
+      return lowAceRun;
+    } catch {
+      return [...sortedLowToHigh, aces[0], ...jokers];
+    }
+  }
+}
+
+// pull out aces
+// pull out jokers
+// sort remaining cards low to high
+// apply jokers on the inside of the run
+// if there are leftovers, see which side they can be applied on to make run valid. IE check isRun [cards, ..remainingJokers, ace] or [ace, ...remainingJokers, ..cards]
+// if there are two aces, apply them to each side, if there is one check the isRun to see which side would make it valid
+// if neither are valid, or is a book, just put them at the beginning
 
 //todo remove
 
