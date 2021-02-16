@@ -46,17 +46,17 @@ export const setDeal = (game) => {
   gameApi.clearCardsOnTable(game.id);
 };
 
-export async function nextTurn(game, endHand = false) {
+export const nextTurn = (game, endHand = false) => {
   const turn = tools.nextTurn(
     tools.snapshotToArray(game.opponents),
     endHand,
     game.turn
   );
-  return gameApi.updateGame({
+  gameApi.updateGame({
     ...game,
     turn,
   });
-}
+};
 
 export const setTurn = (game, state) => {
   const turn = { ...game.turn, state };
