@@ -9,6 +9,7 @@ function CardDiscard({
   highlightedCard,
   onCardHovered,
   onCardClicked,
+  onDrop,
 }) {
   const containerHeight = constants.CARD_WIDTH + constants.CARD_HEIGHT;
 
@@ -32,6 +33,7 @@ function CardDiscard({
         source={"placeholder"}
         association={{ location: "discard" }}
         onCardClicked={onCardClicked}
+        onDrop={onDrop}
       />
       {cards.map((card, index) => (
         <PlayingCard
@@ -46,6 +48,7 @@ function CardDiscard({
           highlight={card.id === highlightedCard}
           onCardClicked={index === cards.length - 1 ? onCardClicked : () => {}}
           onCardHovered={index === cards.length - 1 ? onCardHovered : () => {}}
+          onDrop={onDrop}
         />
       ))}
     </div>

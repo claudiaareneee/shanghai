@@ -34,6 +34,7 @@ function CardTable({
   onDrawJokerYes,
   onDrawJokerNo,
   onBuyClicked,
+  onDropDiscard,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -59,6 +60,7 @@ function CardTable({
             highlightedCard={highlightedCard}
             onCardHovered={onCardHovered}
             onCardClicked={onDiscardClicked}
+            onDrop={onDropDiscard}
           />
         </Col>
         <Col className="justify-content-center align-self-center">

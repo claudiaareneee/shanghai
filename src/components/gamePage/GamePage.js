@@ -210,7 +210,7 @@ function GamePage() {
     }
   }
 
-  const onDragStart = (event, index, id, association) => {
+  const handleDragStart = (event, index, id, association) => {
     console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
@@ -218,11 +218,11 @@ function GamePage() {
     console.log("drag start assoc", association);
   };
 
-  const onDragOver = (event) => {
+  const handleDragOver = (event) => {
     event.preventDefault();
   };
 
-  const onDrop = (event, cat, association) => {
+  const handleDrop = (event, cat, association) => {
     const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
     console.log("drag:", cardIndex);
     console.log("drop:", cat);
@@ -253,7 +253,7 @@ function GamePage() {
     setDragAssociation({});
   };
 
-  const onDropCardsOnTable = (event, newIndex, association) => {
+  const handleDropCardsOnTable = (event, newIndex, association) => {
     const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
     // console.log("drag:", oldIndex);
     // console.log("drop:", newIndex);
@@ -345,6 +345,60 @@ function GamePage() {
     }
   };
 
+  async function discardCard(cardToDiscard) {
+    gameApi.pushToDiscard(game.id, cardToDiscard);
+
+    const newCards = cardsInHand.filter(
+      (card) => card.id !== parseInt(cardToDiscard, 10)
+    );
+
+    setCardsInHand(newCards);
+    setCardToDiscard(-1);
+
+    playerApi.setPlayerCardsInHand(
+      player,
+      game.id,
+      newCards.map((card) => card.id)
+    );
+
+    gameApi.pushLogEntry(game.id, {
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.discard,
+      card: parseInt(cardToDiscard, 10),
+    });
+
+    if (newCards.length !== 0) {
+      baseApi.nextTurn({
+        ...game,
+        turn: { ...game.turn, state: "discarding" },
+      });
+      setTurnState("Wait");
+    } else {
+      toast.success("congratz 🦑, you just went out");
+      setTurnState("EndOfHand");
+      playerApi.calculateScores(game.id, players, game.hand.round);
+      playerApi.setNumberOfRemainingCards(game.id, player, 0);
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.wentOut,
+      });
+
+      baseApi.nextTurn(game, true);
+    }
+  }
+
+  const handleDropDiscard = (event, newIndex, association) => {
+    const cardId = event.dataTransfer.getData("id");
+
+    if (
+      dragAssociation.location === "player" &&
+      (turnState === "Discard" || turnState === "Play")
+    ) {
+      discardCard(cardId);
+    }
+  };
+
   const handleSelectionButtonClicked = (color) => {
     const selecting = color === DISCARD_COLOR ? "Discard" : "Play";
     setSelection({ ...selection, selecting, color });
@@ -399,43 +453,7 @@ function GamePage() {
         return;
       }
 
-      gameApi.pushToDiscard(game.id, cardToDiscard);
-
-      const newCards = cardsInHand.filter(
-        (card) => card.id !== parseInt(cardToDiscard, 10)
-      );
-
-      setCardsInHand(newCards);
-      setCardToDiscard(-1);
-
-      playerApi.setPlayerCardsInHand(
-        player,
-        game.id,
-        newCards.map((card) => card.id)
-      );
-
-      gameApi.pushLogEntry(game.id, {
-        player: players[player].name,
-        gameEvent: GAME_EVENTS.discard,
-        card: parseInt(cardToDiscard, 10),
-      });
-
-      if (newCards.length !== 0) {
-        baseApi.nextTurn(game);
-        setTurnState("Wait");
-      } else {
-        toast.success("congratz 🦑, you just went out");
-        setTurnState("EndOfHand");
-        playerApi.calculateScores(game.id, players, game.hand.round);
-        playerApi.setNumberOfRemainingCards(game.id, player, 0);
-
-        gameApi.pushLogEntry(game.id, {
-          player: players[player].name,
-          gameEvent: GAME_EVENTS.wentOut,
-        });
-
-        baseApi.nextTurn(game, true);
-      }
+      discardCard(cardToDiscard);
     }
     setSelection({ ...selection, selecting: "none" });
   };
@@ -537,9 +555,9 @@ function GamePage() {
             }
             drawingJoker={drawingJoker}
             onPlayerCardClicked={handlePlayerCardClicked}
-            onDragStart={onDragStart}
-            onDragOver={onDragOver}
-            onDrop={onDrop}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
             onDrawClicked={handleDrawClicked}
             onCardHovered={handleCardHovered}
             onDiscardClicked={handleDiscardClicked}
@@ -550,6 +568,7 @@ function GamePage() {
             onDrawJokerYes={handleDrawJokerYes}
             onDrawJokerNo={handleDrawJokerNo}
             onBuyClicked={handleBuyClicked}
+            onDropDiscard={handleDropDiscard}
           />
         </Col>
 
@@ -563,8 +582,8 @@ function GamePage() {
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
             lastLogMessage={logEntries[logEntries.length - 1] || {}}
-            onDragStart={onDragStart}
-            onDrop={onDropCardsOnTable}
+            onDragStart={handleDragStart}
+            onDrop={handleDropCardsOnTable}
             onCardClicked={handleCardOnTableClicked}
             onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}
