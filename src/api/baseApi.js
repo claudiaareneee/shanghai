@@ -11,7 +11,6 @@ const baseUrl = "/dev/";
 const commentsUrl = baseUrl + "comments/";
 
 export const setDeal = (game) => {
-  console.log("decks:", game.decks);
   const deal = tools.dealCards(game.opponents, parseInt(game.decks, 10));
   const hand = tools.getHand(game.hand ? game.hand.round : 0);
   const turn = tools.nextTurn(

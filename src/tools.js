@@ -42,7 +42,6 @@ export function dealCards(opponents, numberOfDecks) {
 
   deal.discard = deck.splice(0, 1);
   deal.draw = [...deck];
-  console.log(deal);
   return deal;
 }
 
@@ -140,10 +139,8 @@ export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
   return cards.map((set, i) => {
     if (i === association.index) {
       const newSet = [...set].filter((_, j) => j !== index);
-      console.log("newset", newSet);
       return newSet;
     }
-    console.log("newset", set);
     return set;
   });
 };
@@ -151,14 +148,9 @@ export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
 export const removeCardFromCardsLaidWithId = (cards, id, association) => {
   return cards.map((set, i) => {
     if (i === association.index) {
-      const newSet = [...set].filter((card) => {
-        console.log("card", card, "id", id);
-        return card !== id;
-      });
-      // console.log("newset", newSet);
+      const newSet = [...set].filter((card) => card !== id);
       return newSet;
     }
-    // console.log("newset", set);
     return set;
   });
 };

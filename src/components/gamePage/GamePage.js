@@ -189,10 +189,7 @@ function GamePage() {
   function handleCardOnTableClicked({ target }, association) {
     const isJoker = target.id % 54 === 53 || target.id % 54 === 52;
     if (cardsOnTable[player] && turnState === "Draw" && isJoker) {
-      console.log("can joker draw");
       setDrawingJoker({ isDrawing: true, card: target.id, association });
-    } else {
-      console.log("can't draw this one");
     }
   }
 
@@ -211,11 +208,11 @@ function GamePage() {
   }
 
   const handleDragStart = (event, index, id, association) => {
-    console.log("dragstart:", id);
+    // console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
     setDragAssociation(association);
-    console.log("drag start assoc", association);
+    // console.log("drag start assoc", association);
   };
 
   const handleDragOver = (event) => {
@@ -327,11 +324,6 @@ function GamePage() {
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
 
-      console.log(
-        "players[association.location]",
-        players[association.location]
-      );
-
       gameApi.pushLogEntry(game.id, {
         player: players[player].name,
         gameEvent: GAME_EVENTS.playedCards,
@@ -405,7 +397,6 @@ function GamePage() {
     setTurnState(selecting);
 
     const turnState = selecting === "Discard" ? "discarding" : "playing";
-    console.log("turnState", turnState);
     gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
@@ -480,7 +471,7 @@ function GamePage() {
       cardId,
       drawingJoker.association
     );
-    console.log("drawingJoker: ", drawingJoker);
+
     playerApi.setPlayerCardsOnTable(
       drawingJoker.association.location,
       game.id,
