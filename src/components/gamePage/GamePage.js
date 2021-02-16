@@ -408,6 +408,8 @@ function GamePage() {
           .map((card) => card.id)
       );
 
+      console.log("selectedCards", selectedCards);
+
       const numberOfSelectionsMade = selectedCards.reduce(
         (p, c) => (c.length > 0 ? p + 1 : p),
         0

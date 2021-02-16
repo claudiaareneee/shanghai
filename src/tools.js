@@ -79,6 +79,14 @@ export const getLongCardNameFromId = (card) => {
   return getCardNumber(id) + getSuit(id);
 };
 
+export const getSuitAsInt = (card) => {
+  if (card < 13) return 0;
+  else if (card < 26) return 1;
+  else if (card < 39) return 2;
+  else if (card < 52) return 3;
+  else return 4;
+};
+
 export const getSuit = (card) => {
   if (card < 13) return "♣";
   else if (card < 26) return "♥️";
@@ -169,3 +177,132 @@ export const addCardToCardsLaid = (cards, index, association, card) => {
     return set;
   });
 };
+
+const run1 = [96, 97, 98, 45];
+const book1 = [38, 92, 25];
+const unvalid1 = [96, 97, 45, 54];
+const run2 = [35, 90, 37, 38];
+const run3WithJokerAce = [93, 94, 106, 96, 97];
+const unvalid2 = [51, 93, 94, 106];
+const book2 = [67, 93, 106];
+const unvalid3 = [67, 93, 94, 106];
+const jokers = [52, 53, 106, 107];
+
+function isBook(cards) {
+  if (cards.length < 3)
+    throw new Error("There needs to be at least three cards");
+
+  //check for jokers
+  const jokers = cards.filter((card) => card % 54 >= 52);
+  const regularCards = cards.filter((card) => card % 54 < 52);
+  console.log("jokers", jokers, "regular", regularCards);
+
+  if (regularCards.length < 2)
+    throw new Error("There needs to be at least two natural (non-joker) cards");
+
+  const initialCardNumber = (regularCards[0] % 54) % 13;
+  regularCards.forEach((card) => {
+    console.log((card % 54) % 13);
+    if ((card % 54) % 13 !== initialCardNumber)
+      throw new Error("Cards do not match");
+  });
+
+  return true;
+}
+
+function isRun(cards) {
+  //pretending cards are already sorted
+  console.group();
+  cards.forEach((card) => console.log(getLongCardNameFromId(card % 54)));
+  console.groupEnd();
+
+  if (cards.length < 4)
+    throw new Error("There needs to be at least four cards");
+
+  //check for jokers
+  const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
+  const regularCards = cards.filter((card) => getSuitAsInt(card % 54) !== 4);
+  console.log("jokers", jokers, "regular", regularCards);
+
+  if (regularCards.length < 2)
+    throw new Error("There needs to be at least two natural (non-joker) cards");
+
+  const initialCardSuit = getSuitAsInt(regularCards[0] % 54);
+
+  let previousCard = (regularCards[0] % 54) - 1;
+  let unusedJokers = jokers.length;
+
+  regularCards.forEach((card) => {
+    const cardNumber = card % 54;
+    const cardSuit = getSuitAsInt(cardNumber);
+    console.log(getLongCardNameFromId(cardNumber));
+    if (cardSuit !== initialCardSuit)
+      throw new Error("Cards in run need to be the same suit");
+
+    const difference = cardNumber - previousCard;
+    console.log("diff", difference);
+    previousCard = cardNumber;
+
+    unusedJokers = unusedJokers - (difference - 1);
+
+    if (unusedJokers < 0) throw new Error("Missing cards in sequence");
+  });
+
+  if (unusedJokers > 0)
+    throw new Error("Runs cannot start or end with a Joker");
+
+  return true;
+}
+
+//todo remove
+
+// function getSuitAsInt (card) {
+//   if (card < 13) return 0;
+//   else if (card < 26) return 1;
+//   else if (card < 39) return 2;
+//   else if (card < 52) return 3;
+//   else return 4;
+// };
+
+// function getLongCardNameFromId(card) {
+//   // c, h, s, d, j
+//   // A, 2, 3, ..., J, Q, K
+
+//   const id = card % 54;
+//   return getCardNumber(id) + getSuit(id);
+// }
+
+// function getSuit(card) {
+//   if (card < 13) return "♣";
+//   else if (card < 26) return "♥️";
+//   else if (card < 39) return "♠";
+//   else if (card < 52) return "♦️";
+//   else return "Joker";
+// }
+
+// function getSuitLong(card) {
+//   if (card < 13) return " of Clubs";
+//   else if (card < 26) return " of Hearts";
+//   else if (card < 39) return " of Spades";
+//   else if (card < 52) return " of Diamonds";
+//   else return "Joker";
+// }
+
+// function getCardNumber(card) {
+//   const id = card % 13;
+
+//   if (card >= 52) return "";
+
+//   switch (id) {
+//     case 0:
+//       return "A";
+//     case 10:
+//       return "J";
+//     case 11:
+//       return "Q";
+//     case 12:
+//       return "K";
+//     default:
+//       return (id + 1).toString();
+//   }
+// }
