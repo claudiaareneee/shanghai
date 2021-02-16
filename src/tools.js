@@ -187,6 +187,8 @@ const unvalid2 = [51, 93, 94, 106];
 const book2 = [67, 93, 106];
 const unvalid3 = [67, 93, 94, 106];
 const jokers = [52, 53, 106, 107];
+const run4EndWithJoker = [96, 97, 98, 45, 53];
+const run5EndsWithHighAce = [35, 90, 37, 38, 26];
 
 function isBook(cards) {
   if (cards.length < 3)
@@ -232,21 +234,29 @@ function isRun(cards) {
   let previousCard = (regularCards[0] % 54) - 1;
   let unusedJokers = jokers.length;
 
-  regularCards.forEach((card) => {
-    const cardNumber = card % 54;
+  regularCards.forEach((card, index) => {
+    let cardNumber = card % 54;
     const cardSuit = getSuitAsInt(cardNumber);
     console.log(getLongCardNameFromId(cardNumber));
     if (cardSuit !== initialCardSuit)
       throw new Error("Cards in run need to be the same suit");
+
+    if (getCardNumber(cardNumber) === "A") {
+      if (index === regularCards.length - 1) cardNumber = cardNumber + 13;
+      else if (index !== 0) throw new Error("Aces cannot wrap");
+    }
 
     const difference = cardNumber - previousCard;
     console.log("diff", difference);
     previousCard = cardNumber;
 
     unusedJokers = unusedJokers - (difference - 1);
+    console.log("unused jokers in seq", unusedJokers);
 
     if (unusedJokers < 0) throw new Error("Missing cards in sequence");
   });
+
+  console.log("unused jokers", unusedJokers);
 
   if (unusedJokers > 0)
     throw new Error("Runs cannot start or end with a Joker");
