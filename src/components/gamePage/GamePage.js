@@ -252,10 +252,10 @@ function GamePage() {
 
   const handleDropCardsOnTable = (event, newIndex, association) => {
     const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
-    // console.log("drag:", oldIndex);
-    // console.log("drop:", newIndex);
-    // console.log("association", association);
-    // console.log("dragAssociation", dragAssociation);
+    console.log("drag:", oldIndex);
+    console.log("drop:", newIndex);
+    console.log("association", association);
+    console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
@@ -305,6 +305,9 @@ function GamePage() {
         return;
       }
 
+      console.log(cardsInHand);
+      console.log(cardsOnTable);
+
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         Object.values(cardsOnTable[association.location]),
         newIndex,
@@ -312,24 +315,24 @@ function GamePage() {
         parseInt(cardId, 10)
       );
 
-      playerApi.setPlayerCardsOnTable(
-        association.location,
-        game.id,
-        newPlayerCardsOnTable
-      );
+      // playerApi.setPlayerCardsOnTable(
+      //   association.location,
+      //   game.id,
+      //   newPlayerCardsOnTable
+      // );
 
       const newPlayerCardsInHand = cardsInHand
         .filter((card) => card.id.toString() !== cardId)
         .map((card) => card.id);
 
-      playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+      // playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
 
-      gameApi.pushLogEntry(game.id, {
-        player: players[player].name,
-        gameEvent: GAME_EVENTS.playedCards,
-        card: cardId,
-        opponent: players[association.location].name,
-      });
+      // gameApi.pushLogEntry(game.id, {
+      //   player: players[player].name,
+      //   gameEvent: GAME_EVENTS.playedCards,
+      //   card: cardId,
+      //   opponent: players[association.location].name,
+      // });
     } else {
       toast.error(
         "Oops! You can only move cards after drawing on your turn 🌵"

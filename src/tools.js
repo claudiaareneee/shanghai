@@ -163,7 +163,7 @@ export const removeCardFromCardsLaidWithId = (cards, id, association) => {
   });
 };
 
-export const addCardToCardsLaid = (cards, index, association, card) => {
+export const addCardsToSet = (cards, index, association, card) => {
   return cards.map((set, i) => {
     if (i === association.index) {
       const newSet = [...set];
@@ -176,6 +176,28 @@ export const addCardToCardsLaid = (cards, index, association, card) => {
     }
     return set;
   });
+};
+
+export const addCardToCardsLaid = (cards, index, association, card) => {
+  const numberOfBooks = cards.books ? cards.books.length : 0;
+  let newBooks = [];
+  let newRuns = [];
+
+  if (index < numberOfBooks) {
+    newBooks = addCardsToSet(cards.books, index, association, card);
+    newRuns = cards.runs || [];
+    return { books: newBooks, runs: newRuns };
+  } else {
+    const adjustedAssociation = {
+      ...association,
+      index: index - (numberOfBooks + 1),
+    };
+
+    newRuns = addCardsToSet(cards.runs, index, adjustedAssociation, card);
+    newBooks = cards.books || [];
+
+    return { books: newBooks, runs: newRuns };
+  }
 };
 
 export const printCards = (cards) => {

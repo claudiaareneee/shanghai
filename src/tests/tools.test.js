@@ -68,3 +68,51 @@ test("sorting should sort cards properly", () => {
   expect(sortedCards).toEqual([35, 90, 37, 38, 26]); //10♠ J♠ Q♠ K♠ A♠
   expect(tools.isRun(sortedCards)).toBeTruthy();
 });
+
+test("cards should be added to cards played properly", () => {
+  const cardsOnTable = {
+    "-MU-pwq3QQniLXvF1wZV": {
+      books: [
+        [81, 27, 14],
+        [47, 62, 88, 34],
+      ],
+      runs: [[0, 1, 2, 3]],
+    },
+  };
+
+  const associationRun = { index: 2, location: "-MU-pwq3QQniLXvF1wZV" };
+  const newRun = {
+    books: [
+      [81, 27, 14],
+      [47, 62, 88, 34],
+    ],
+    runs: [[0, 1, 2, 3, 87]],
+  };
+
+  expect(
+    tools.addCardToCardsLaid(
+      cardsOnTable[associationRun.location],
+      3,
+      associationRun,
+      87
+    )
+  ).toEqual(newRun);
+
+  const associationBook = { index: 1, location: "-MU-pwq3QQniLXvF1wZV" };
+  const newBook = {
+    books: [
+      [81, 27, 14],
+      [47, 87, 62, 88, 34],
+    ],
+    runs: [[0, 1, 2, 3]],
+  };
+
+  expect(
+    tools.addCardToCardsLaid(
+      cardsOnTable[associationBook.location],
+      0,
+      associationBook,
+      87
+    )
+  ).toEqual(newBook);
+});
