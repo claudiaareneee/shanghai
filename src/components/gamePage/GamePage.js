@@ -309,30 +309,30 @@ function GamePage() {
       console.log(cardsOnTable);
 
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
-        Object.values(cardsOnTable[association.location]),
+        cardsOnTable[association.location],
         newIndex,
         association,
         parseInt(cardId, 10)
       );
 
-      // playerApi.setPlayerCardsOnTable(
-      //   association.location,
-      //   game.id,
-      //   newPlayerCardsOnTable
-      // );
+      playerApi.setPlayerCardsOnTable(
+        association.location,
+        game.id,
+        newPlayerCardsOnTable
+      );
 
       const newPlayerCardsInHand = cardsInHand
         .filter((card) => card.id.toString() !== cardId)
         .map((card) => card.id);
 
-      // playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
+      playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
 
-      // gameApi.pushLogEntry(game.id, {
-      //   player: players[player].name,
-      //   gameEvent: GAME_EVENTS.playedCards,
-      //   card: cardId,
-      //   opponent: players[association.location].name,
-      // });
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.playedCards,
+        card: cardId,
+        opponent: players[association.location].name,
+      });
     } else {
       toast.error(
         "Oops! You can only move cards after drawing on your turn 🌵"
