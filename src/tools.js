@@ -286,89 +286,37 @@ export const sortCardsLowToHigh = (cards) => {
 };
 
 export const sortIsRun = (cards) => {
+  // pull out aces
   const aces = cards.filter((card) => getCardNumber(card % 54) === "A");
 
   if (aces.length > 2)
     // This isn't a run
     return cards;
 
+  // pull out jokers
   const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
   const remainingCards = cards.filter(
     (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card % 54) !== 4
   );
 
+  // sort remaining cards low to high
   const sortedLowToHigh = remainingCards.sort((a, b) => (a % 54) - (b % 54));
+
+  // TODO: apply jokers on the inside of the run
+  // if there are leftovers, see which side they can be applied on to make run valid. IE check isRun [cards, ..remainingJokers, ace] or [ace, ...remainingJokers, ..cards]
 
   if (aces.length === 0) return isRun([...sortedLowToHigh, ...jokers]);
   else if (aces.length === 2)
+    // if there are two aces, apply them to each side
     return isRun([aces[0], ...sortedLowToHigh, aces[1], ...jokers]);
   else {
+    //if there is one ace check the isRun to see which side would make it valid
     try {
       isRun([aces[0], ...sortedLowToHigh, ...jokers]);
     } catch (e) {
+      // if neither are valid, or is a book, just put them at the beginning
       isRun([...sortedLowToHigh, aces[0], ...jokers]);
     }
   }
   return true;
 };
-
-// pull out aces
-// pull out jokers
-// sort remaining cards low to high
-// apply jokers on the inside of the run
-// if there are leftovers, see which side they can be applied on to make run valid. IE check isRun [cards, ..remainingJokers, ace] or [ace, ...remainingJokers, ..cards]
-// if there are two aces, apply them to each side, if there is one check the isRun to see which side would make it valid
-// if neither are valid, or is a book, just put them at the beginning
-
-//todo remove
-
-// function getSuitAsInt (card) {
-//   if (card < 13) return 0;
-//   else if (card < 26) return 1;
-//   else if (card < 39) return 2;
-//   else if (card < 52) return 3;
-//   else return 4;
-// };
-
-// function getLongCardNameFromId(card) {
-//   // c, h, s, d, j
-//   // A, 2, 3, ..., J, Q, K
-
-//   const id = card % 54;
-//   return getCardNumber(id) + getSuit(id);
-// }
-
-// function getSuit(card) {
-//   if (card < 13) return "♣";
-//   else if (card < 26) return "♥️";
-//   else if (card < 39) return "♠";
-//   else if (card < 52) return "♦️";
-//   else return "Joker";
-// }
-
-// function getSuitLong(card) {
-//   if (card < 13) return " of Clubs";
-//   else if (card < 26) return " of Hearts";
-//   else if (card < 39) return " of Spades";
-//   else if (card < 52) return " of Diamonds";
-//   else return "Joker";
-// }
-
-// function getCardNumber(card) {
-//   const id = card % 13;
-
-//   if (card >= 52) return "";
-
-//   switch (id) {
-//     case 0:
-//       return "A";
-//     case 10:
-//       return "J";
-//     case 11:
-//       return "Q";
-//     case 12:
-//       return "K";
-//     default:
-//       return (id + 1).toString();
-//   }
-// }
