@@ -143,7 +143,7 @@ export const selectBuyer = (currentPlayer, buyers, opponents) => {
   return null;
 };
 
-export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
+export const removeCardFromSetWithIndex = (cards, index, association) => {
   return cards.map((set, i) => {
     if (i === association.index) {
       const newSet = [...set].filter((_, j) => j !== index);
@@ -151,6 +151,32 @@ export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
     }
     return set;
   });
+};
+
+export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
+  const numberOfBooks = cards.books ? cards.books.length : 0;
+  let newBooks = [];
+  let newRuns = [];
+
+  if (association.index < numberOfBooks) {
+    newBooks = removeCardFromSetWithIndex(cards.books, index, association);
+    newRuns = cards.runs || [];
+    return { books: newBooks, runs: newRuns };
+  } else {
+    const adjustedAssociation = {
+      ...association,
+      index: association.index - numberOfBooks,
+    };
+
+    newRuns = removeCardFromSetWithIndex(
+      cards.runs,
+      index,
+      adjustedAssociation
+    );
+    newBooks = cards.books || [];
+
+    return { books: newBooks, runs: newRuns };
+  }
 };
 
 export const removeCardFromSetWithId = (cards, id, association) => {
