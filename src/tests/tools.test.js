@@ -116,3 +116,49 @@ test("cards should be added to cards played properly", () => {
     )
   ).toEqual(newBook);
 });
+
+test("cards should be removed from cards played properly with a given id", () => {
+  const cardsOnTable = {
+    "-MU-pwq3QQniLXvF1wZV": {
+      books: [
+        [81, 27, 14],
+        [47, 62, 88, 34],
+      ],
+      runs: [[0, 1, 2, 3]],
+    },
+  };
+
+  const associationRun = { index: 2, location: "-MU-pwq3QQniLXvF1wZV" };
+  const newRun = {
+    books: [
+      [81, 27, 14],
+      [47, 62, 88, 34],
+    ],
+    runs: [[0, 1, 3]],
+  };
+
+  expect(
+    tools.removeCardFromCardsLaidWithId(
+      cardsOnTable[associationRun.location],
+      2,
+      associationRun
+    )
+  ).toEqual(newRun);
+
+  const associationBook = { index: 1, location: "-MU-pwq3QQniLXvF1wZV" };
+  const newBook = {
+    books: [
+      [81, 27, 14],
+      [47, 88, 34],
+    ],
+    runs: [[0, 1, 2, 3]],
+  };
+
+  expect(
+    tools.removeCardFromCardsLaidWithId(
+      cardsOnTable[associationBook.location],
+      62,
+      associationBook
+    )
+  ).toEqual(newBook);
+});
