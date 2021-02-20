@@ -26,6 +26,8 @@ const unsortedRun5EndsWithHighAce = [37, 38, 35, 26, 90]; //Q♠ K♠ 10♠ A♠
 const invalid4TooShort = [38, 92]; //K♠ K♠
 const invalid5RollingAce = [51, 93, 94, 95]; //K♦️ A♦️ 2♦️ Joker
 
+const run6Idk = [51, 50, 107, 102];
+
 test("should determine if books are valid", () => {
   expect(tools.isBook(book1)).toBeTruthy();
   expect(tools.isBook(book2)).toBeTruthy();
@@ -67,6 +69,8 @@ test("sorting should sort cards properly", () => {
   const sortedCards = tools.sortCardsLowToHigh(unsortedRun5EndsWithHighAce);
   expect(sortedCards).toEqual([35, 90, 37, 38, 26]); //10♠ J♠ Q♠ K♠ A♠
   expect(tools.isRun(sortedCards)).toBeTruthy();
+
+  expect(tools.sortIsRun(run6Idk)).toBeTruthy();
 });
 
 test("cards should be added to cards played properly", () => {

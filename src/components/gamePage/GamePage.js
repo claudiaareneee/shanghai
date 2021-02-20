@@ -315,6 +315,22 @@ function GamePage() {
         parseInt(cardId, 10)
       );
 
+      // Check that card played is valid
+      console.log(tools.getSuit(parseInt(cardId, 10)));
+      if (tools.getSuit(parseInt(cardId, 10)) !== "Joker") {
+        try {
+          if (association.index < game.hand.books)
+            tools.isBook(newPlayerCardsOnTable.books[association.index]);
+          else
+            tools.sortIsRun(
+              newPlayerCardsOnTable.runs[association.index - game.hand.books]
+            );
+        } catch (e) {
+          toast.error(`Uh oh, can't play this card. ${e.message}`);
+          return;
+        }
+      }
+
       playerApi.setPlayerCardsOnTable(
         association.location,
         game.id,
@@ -445,8 +461,11 @@ function GamePage() {
       console.log("booksSelected: ", booksSelected);
       console.log("runsSelected: ", runsSelected);
 
+      //todo this didn't work
       let errors = verifySelection("book", booksSelected, tools.isBook);
-      errors = errors + verifySelection("run", runsSelected, tools.isRun);
+      errors = errors + verifySelection("run", runsSelected, tools.sortIsRun);
+
+      console.log("errors", errors);
 
       if (errors > 0) return;
 

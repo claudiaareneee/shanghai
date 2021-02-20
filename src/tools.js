@@ -87,7 +87,8 @@ export const getSuitAsInt = (card) => {
   else return 4;
 };
 
-export const getSuit = (card) => {
+export const getSuit = (id) => {
+  const card = id % 54;
   if (card < 13) return "♣";
   else if (card < 26) return "♥️";
   else if (card < 39) return "♠";
@@ -95,7 +96,8 @@ export const getSuit = (card) => {
   else return "Joker";
 };
 
-export const getSuitLong = (card) => {
+export const getSuitLong = (id) => {
+  const card = id % 54;
   if (card < 13) return " of Clubs";
   else if (card < 26) return " of Hearts";
   else if (card < 39) return " of Spades";
@@ -356,6 +358,7 @@ export const sortCardsLowToHigh = (cards) => {
 };
 
 export const sortIsRun = (cards) => {
+  console.log("here");
   // pull out aces
   const aces = cards.filter((card) => getCardNumber(card % 54) === "A");
 
