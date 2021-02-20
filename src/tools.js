@@ -320,3 +320,6 @@ export const sortIsRun = (cards) => {
   }
   return true;
 };
+
+// I could restructure data to be like:
+// CardsOnTable { books: [[],[]], runs: [[],[]s]}

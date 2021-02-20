@@ -400,27 +400,52 @@ function GamePage() {
     gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
+  const verifySelection = (selectionType, selectionGroup, check) => {
+    let numberOfErrors = 0;
+    selectionGroup.forEach((selection, index) => {
+      try {
+        if (selection.length === 0)
+          toast.error(`Uh oh! Not enough ${selectionType}s selected`);
+        else check(selection);
+      } catch (e) {
+        numberOfErrors = numberOfErrors + 1;
+        toast.error(
+          `Uh oh! Error on ${selectionType} ${index + 1}: ${e.message}`
+        );
+      }
+    });
+
+    return numberOfErrors;
+  };
+
   const handlePlaySelectedYes = () => {
     if (selection.selecting === "Play") {
-      const selectedCards = GROUP_COLORS.map((color) =>
+      const booksSelected = [...Array(game.hand.books)].map((_, index) =>
         cardsInHand
-          .filter((card) => card.selected && card.selectedColor === color)
+          .filter(
+            (card) =>
+              card.selected && card.selectedColor === GROUP_COLORS[index]
+          )
           .map((card) => card.id)
       );
 
-      console.log("selectedCards", selectedCards);
-
-      const numberOfSelectionsMade = selectedCards.reduce(
-        (p, c) => (c.length > 0 ? p + 1 : p),
-        0
+      const runsSelected = [...Array(game.hand.runs)].map((_, index) =>
+        cardsInHand
+          .filter(
+            (card) =>
+              card.selected &&
+              card.selectedColor === GROUP_COLORS[index + game.hand.books]
+          )
+          .map((card) => card.id)
       );
 
-      if (numberOfSelectionsMade !== game.hand.books + game.hand.runs) {
-        toast.error(
-          `Uh oh, please select ${game.hand.books} books and ${game.hand.runs} runs`
-        );
-        return;
-      }
+      console.log("booksSelected: ", booksSelected);
+      console.log("runsSelected: ", runsSelected);
+
+      let errors = verifySelection("book", booksSelected, tools.isBook);
+      errors = errors + verifySelection("run", runsSelected, tools.isRun);
+
+      if (errors > 0) return;
 
       const newCardsInHand = cardsInHand.filter((card) => !card.selected);
 
@@ -429,7 +454,11 @@ function GamePage() {
         return;
       }
 
-      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+      playerApi.setPlayerCardsOnTable(player, game.id, {
+        books: booksSelected,
+        runs: runsSelected,
+      });
+
       playerApi.setPlayerCardsInHand(
         player,
         game.id,
