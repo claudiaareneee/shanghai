@@ -372,9 +372,9 @@ function GamePage() {
       });
     } else {
       if (!cardsOnTable[player])
-        toast.error("Oops! You can only play cards after laying down 🌵");
+        toast.warning("Oops! You can only play cards after laying down 🌵");
       else
-        toast.error(
+        toast.warning(
           "Oops! You can only move cards after drawing on your turn 🌵"
         );
     }
@@ -518,7 +518,7 @@ function GamePage() {
       });
     } else if (selection.selecting === "Discard") {
       if (cardToDiscard === -1) {
-        toast.error(`Uh oh, please select a card to discard`);
+        toast.warning(`Uh oh, please select a card to discard`);
         return;
       }
 
