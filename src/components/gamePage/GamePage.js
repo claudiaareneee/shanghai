@@ -148,6 +148,8 @@ function GamePage() {
           card: cardId,
         });
 
+        gameApi.clearBuyers(game.id);
+
         if (discard.length === 1) setDiscard([]);
         baseApi.nextTurn(game);
       });
@@ -515,6 +517,8 @@ function GamePage() {
     if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
   };
 
+  // maybe some awaits need to happen here
+  // todo: add log event
   const handleDrawJokerYes = () => {
     const cardId = parseInt(drawingJoker.card, 10);
 
@@ -544,6 +548,8 @@ function GamePage() {
       gameEvent: GAME_EVENTS.drewJoker,
       opponent: players[drawingJoker.association.location].name,
     });
+
+    baseApi.performBuy(game, player, players, discard[discard.length - 1].id);
 
     setDrawingJoker({ isDrawing: false });
     baseApi.nextTurn(game);
