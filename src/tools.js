@@ -79,7 +79,8 @@ export const getLongCardNameFromId = (card) => {
   return getCardNumber(id) + getSuit(id);
 };
 
-export const getSuitAsInt = (card) => {
+export const getSuitAsInt = (id) => {
+  const card = id % 54;
   if (card < 13) return 0;
   else if (card < 26) return 1;
   else if (card < 39) return 2;
@@ -287,14 +288,14 @@ export const isRun = (cards) => {
     throw new Error("There needs to be at least four cards");
 
   //check for jokers
-  const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
-  const regularCards = cards.filter((card) => getSuitAsInt(card % 54) !== 4);
+  const jokers = cards.filter((card) => getSuitAsInt(card) === 4);
+  const regularCards = cards.filter((card) => getSuitAsInt(card) !== 4);
   // console.log("jokers", jokers, "regular", regularCards);
 
   if (regularCards.length < 2)
     throw new Error("There needs to be at least two natural (non-joker) cards");
 
-  const initialCardSuit = getSuitAsInt(regularCards[0] % 54);
+  const initialCardSuit = getSuitAsInt(regularCards[0]);
 
   let previousCard = (regularCards[0] % 54) - 1;
   let unusedJokers = jokers.length;
@@ -336,9 +337,9 @@ export const sortCardsLowToHigh = (cards) => {
     // This isn't a run
     return cards;
 
-  const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
+  const jokers = cards.filter((card) => getSuitAsInt(card) === 4);
   const remainingCards = cards.filter(
-    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card % 54) !== 4
+    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card) !== 4
   );
 
   const sortedLowToHigh = remainingCards.sort((a, b) => (a % 54) - (b % 54));
@@ -367,9 +368,9 @@ export const sortIsRun = (cards) => {
     return cards;
 
   // pull out jokers
-  const jokers = cards.filter((card) => getSuitAsInt(card % 54) === 4);
+  const jokers = cards.filter((card) => getSuitAsInt(card) === 4);
   const remainingCards = cards.filter(
-    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card % 54) !== 4
+    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card) !== 4
   );
 
   // sort remaining cards low to high
@@ -393,6 +394,3 @@ export const sortIsRun = (cards) => {
   }
   return true;
 };
-
-// I could restructure data to be like:
-// CardsOnTable { books: [[],[]], runs: [[],[]s]}
