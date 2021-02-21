@@ -306,11 +306,26 @@ function GamePage() {
       }
 
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
-        Object.values(cardsOnTable[association.location]),
+        cardsOnTable[association.location],
         newIndex,
         association,
         parseInt(cardId, 10)
       );
+
+      // Check that card played is valid
+      if (tools.getSuit(parseInt(cardId, 10)) !== "Joker") {
+        try {
+          if (association.index < game.hand.books)
+            tools.isBook(newPlayerCardsOnTable.books[association.index]);
+          else
+            tools.sortIsRun(
+              newPlayerCardsOnTable.runs[association.index - game.hand.books]
+            );
+        } catch (e) {
+          toast.error(`Uh oh, can't play this card. ${e.message}`);
+          return;
+        }
+      }
 
       playerApi.setPlayerCardsOnTable(
         association.location,
@@ -331,9 +346,12 @@ function GamePage() {
         opponent: players[association.location].name,
       });
     } else {
-      toast.error(
-        "Oops! You can only move cards after drawing on your turn 🌵"
-      );
+      if (!cardsOnTable[player])
+        toast.error("Oops! You can only play cards after laying down 🌵");
+      else
+        toast.error(
+          "Oops! You can only move cards after drawing on your turn 🌵"
+        );
     }
   };
 
@@ -400,25 +418,55 @@ function GamePage() {
     gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
+  const verifySelection = (selectionType, selectionGroup, check) => {
+    let numberOfErrors = 0;
+    let notEnough = false;
+    selectionGroup.forEach((selection, index) => {
+      try {
+        if (selection.length === 0) notEnough = true;
+        else check(selection);
+      } catch (e) {
+        numberOfErrors = numberOfErrors + 1;
+        toast.error(
+          `Uh oh! Error on ${selectionType} ${index + 1}: ${e.message}`
+        );
+      }
+    });
+
+    if (notEnough) {
+      toast.error(`Uh oh! Not enough ${selectionType}s selected`);
+      numberOfErrors = numberOfErrors + 1;
+    }
+
+    return numberOfErrors;
+  };
+
   const handlePlaySelectedYes = () => {
     if (selection.selecting === "Play") {
-      const selectedCards = GROUP_COLORS.map((color) =>
+      const booksSelected = [...Array(game.hand.books)].map((_, index) =>
         cardsInHand
-          .filter((card) => card.selected && card.selectedColor === color)
+          .filter(
+            (card) =>
+              card.selected && card.selectedColor === GROUP_COLORS[index]
+          )
           .map((card) => card.id)
       );
 
-      const numberOfSelectionsMade = selectedCards.reduce(
-        (p, c) => (c.length > 0 ? p + 1 : p),
-        0
+      const runsSelected = [...Array(game.hand.runs)].map((_, index) =>
+        cardsInHand
+          .filter(
+            (card) =>
+              card.selected &&
+              card.selectedColor === GROUP_COLORS[index + game.hand.books]
+          )
+          .map((card) => card.id)
       );
 
-      if (numberOfSelectionsMade !== game.hand.books + game.hand.runs) {
-        toast.error(
-          `Uh oh, please select ${game.hand.books} books and ${game.hand.runs} runs`
-        );
-        return;
-      }
+      //todo this didn't work
+      let errors = verifySelection("book", booksSelected, tools.isBook);
+      errors = errors + verifySelection("run", runsSelected, tools.sortIsRun);
+
+      if (errors > 0) return;
 
       const newCardsInHand = cardsInHand.filter((card) => !card.selected);
 
@@ -427,7 +475,11 @@ function GamePage() {
         return;
       }
 
-      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+      playerApi.setPlayerCardsOnTable(player, game.id, {
+        books: booksSelected,
+        runs: runsSelected,
+      });
+
       playerApi.setPlayerCardsInHand(
         player,
         game.id,
