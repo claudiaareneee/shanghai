@@ -9,68 +9,77 @@ import * as tools from "../tools";
 //   expect(linkElement).toBeInTheDocument();
 // });
 
-// sorting tests
-
-const run1 = [96, 97, 98, 45]; //4♦️ 5♦️ 6♦️ 7♦️
-const book1 = [38, 92, 25]; //K♠ K♠ K♥️
-const invalid1 = [96, 97, 45, 54]; //4♦️ 5♦️ 7♦️ A♣
-const run2 = [35, 90, 37, 38]; //10♠ J♠ Q♠ K♠
-const run3WithJokerAce = [93, 94, 106, 96, 97]; //A♦️ 2♦️ Joker 4♦️ 5♦️
-const invalid2 = [51, 93, 94, 106]; //K♦️ A♦️ 2♦️ Joker
-const book2 = [67, 93, 106]; //A♥️ A♦️ Joker
-const invalid3 = [67, 93, 94, 106]; //A♥️ A♦️ 2♦️ Joker
-const jokers = [52, 53, 106, 107]; //Joker Joker Joker Joker
-const run4EndWithJoker = [96, 97, 98, 45, 53]; //4♦️ 5♦️ 6♦️ 7♦️ Joker
-const run5EndsWithHighAce = [35, 90, 37, 38, 26]; //10♠ J♠ Q♠ K♠ A♠
-const unsortedRun5EndsWithHighAce = [37, 38, 35, 26, 90]; //Q♠ K♠ 10♠ A♠ J♠
-const invalid4TooShort = [38, 92]; //K♠ K♠
-const invalid5RollingAce = [51, 93, 94, 95]; //K♦️ A♦️ 2♦️ Joker
-
-const run6Idk = [51, 50, 107, 102];
+const selectionSetTestData = {
+  run1: [96, 97, 98, 45], //4♦️ 5♦️ 6♦️ 7♦️
+  book1: [38, 92, 25], //K♠ K♠ K♥️
+  invalid1: [96, 97, 45, 54], //4♦️ 5♦️ 7♦️ A♣
+  run2: [35, 90, 37, 38], //10♠ J♠ Q♠ K♠
+  run3WithJokerAce: [93, 94, 106, 96, 97], //A♦️ 2♦️ Joker 4♦️ 5♦️
+  invalid2: [51, 93, 94, 106], //K♦️ A♦️ 2♦️ Joker
+  book2: [67, 93, 106], //A♥️ A♦️ Joker
+  invalid3: [67, 93, 94, 106], //A♥️ A♦️ 2♦️ Joker
+  jokers: [52, 53, 106, 107], //Joker Joker Joker Joker
+  run4EndWithJoker: [96, 97, 98, 45, 53], //4♦️ 5♦️ 6♦️ 7♦️ Joker
+  run5EndsWithHighAce: [35, 90, 37, 38, 26], //10♠ J♠ Q♠ K♠ A♠
+  unsortedRun5EndsWithHighAce: [37, 38, 35, 26, 90], //Q♠ K♠ 10♠ A♠ J♠
+  invalid4TooShort: [38, 92], //K♠ K♠
+  invalid5RollingAce: [51, 93, 94, 95], //K♦️ A♦️ 2♦️ Joker
+  run6Idk: [51, 50, 107, 102],
+};
 
 test("should determine if books are valid", () => {
-  expect(tools.isBook(book1)).toBeTruthy();
-  expect(tools.isBook(book2)).toBeTruthy();
+  expect(tools.isBook(selectionSetTestData.book1)).toBeTruthy();
+  expect(tools.isBook(selectionSetTestData.book2)).toBeTruthy();
 });
 
 test("should determine if books are invalid", () => {
-  expect(() => tools.isBook(invalid4TooShort)).toThrow(
+  expect(() => tools.isBook(selectionSetTestData.invalid4TooShort)).toThrow(
     "There needs to be at least three cards"
   );
-  expect(() => tools.isBook(jokers)).toThrow(
+  expect(() => tools.isBook(selectionSetTestData.jokers)).toThrow(
     "There needs to be at least two natural (non-joker) cards"
   );
-  expect(() => tools.isBook(invalid3)).toThrow("Cards do not match");
+  expect(() => tools.isBook(selectionSetTestData.invalid3)).toThrow(
+    "Cards do not match"
+  );
 });
 
 test("should determine if runs are valid", () => {
-  expect(tools.isRun(run1)).toBeTruthy();
-  expect(tools.isRun(run2)).toBeTruthy();
-  expect(tools.isRun(run3WithJokerAce)).toBeTruthy();
-  expect(tools.isRun(run5EndsWithHighAce)).toBeTruthy();
+  expect(tools.isRun(selectionSetTestData.run1)).toBeTruthy();
+  expect(tools.isRun(selectionSetTestData.run2)).toBeTruthy();
+  expect(tools.isRun(selectionSetTestData.run3WithJokerAce)).toBeTruthy();
+  expect(tools.isRun(selectionSetTestData.run5EndsWithHighAce)).toBeTruthy();
 });
 
 test("should determine if runs are invalid", () => {
-  expect(() => tools.isRun(book1)).toThrow(
+  expect(() => tools.isRun(selectionSetTestData.book1)).toThrow(
     "There needs to be at least four cards"
   );
-  expect(() => tools.isRun(jokers)).toThrow(
+  expect(() => tools.isRun(selectionSetTestData.jokers)).toThrow(
     "There needs to be at least two natural (non-joker) cards"
   );
-  expect(() => tools.isRun(invalid1)).toThrow("Missing cards in sequence"); //idk maybe should be of same suit
-  expect(() => tools.isRun(invalid2)).toThrow("Aces cannot wrap");
-  expect(() => tools.isRun(run4EndWithJoker)).toThrow(
+  expect(() => tools.isRun(selectionSetTestData.invalid1)).toThrow(
+    "Missing cards in sequence"
+  ); //idk maybe should be of same suit
+  expect(() => tools.isRun(selectionSetTestData.invalid2)).toThrow(
+    "Aces cannot wrap"
+  );
+  expect(() => tools.isRun(selectionSetTestData.run4EndWithJoker)).toThrow(
     "Runs cannot start or end with a Joker"
   );
-  expect(() => tools.isRun(invalid5RollingAce)).toThrow("Aces cannot wrap");
+  expect(() => tools.isRun(selectionSetTestData.invalid5RollingAce)).toThrow(
+    "Aces cannot wrap"
+  );
 });
 
 test("sorting should sort cards properly", () => {
-  const sortedCards = tools.sortCardsLowToHigh(unsortedRun5EndsWithHighAce);
+  const sortedCards = tools.sortCardsLowToHigh(
+    selectionSetTestData.unsortedRun5EndsWithHighAce
+  );
   expect(sortedCards).toEqual([35, 90, 37, 38, 26]); //10♠ J♠ Q♠ K♠ A♠
   expect(tools.isRun(sortedCards)).toBeTruthy();
 
-  expect(tools.sortIsRun(run6Idk)).toBeTruthy();
+  expect(tools.sortIsRun(selectionSetTestData.run6Idk)).toBeTruthy();
 });
 
 test("cards should be added to cards played properly", () => {

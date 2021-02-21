@@ -92,6 +92,7 @@ export async function buyWithId(
     numberOfPlayerCards + 2
   );
   playerApi.setBuys(gameId, playerId, numberOfBuys - 1);
+  gameApi.clearBuyers(gameId);
 }
 
 export const performBuy = (game, currentPlayer, players, card) => {
@@ -125,8 +126,6 @@ export const performBuy = (game, currentPlayer, players, card) => {
     gameEvent: GAME_EVENTS.bought,
     card,
   });
-
-  gameApi.clearBuyers(game.id);
 };
 
 export const addComment = (gameId, playerId, comment) => {
