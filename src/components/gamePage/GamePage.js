@@ -38,6 +38,7 @@ function GamePage() {
   const [dragAssociation, setDragAssociation] = useState({});
   const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
   const [logEntries, setLogEntries] = useState([]);
+  const [timer, setTimer] = useState(0);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -92,16 +93,30 @@ function GamePage() {
             break;
         }
       } else setTurnState("Wait");
-
-      // I could see this being problematic
-      if (
-        game.turn.state === TURN_STATES.drawing &&
-        turnState === "EndOfHand"
-      ) {
-        setCardsOnTable([]);
-      }
     }
-  }, [room, game, player, turnState]);
+  }, [room, game, player]);
+
+  useEffect(() => {
+    // I could see this being problematic
+    if (turnState === "EndOfHand") {
+      setCardsOnTable([]);
+    }
+
+    if (turnState === "Draw") {
+      setTimer(15);
+    } else {
+      setTimer(0);
+    }
+  }, [turnState]);
+
+  useEffect(() => {
+    if (timer > 0) {
+      setTimeout(() => {
+        setTimer(timer - 1);
+        console.log("time left: ", timer);
+      }, 1000);
+    }
+  }, [timer]);
 
   function handleDropdownClicked(playerId) {
     const showPlayer = showPlayers[playerId] ? false : true;
@@ -164,7 +179,7 @@ function GamePage() {
   }
 
   function handleDrawClicked({ target }) {
-    if (turnState === "Draw")
+    if (turnState === "Draw" && timer === 0)
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -532,6 +547,8 @@ function GamePage() {
   // maybe some awaits need to happen here
   // todo: add log event
   const handleDrawJokerYes = () => {
+    if (timer > 0) return;
+
     const cardId = parseInt(drawingJoker.card, 10);
 
     const newCardsOnTable = tools.removeCardFromCardsLaidWithId(
@@ -615,6 +632,7 @@ function GamePage() {
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
             drawingJoker={drawingJoker}
+            timer={timer}
             onPlayerCardClicked={handlePlayerCardClicked}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}

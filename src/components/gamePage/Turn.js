@@ -5,21 +5,24 @@ function Turn({
   turnState,
   selection,
   drawingJoker,
+  timer,
   onPlaySelectedYes,
   onPlaySelectedNo,
   onDrawJokerYes,
   onDrawJokerNo,
 }) {
-  const hideButtons = selection.selecting === "none" && !drawingJoker.isDrawing;
+  const hideButtons =
+    (selection.selecting === "none" && !drawingJoker.isDrawing) || timer > 0;
 
   let message = "";
 
-  if (drawingJoker.isDrawing) {
+  if (drawingJoker.isDrawing && timer === 0) {
     message = "Draw Joker?";
   } else if (selection.selecting === "none") {
     switch (turnState) {
       case "Draw":
-        message = "It's your turn! Select a draw card!";
+        if (timer <= 0) message = "It's your turn! Select a draw card!";
+        else message = `Waiting for buyers (${timer} seconds left...)`;
         break;
       case "Play":
         message = "Play cards or choose which card to discard.";
