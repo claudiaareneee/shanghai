@@ -218,20 +218,6 @@ function GamePage() {
     }
   }
 
-  function handleTurnButtonClicked({ target }) {
-    setTurnState(target.name);
-    setSelection({ ...selection, selecting: "none" });
-
-    if (target.name === "Draw") {
-      toast.success("🦄 Select draw card!");
-    }
-
-    if (target.name === "Discard") {
-      baseApi.setTurn(game, TURN_STATES.discarding);
-      toast.warn("🐨 Select a card to discard!");
-    }
-  }
-
   const handleDragStart = (event, index, id, association) => {
     // console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
@@ -640,7 +626,6 @@ function GamePage() {
             onDrawClicked={handleDrawClicked}
             onCardHovered={handleCardHovered}
             onDiscardClicked={handleDiscardClicked}
-            onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onPlaySelectedYes={handlePlaySelectedYes}
             onPlaySelectedNo={handlePlaySelectedNo}

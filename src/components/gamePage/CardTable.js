@@ -28,7 +28,6 @@ function CardTable({
   onDrop,
   onDrawClicked,
   onDiscardClicked,
-  onTurnButtonClicked,
   onSelectionButtonClicked,
   onPlaySelectedYes,
   onPlaySelectedNo,
