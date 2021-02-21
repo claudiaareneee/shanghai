@@ -75,6 +75,40 @@ test("should select the correct buyer", () => {
       Object.values(game2.opponents)
     )
   ).toBeNull();
+
+  const game3 = {
+    buyers: {
+      "-MU53dpVJY6x8N0fhgIT": "-MU530EkgdNf_tgQhl4d",
+      "-MU536FWJjw58L2PFzHB": "-MU52zkK5tlSyCBd9Xek",
+      "-MU53kTnOOz5DwLnDgSL": "-MU532g0UemPrtlvFYPo",
+    },
+    decks: "2",
+    hand: {
+      books: 2,
+      round: 1,
+      runs: 0,
+    },
+    id: "-MU52zgvcC_sTOIVDBlY",
+    numberOfDrawCards: 63,
+    opponents: {
+      "-MU52zl3ly1ztkNe3_z9": "-MU52zkK5tlSyCBd9Xek",
+      "-MU530FRjysLlNhmsczb": "-MU530EkgdNf_tgQhl4d",
+      "-MU532gi4XeLM8iwQJDo": "-MU532g0UemPrtlvFYPo",
+      "-MU5359kGZ1w0OkO_A88": "-MU5359-ztH_SAGbdxjV",
+    },
+    turn: {
+      player: "-MU5359-ztH_SAGbdxjV",
+      state: "drawing",
+    },
+  };
+
+  expect(
+    tools.selectBuyer(
+      game3.turn.player,
+      Object.values(game3.buyers),
+      Object.values(game3.opponents)
+    )
+  ).toBe("-MU52zkK5tlSyCBd9Xek");
 });
 
 const selectionSetTestData = {
