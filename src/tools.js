@@ -1,3 +1,5 @@
+import * as constants from "./components/common/Constants";
+
 export const snapshotToArray = (snapshot) =>
   Object.entries(snapshot).map((e) => e[1]);
 
@@ -52,13 +54,15 @@ export const nextTurn = (opponents, endOfHand, turn = {}, round = 1) => {
 
   if (endOfHand) return { player: "End of Hand", state: "endOfHand" };
 
-  if (turn.state === "drawing") state = "playing";
-  else if (turn.state === "playing") state = "discarding";
-  else if (turn.state === "discarding") {
-    state = "drawing";
+  if (turn.state === constants.TURN_STATES.drawing)
+    state = constants.TURN_STATES.playing;
+  else if (turn.state === constants.TURN_STATES.playing)
+    state = constants.TURN_STATES.discarding;
+  else if (turn.state === constants.TURN_STATES.discarding) {
+    state = constants.TURN_STATES.drawing;
     player = opponents[(playerIndex + 1) % opponents.length];
   } else {
-    state = "drawing";
+    state = constants.TURN_STATES.drawing;
     player = opponents[(round - 1) % opponents.length];
   }
 

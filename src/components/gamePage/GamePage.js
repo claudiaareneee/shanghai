@@ -7,7 +7,12 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS, DISCARD_COLOR, GAME_EVENTS } from "../common/Constants";
+import {
+  GROUP_COLORS,
+  DISCARD_COLOR,
+  GAME_EVENTS,
+  TURN_STATES,
+} from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import LogModal from "./LogModal";
 import * as tools from "./../../tools";
@@ -76,10 +81,10 @@ function GamePage() {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
         switch (game.turn.state) {
-          case "playing":
+          case TURN_STATES.playing:
             setTurnState("Play");
             break;
-          case "discarding":
+          case TURN_STATES.discarding:
             setTurnState("Discard");
             break;
           default:
@@ -89,7 +94,10 @@ function GamePage() {
       } else setTurnState("Wait");
 
       // I could see this being problematic
-      if (game.turn.state === "drawing" && turnState === "EndOfHand") {
+      if (
+        game.turn.state === TURN_STATES.drawing &&
+        turnState === "EndOfHand"
+      ) {
         setCardsOnTable([]);
       }
     }
@@ -114,6 +122,8 @@ function GamePage() {
         else return card;
       });
       setCardsInHand(newCardsInHand);
+
+      console.log(turnState);
 
       if (turnState === "Discard") {
         if (cardToDiscard !== target.id) setCardToDiscard(target.id);
@@ -202,7 +212,7 @@ function GamePage() {
     }
 
     if (target.name === "Discard") {
-      baseApi.setTurn(game, "discarding");
+      baseApi.setTurn(game, TURN_STATES.discarding);
       toast.warn("🐨 Select a card to discard!");
     }
   }
@@ -380,7 +390,7 @@ function GamePage() {
     if (newCards.length !== 0) {
       baseApi.nextTurn({
         ...game,
-        turn: { ...game.turn, state: "discarding" },
+        turn: { ...game.turn, state: TURN_STATES.discarding },
       });
       setTurnState("Wait");
     } else {
@@ -414,7 +424,8 @@ function GamePage() {
     setSelection({ ...selection, selecting, color });
     setTurnState(selecting);
 
-    const turnState = selecting === "Discard" ? "discarding" : "playing";
+    const turnState =
+      selecting === "Discard" ? TURN_STATES.discarding : TURN_STATES.playing;
     gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
@@ -510,7 +521,10 @@ function GamePage() {
     setSelection({ ...selection, selecting: "none" });
 
     if (turnState === "Discard")
-      gameApi.setNextTurn(game.id, { ...game.turn, state: "playing" });
+      gameApi.setNextTurn(game.id, {
+        ...game.turn,
+        state: TURN_STATES.playing,
+      });
 
     if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
   };
