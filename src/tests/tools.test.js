@@ -9,6 +9,74 @@ import * as tools from "../tools";
 //   expect(linkElement).toBeInTheDocument();
 // });
 
+test("should select the correct buyer", () => {
+  const game1 = {
+    buyers: {
+      "-MU536FWJjw58L2PFzHB": "-MU5359-ztH_SAGbdxjV",
+      "-MU53dpVJY6x8N0fhgIT": "-MU530EkgdNf_tgQhl4d",
+      "-MU53kTnOOz5DwLnDgSL": "-MU532g0UemPrtlvFYPo",
+    },
+    decks: "2",
+    hand: {
+      books: 2,
+      round: 1,
+      runs: 0,
+    },
+    id: "-MU52zgvcC_sTOIVDBlY",
+    numberOfDrawCards: 63,
+    opponents: {
+      "-MU52zl3ly1ztkNe3_z9": "-MU52zkK5tlSyCBd9Xek",
+      "-MU530FRjysLlNhmsczb": "-MU530EkgdNf_tgQhl4d",
+      "-MU532gi4XeLM8iwQJDo": "-MU532g0UemPrtlvFYPo",
+      "-MU5359kGZ1w0OkO_A88": "-MU5359-ztH_SAGbdxjV",
+    },
+    turn: {
+      player: "-MU52zkK5tlSyCBd9Xek",
+      state: "drawing",
+    },
+  };
+
+  expect(
+    tools.selectBuyer(
+      game1.turn.player,
+      Object.values(game1.buyers),
+      Object.values(game1.opponents)
+    )
+  ).toBe("-MU530EkgdNf_tgQhl4d");
+
+  const game2 = {
+    buyers: {
+      "-MU536FWJjw58L2PFzHB": "-MU52zkK5tlSyCBd9Xek",
+    },
+    decks: "2",
+    hand: {
+      books: 2,
+      round: 1,
+      runs: 0,
+    },
+    id: "-MU52zgvcC_sTOIVDBlY",
+    numberOfDrawCards: 63,
+    opponents: {
+      "-MU52zl3ly1ztkNe3_z9": "-MU52zkK5tlSyCBd9Xek",
+      "-MU530FRjysLlNhmsczb": "-MU530EkgdNf_tgQhl4d",
+      "-MU532gi4XeLM8iwQJDo": "-MU532g0UemPrtlvFYPo",
+      "-MU5359kGZ1w0OkO_A88": "-MU5359-ztH_SAGbdxjV",
+    },
+    turn: {
+      player: "-MU52zkK5tlSyCBd9Xek",
+      state: "drawing",
+    },
+  };
+
+  expect(
+    tools.selectBuyer(
+      game2.turn.player,
+      Object.values(game2.buyers),
+      Object.values(game2.opponents)
+    )
+  ).toBeNull();
+});
+
 const selectionSetTestData = {
   run1: [96, 97, 98, 45], //4♦️ 5♦️ 6♦️ 7♦️
   book1: [38, 92, 25], //K♠ K♠ K♥️
