@@ -252,10 +252,10 @@ function GamePage() {
 
   const handleDropCardsOnTable = (event, newIndex, association) => {
     const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
-    console.log("drag:", oldIndex);
-    console.log("drop:", newIndex);
-    console.log("association", association);
-    console.log("dragAssociation", dragAssociation);
+    // console.log("drag:", oldIndex);
+    // console.log("drop:", newIndex);
+    // console.log("association", association);
+    // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
@@ -305,9 +305,6 @@ function GamePage() {
         return;
       }
 
-      console.log(cardsInHand);
-      console.log(cardsOnTable);
-
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
         cardsOnTable[association.location],
         newIndex,
@@ -316,7 +313,6 @@ function GamePage() {
       );
 
       // Check that card played is valid
-      console.log(tools.getSuit(parseInt(cardId, 10)));
       if (tools.getSuit(parseInt(cardId, 10)) !== "Joker") {
         try {
           if (association.index < game.hand.books)
@@ -421,10 +417,10 @@ function GamePage() {
 
   const verifySelection = (selectionType, selectionGroup, check) => {
     let numberOfErrors = 0;
+    let notEnough = false;
     selectionGroup.forEach((selection, index) => {
       try {
-        if (selection.length === 0)
-          toast.error(`Uh oh! Not enough ${selectionType}s selected`);
+        if (selection.length === 0) notEnough = true;
         else check(selection);
       } catch (e) {
         numberOfErrors = numberOfErrors + 1;
@@ -433,6 +429,11 @@ function GamePage() {
         );
       }
     });
+
+    if (notEnough) {
+      toast.error(`Uh oh! Not enough ${selectionType}s selected`);
+      numberOfErrors = numberOfErrors + 1;
+    }
 
     return numberOfErrors;
   };
@@ -458,14 +459,9 @@ function GamePage() {
           .map((card) => card.id)
       );
 
-      console.log("booksSelected: ", booksSelected);
-      console.log("runsSelected: ", runsSelected);
-
       //todo this didn't work
       let errors = verifySelection("book", booksSelected, tools.isBook);
       errors = errors + verifySelection("run", runsSelected, tools.sortIsRun);
-
-      console.log("errors", errors);
 
       if (errors > 0) return;
 
