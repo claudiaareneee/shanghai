@@ -148,8 +148,6 @@ function GamePage() {
           card: cardId,
         });
 
-        gameApi.clearBuyers(game.id);
-
         if (discard.length === 1) setDiscard([]);
         baseApi.nextTurn(game);
       });
