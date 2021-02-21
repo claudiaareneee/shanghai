@@ -346,9 +346,12 @@ function GamePage() {
         opponent: players[association.location].name,
       });
     } else {
-      toast.error(
-        "Oops! You can only move cards after drawing on your turn 🌵"
-      );
+      if (!cardsOnTable[player])
+        toast.error("Oops! You can only play cards after laying down 🌵");
+      else
+        toast.error(
+          "Oops! You can only move cards after drawing on your turn 🌵"
+        );
     }
   };
 
