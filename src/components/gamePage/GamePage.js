@@ -268,11 +268,17 @@ function GamePage() {
     // console.log("drag:", oldIndex);
     // console.log("drop:", newIndex);
     // console.log("association", association);
-    // console.log("dragAssociation", dragAssociation);
+    console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
-    if (dragAssociation.location !== "player" && turnState === "Play") {
+    if (
+      !dragAssociation.location ||
+      dragAssociation.location === "discard" ||
+      dragAssociation.location === "draw"
+    ) {
+      return;
+    } else if (dragAssociation.location !== "player" && turnState === "Play") {
       // remove card from original location
       const newPlayerCardsOnTableOldAssociation = tools.removeCardFromCardsLaidWithIndex(
         cardsOnTable[dragAssociation.location],
