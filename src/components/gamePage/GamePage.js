@@ -29,7 +29,7 @@ function GamePage() {
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [statsModalShow, setStatsModalShow] = React.useState(false);
   const [logModalShow, setLogModalShow] = React.useState(false);
-  const [showPlayers, setShowPlayers] = React.useState({});
+  const [hidePlayers, setHidePlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: "none",
     color: "",
@@ -97,11 +97,6 @@ function GamePage() {
   }, [room, game, player]);
 
   useEffect(() => {
-    // I could see this being problematic
-    if (turnState === "EndOfHand") {
-      setCardsOnTable([]);
-    }
-
     if (turnState === "Draw") {
       setTimer(15);
     } else {
@@ -109,18 +104,25 @@ function GamePage() {
     }
   }, [turnState]);
 
+  // todo: I might need to clear the remaining set timeouts when a person draws
   useEffect(() => {
     if (timer > 0) {
       setTimeout(() => {
         setTimer(timer - 1);
-        console.log("time left: ", timer);
       }, 1000);
     }
   }, [timer]);
 
+  useEffect(() => {
+    const lastLog = logEntries[logEntries.length - 1];
+    if (lastLog && lastLog.gameEvent === GAME_EVENTS.moveToNextHand) {
+      setCardsOnTable([]);
+    }
+  }, [logEntries]);
+
   function handleDropdownClicked(playerId) {
-    const showPlayer = showPlayers[playerId] ? false : true;
-    setShowPlayers({ ...showPlayers, [playerId]: showPlayer });
+    const hidePlayer = hidePlayers[playerId] ? false : true;
+    setHidePlayers({ ...hidePlayers, [playerId]: hidePlayer });
   }
 
   function handlePlayerCardClicked({ target }) {
@@ -137,8 +139,6 @@ function GamePage() {
         else return card;
       });
       setCardsInHand(newCardsInHand);
-
-      console.log(turnState);
 
       if (turnState === "Discard") {
         if (cardToDiscard !== target.id) setCardToDiscard(target.id);
@@ -231,6 +231,8 @@ function GamePage() {
   };
 
   const handleDrop = (event, cat, association) => {
+    if (dragAssociation.location !== "player") return;
+
     const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
     // console.log("drag:", cardIndex);
     // console.log("drop:", cat);
@@ -474,7 +476,7 @@ function GamePage() {
           .map((card) => card.id)
       );
 
-      //todo this didn't work
+      // todo this didn't work
       let errors = verifySelection("book", booksSelected, tools.isBook);
       errors = errors + verifySelection("run", runsSelected, tools.sortIsRun);
 
@@ -574,14 +576,16 @@ function GamePage() {
     setDrawingJoker({ drawing: false });
   };
 
-  const handleNextHandClick = () => {
+  async function handleNextHandClick() {
     baseApi.setDeal(game);
+
+    await gameApi.clearLogs(game.id);
     gameApi.pushLogEntry(game.id, {
       player: players[player].name,
       gameEvent: GAME_EVENTS.moveToNextHand,
     });
     setCardsOnTable([]);
-  };
+  }
 
   const handleBuyClicked = () => {
     toast.info("ooo buy");
@@ -641,7 +645,7 @@ function GamePage() {
             user={player}
             turn={game.turn}
             players={players}
-            showPlayers={showPlayers}
+            hidePlayers={hidePlayers}
             turnState={turnState}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
