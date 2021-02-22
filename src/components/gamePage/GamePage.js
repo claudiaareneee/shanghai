@@ -268,7 +268,7 @@ function GamePage() {
     // console.log("drag:", oldIndex);
     // console.log("drop:", newIndex);
     // console.log("association", association);
-    console.log("dragAssociation", dragAssociation);
+    // console.log("dragAssociation", dragAssociation);
 
     const cardId = event.dataTransfer.getData("id");
 
