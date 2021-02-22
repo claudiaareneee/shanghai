@@ -23,3 +23,10 @@ export const GAME_EVENTS = {
   wantsToBuy: "wantsToBuy",
   bought: "bought",
 };
+
+export const TURN_STATES = {
+  waitingForBuyers: "waitingForBuyers",
+  drawing: "drawing",
+  playing: "playing",
+  discarding: "discarding",
+};

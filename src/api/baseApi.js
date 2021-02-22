@@ -52,8 +52,10 @@ export const nextTurn = (game, endHand = false) => {
     endHand,
     game.turn
   );
+
   gameApi.updateGame({
     ...game,
+    buyers: [],
     turn,
   });
 };
@@ -67,8 +69,6 @@ export const setTurn = (game, state) => {
 };
 
 export async function discardCardWithId(gameId, playerId, playerCards, card) {
-  // in case something weird happened
-  await gameApi.clearBuyers(gameId);
   gameApi.pushToDiscard(gameId, card);
   playerApi.setPlayerCardsInHand(playerId, gameId, playerCards);
 }
@@ -92,6 +92,9 @@ export async function buyWithId(
     numberOfPlayerCards + 2
   );
   playerApi.setBuys(gameId, playerId, numberOfBuys - 1);
+
+  //This now happens in next turn, so this might not be needed
+  //gameApi.clearBuyers(gameId);
 }
 
 export const performBuy = (game, currentPlayer, players, card) => {
@@ -125,8 +128,6 @@ export const performBuy = (game, currentPlayer, players, card) => {
     gameEvent: GAME_EVENTS.bought,
     card,
   });
-
-  gameApi.clearBuyers(game.id);
 };
 
 export const addComment = (gameId, playerId, comment) => {

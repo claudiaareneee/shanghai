@@ -20,6 +20,7 @@ function CardTable({
   cardsOnTable,
   selection,
   drawingJoker,
+  timer,
   onCardHovered,
   onPlayerCardClicked,
   onDragStart,
@@ -27,7 +28,6 @@ function CardTable({
   onDrop,
   onDrawClicked,
   onDiscardClicked,
-  onTurnButtonClicked,
   onSelectionButtonClicked,
   onPlaySelectedYes,
   onPlaySelectedNo,
@@ -86,6 +86,7 @@ function CardTable({
           turnState={turnState}
           selection={selection}
           drawingJoker={drawingJoker}
+          timer={timer}
           onPlaySelectedYes={onPlaySelectedYes}
           onPlaySelectedNo={onPlaySelectedNo}
           onDrawJokerYes={onDrawJokerYes}

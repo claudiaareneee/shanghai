@@ -7,7 +7,12 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS, DISCARD_COLOR, GAME_EVENTS } from "../common/Constants";
+import {
+  GROUP_COLORS,
+  DISCARD_COLOR,
+  GAME_EVENTS,
+  TURN_STATES,
+} from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import LogModal from "./LogModal";
 import * as tools from "./../../tools";
@@ -33,6 +38,7 @@ function GamePage() {
   const [dragAssociation, setDragAssociation] = useState({});
   const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
   const [logEntries, setLogEntries] = useState([]);
+  const [timer, setTimer] = useState(0);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -76,10 +82,10 @@ function GamePage() {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
         switch (game.turn.state) {
-          case "playing":
+          case TURN_STATES.playing:
             setTurnState("Play");
             break;
-          case "discarding":
+          case TURN_STATES.discarding:
             setTurnState("Discard");
             break;
           default:
@@ -87,13 +93,30 @@ function GamePage() {
             break;
         }
       } else setTurnState("Wait");
-
-      // I could see this being problematic
-      if (game.turn.state === "drawing" && turnState === "EndOfHand") {
-        setCardsOnTable([]);
-      }
     }
-  }, [room, game, player, turnState]);
+  }, [room, game, player]);
+
+  useEffect(() => {
+    // I could see this being problematic
+    if (turnState === "EndOfHand") {
+      setCardsOnTable([]);
+    }
+
+    if (turnState === "Draw") {
+      setTimer(15);
+    } else {
+      setTimer(0);
+    }
+  }, [turnState]);
+
+  useEffect(() => {
+    if (timer > 0) {
+      setTimeout(() => {
+        setTimer(timer - 1);
+        console.log("time left: ", timer);
+      }, 1000);
+    }
+  }, [timer]);
 
   function handleDropdownClicked(playerId) {
     const showPlayer = showPlayers[playerId] ? false : true;
@@ -114,6 +137,8 @@ function GamePage() {
         else return card;
       });
       setCardsInHand(newCardsInHand);
+
+      console.log(turnState);
 
       if (turnState === "Discard") {
         if (cardToDiscard !== target.id) setCardToDiscard(target.id);
@@ -154,7 +179,7 @@ function GamePage() {
   }
 
   function handleDrawClicked({ target }) {
-    if (turnState === "Draw")
+    if (turnState === "Draw" && timer === 0)
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -190,20 +215,6 @@ function GamePage() {
     const isJoker = target.id % 54 === 53 || target.id % 54 === 52;
     if (cardsOnTable[player] && turnState === "Draw" && isJoker) {
       setDrawingJoker({ isDrawing: true, card: target.id, association });
-    }
-  }
-
-  function handleTurnButtonClicked({ target }) {
-    setTurnState(target.name);
-    setSelection({ ...selection, selecting: "none" });
-
-    if (target.name === "Draw") {
-      toast.success("🦄 Select draw card!");
-    }
-
-    if (target.name === "Discard") {
-      baseApi.setTurn(game, "discarding");
-      toast.warn("🐨 Select a card to discard!");
     }
   }
 
@@ -347,9 +358,9 @@ function GamePage() {
       });
     } else {
       if (!cardsOnTable[player])
-        toast.error("Oops! You can only play cards after laying down 🌵");
+        toast.warning("Oops! You can only play cards after laying down 🌵");
       else
-        toast.error(
+        toast.warning(
           "Oops! You can only move cards after drawing on your turn 🌵"
         );
     }
@@ -380,7 +391,7 @@ function GamePage() {
     if (newCards.length !== 0) {
       baseApi.nextTurn({
         ...game,
-        turn: { ...game.turn, state: "discarding" },
+        turn: { ...game.turn, state: TURN_STATES.discarding },
       });
       setTurnState("Wait");
     } else {
@@ -414,7 +425,8 @@ function GamePage() {
     setSelection({ ...selection, selecting, color });
     setTurnState(selecting);
 
-    const turnState = selecting === "Discard" ? "discarding" : "playing";
+    const turnState =
+      selecting === "Discard" ? TURN_STATES.discarding : TURN_STATES.playing;
     gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
   };
 
@@ -492,7 +504,7 @@ function GamePage() {
       });
     } else if (selection.selecting === "Discard") {
       if (cardToDiscard === -1) {
-        toast.error(`Uh oh, please select a card to discard`);
+        toast.warning(`Uh oh, please select a card to discard`);
         return;
       }
 
@@ -510,12 +522,19 @@ function GamePage() {
     setSelection({ ...selection, selecting: "none" });
 
     if (turnState === "Discard")
-      gameApi.setNextTurn(game.id, { ...game.turn, state: "playing" });
+      gameApi.setNextTurn(game.id, {
+        ...game.turn,
+        state: TURN_STATES.playing,
+      });
 
     if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
   };
 
+  // maybe some awaits need to happen here
+  // todo: add log event
   const handleDrawJokerYes = () => {
+    if (timer > 0) return;
+
     const cardId = parseInt(drawingJoker.card, 10);
 
     const newCardsOnTable = tools.removeCardFromCardsLaidWithId(
@@ -544,6 +563,8 @@ function GamePage() {
       gameEvent: GAME_EVENTS.drewJoker,
       opponent: players[drawingJoker.association.location].name,
     });
+
+    baseApi.performBuy(game, player, players, discard[discard.length - 1].id);
 
     setDrawingJoker({ isDrawing: false });
     baseApi.nextTurn(game);
@@ -597,6 +618,7 @@ function GamePage() {
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
             drawingJoker={drawingJoker}
+            timer={timer}
             onPlayerCardClicked={handlePlayerCardClicked}
             onDragStart={handleDragStart}
             onDragOver={handleDragOver}
@@ -604,7 +626,6 @@ function GamePage() {
             onDrawClicked={handleDrawClicked}
             onCardHovered={handleCardHovered}
             onDiscardClicked={handleDiscardClicked}
-            onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onPlaySelectedYes={handlePlaySelectedYes}
             onPlaySelectedNo={handlePlaySelectedNo}
