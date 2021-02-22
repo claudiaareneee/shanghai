@@ -236,7 +236,7 @@ function GamePage() {
     const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
     // console.log("drag:", cardIndex);
     // console.log("drop:", cat);
-    console.log("association", association);
+    // console.log("association", association);
 
     const card = cardsInHand[parseInt(cardIndex, 10)];
     const newArray = cardsInHand.filter((card, index) => {
