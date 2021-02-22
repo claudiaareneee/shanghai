@@ -7,7 +7,12 @@ import CardTable from "./CardTable";
 import { Row, Col } from "react-bootstrap";
 import Sidebar from "./Sidebar";
 import { toast } from "react-toastify";
-import { GROUP_COLORS, DISCARD_COLOR, GAME_EVENTS } from "../common/Constants";
+import {
+  GROUP_COLORS,
+  DISCARD_COLOR,
+  GAME_EVENTS,
+  TURN_STATES,
+} from "../common/Constants";
 import GameStatsModal from "./GameStatsModal";
 import LogModal from "./LogModal";
 import * as tools from "./../../tools";
@@ -33,6 +38,7 @@ function GamePage() {
   const [dragAssociation, setDragAssociation] = useState({});
   const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
   const [logEntries, setLogEntries] = useState([]);
+  const [timer, setTimer] = useState(0);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -76,10 +82,10 @@ function GamePage() {
       if (game.turn.state === "endOfHand") setTurnState("EndOfHand");
       else if (player === game.turn.player) {
         switch (game.turn.state) {
-          case "playing":
+          case TURN_STATES.playing:
             setTurnState("Play");
             break;
-          case "discarding":
+          case TURN_STATES.discarding:
             setTurnState("Discard");
             break;
           default:
@@ -87,13 +93,30 @@ function GamePage() {
             break;
         }
       } else setTurnState("Wait");
-
-      // I could see this being problematic
-      if (game.turn.state === "drawing" && turnState === "EndOfHand") {
-        setCardsOnTable([]);
-      }
     }
-  }, [room, game, player, turnState]);
+  }, [room, game, player]);
+
+  useEffect(() => {
+    // I could see this being problematic
+    if (turnState === "EndOfHand") {
+      setCardsOnTable([]);
+    }
+
+    if (turnState === "Draw") {
+      setTimer(15);
+    } else {
+      setTimer(0);
+    }
+  }, [turnState]);
+
+  useEffect(() => {
+    if (timer > 0) {
+      setTimeout(() => {
+        setTimer(timer - 1);
+        console.log("time left: ", timer);
+      }, 1000);
+    }
+  }, [timer]);
 
   function handleDropdownClicked(playerId) {
     const showPlayer = showPlayers[playerId] ? false : true;
@@ -114,6 +137,8 @@ function GamePage() {
         else return card;
       });
       setCardsInHand(newCardsInHand);
+
+      console.log(turnState);
 
       if (turnState === "Discard") {
         if (cardToDiscard !== target.id) setCardToDiscard(target.id);
@@ -154,7 +179,7 @@ function GamePage() {
   }
 
   function handleDrawClicked({ target }) {
-    if (turnState === "Draw")
+    if (turnState === "Draw" && timer === 0)
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -189,44 +214,27 @@ function GamePage() {
   function handleCardOnTableClicked({ target }, association) {
     const isJoker = target.id % 54 === 53 || target.id % 54 === 52;
     if (cardsOnTable[player] && turnState === "Draw" && isJoker) {
-      console.log("can joker draw");
       setDrawingJoker({ isDrawing: true, card: target.id, association });
-    } else {
-      console.log("can't draw this one");
     }
   }
 
-  function handleTurnButtonClicked({ target }) {
-    setTurnState(target.name);
-    setSelection({ ...selection, selecting: "none" });
-
-    if (target.name === "Draw") {
-      toast.success("🦄 Select draw card!");
-    }
-
-    if (target.name === "Discard") {
-      baseApi.setTurn(game, "discarding");
-      toast.warn("🐨 Select a card to discard!");
-    }
-  }
-
-  const onDragStart = (event, index, id, association) => {
-    console.log("dragstart:", id);
+  const handleDragStart = (event, index, id, association) => {
+    // console.log("dragstart:", id);
     event.dataTransfer.setData("index", index);
     event.dataTransfer.setData("id", id);
     setDragAssociation(association);
-    console.log("drag start assoc", association);
+    // console.log("drag start assoc", association);
   };
 
-  const onDragOver = (event) => {
+  const handleDragOver = (event) => {
     event.preventDefault();
   };
 
-  const onDrop = (event, cat, association) => {
+  const handleDrop = (event, cat, association) => {
     const cardIndex = parseInt(event.dataTransfer.getData("index"), 10);
-    console.log("drag:", cardIndex);
-    console.log("drop:", cat);
-    console.log("association", association);
+    // console.log("drag:", cardIndex);
+    // console.log("drop:", cat);
+    // console.log("association", association);
 
     const card = cardsInHand[parseInt(cardIndex, 10)];
     const newArray = cardsInHand.filter((card, index) => {
@@ -253,7 +261,7 @@ function GamePage() {
     setDragAssociation({});
   };
 
-  const onDropCardsOnTable = (event, newIndex, association) => {
+  const handleDropCardsOnTable = (event, newIndex, association) => {
     const oldIndex = parseInt(event.dataTransfer.getData("index"), 10);
     // console.log("drag:", oldIndex);
     // console.log("drop:", newIndex);
@@ -309,11 +317,26 @@ function GamePage() {
       }
 
       const newPlayerCardsOnTable = tools.addCardToCardsLaid(
-        Object.values(cardsOnTable[association.location]),
+        cardsOnTable[association.location],
         newIndex,
         association,
         parseInt(cardId, 10)
       );
+
+      // Check that card played is valid
+      if (tools.getSuit(parseInt(cardId, 10)) !== "Joker") {
+        try {
+          if (association.index < game.hand.books)
+            tools.isBook(newPlayerCardsOnTable.books[association.index]);
+          else
+            tools.sortIsRun(
+              newPlayerCardsOnTable.runs[association.index - game.hand.books]
+            );
+        } catch (e) {
+          toast.error(`Uh oh, can't play this card. ${e.message}`);
+          return;
+        }
+      }
 
       playerApi.setPlayerCardsOnTable(
         association.location,
@@ -327,11 +350,6 @@ function GamePage() {
 
       playerApi.setPlayerCardsInHand(player, game.id, newPlayerCardsInHand);
 
-      console.log(
-        "players[association.location]",
-        players[association.location]
-      );
-
       gameApi.pushLogEntry(game.id, {
         player: players[player].name,
         gameEvent: GAME_EVENTS.playedCards,
@@ -339,9 +357,66 @@ function GamePage() {
         opponent: players[association.location].name,
       });
     } else {
-      toast.error(
-        "Oops! You can only move cards after drawing on your turn 🌵"
-      );
+      if (!cardsOnTable[player])
+        toast.warning("Oops! You can only play cards after laying down 🌵");
+      else
+        toast.warning(
+          "Oops! You can only move cards after drawing on your turn 🌵"
+        );
+    }
+  };
+
+  async function discardCard(cardToDiscard) {
+    gameApi.pushToDiscard(game.id, cardToDiscard);
+
+    const newCards = cardsInHand.filter(
+      (card) => card.id !== parseInt(cardToDiscard, 10)
+    );
+
+    setCardsInHand(newCards);
+    setCardToDiscard(-1);
+
+    playerApi.setPlayerCardsInHand(
+      player,
+      game.id,
+      newCards.map((card) => card.id)
+    );
+
+    gameApi.pushLogEntry(game.id, {
+      player: players[player].name,
+      gameEvent: GAME_EVENTS.discard,
+      card: parseInt(cardToDiscard, 10),
+    });
+
+    if (newCards.length !== 0) {
+      baseApi.nextTurn({
+        ...game,
+        turn: { ...game.turn, state: TURN_STATES.discarding },
+      });
+      setTurnState("Wait");
+    } else {
+      toast.success("congratz 🦑, you just went out");
+      setTurnState("EndOfHand");
+      playerApi.calculateScores(game.id, players, game.hand.round);
+      playerApi.setNumberOfRemainingCards(game.id, player, 0);
+
+      gameApi.pushLogEntry(game.id, {
+        player: players[player].name,
+        gameEvent: GAME_EVENTS.wentOut,
+      });
+
+      baseApi.nextTurn(game, true);
+    }
+  }
+
+  const handleDropDiscard = (event, newIndex, association) => {
+    const cardId = event.dataTransfer.getData("id");
+
+    if (
+      dragAssociation.location === "player" &&
+      (turnState === "Discard" || turnState === "Play")
+    ) {
+      discardCard(cardId);
     }
   };
 
@@ -350,30 +425,60 @@ function GamePage() {
     setSelection({ ...selection, selecting, color });
     setTurnState(selecting);
 
-    const turnState = selecting === "Discard" ? "discarding" : "playing";
-    console.log("turnState", turnState);
+    const turnState =
+      selecting === "Discard" ? TURN_STATES.discarding : TURN_STATES.playing;
     gameApi.setNextTurn(game.id, { ...game.turn, state: turnState });
+  };
+
+  const verifySelection = (selectionType, selectionGroup, check) => {
+    let numberOfErrors = 0;
+    let notEnough = false;
+    selectionGroup.forEach((selection, index) => {
+      try {
+        if (selection.length === 0) notEnough = true;
+        else check(selection);
+      } catch (e) {
+        numberOfErrors = numberOfErrors + 1;
+        toast.error(
+          `Uh oh! Error on ${selectionType} ${index + 1}: ${e.message}`
+        );
+      }
+    });
+
+    if (notEnough) {
+      toast.error(`Uh oh! Not enough ${selectionType}s selected`);
+      numberOfErrors = numberOfErrors + 1;
+    }
+
+    return numberOfErrors;
   };
 
   const handlePlaySelectedYes = () => {
     if (selection.selecting === "Play") {
-      const selectedCards = GROUP_COLORS.map((color) =>
+      const booksSelected = [...Array(game.hand.books)].map((_, index) =>
         cardsInHand
-          .filter((card) => card.selected && card.selectedColor === color)
+          .filter(
+            (card) =>
+              card.selected && card.selectedColor === GROUP_COLORS[index]
+          )
           .map((card) => card.id)
       );
 
-      const numberOfSelectionsMade = selectedCards.reduce(
-        (p, c) => (c.length > 0 ? p + 1 : p),
-        0
+      const runsSelected = [...Array(game.hand.runs)].map((_, index) =>
+        cardsInHand
+          .filter(
+            (card) =>
+              card.selected &&
+              card.selectedColor === GROUP_COLORS[index + game.hand.books]
+          )
+          .map((card) => card.id)
       );
 
-      if (numberOfSelectionsMade !== game.hand.books + game.hand.runs) {
-        toast.error(
-          `Uh oh, please select ${game.hand.books} books and ${game.hand.runs} runs`
-        );
-        return;
-      }
+      //todo this didn't work
+      let errors = verifySelection("book", booksSelected, tools.isBook);
+      errors = errors + verifySelection("run", runsSelected, tools.sortIsRun);
+
+      if (errors > 0) return;
 
       const newCardsInHand = cardsInHand.filter((card) => !card.selected);
 
@@ -382,7 +487,11 @@ function GamePage() {
         return;
       }
 
-      playerApi.setPlayerCardsOnTable(player, game.id, selectedCards);
+      playerApi.setPlayerCardsOnTable(player, game.id, {
+        books: booksSelected,
+        runs: runsSelected,
+      });
+
       playerApi.setPlayerCardsInHand(
         player,
         game.id,
@@ -395,47 +504,11 @@ function GamePage() {
       });
     } else if (selection.selecting === "Discard") {
       if (cardToDiscard === -1) {
-        toast.error(`Uh oh, please select a card to discard`);
+        toast.warning(`Uh oh, please select a card to discard`);
         return;
       }
 
-      gameApi.pushToDiscard(game.id, cardToDiscard);
-
-      const newCards = cardsInHand.filter(
-        (card) => card.id !== parseInt(cardToDiscard, 10)
-      );
-
-      setCardsInHand(newCards);
-      setCardToDiscard(-1);
-
-      playerApi.setPlayerCardsInHand(
-        player,
-        game.id,
-        newCards.map((card) => card.id)
-      );
-
-      gameApi.pushLogEntry(game.id, {
-        player: players[player].name,
-        gameEvent: GAME_EVENTS.discard,
-        card: parseInt(cardToDiscard, 10),
-      });
-
-      if (newCards.length !== 0) {
-        baseApi.nextTurn(game);
-        setTurnState("Wait");
-      } else {
-        toast.success("congratz 🦑, you just went out");
-        setTurnState("EndOfHand");
-        playerApi.calculateScores(game.id, players);
-        playerApi.setNumberOfRemainingCards(game.id, player, 0);
-
-        gameApi.pushLogEntry(game.id, {
-          player: players[player].name,
-          gameEvent: GAME_EVENTS.wentOut,
-        });
-
-        baseApi.nextTurn(game, true);
-      }
+      discardCard(cardToDiscard);
     }
     setSelection({ ...selection, selecting: "none" });
   };
@@ -449,12 +522,19 @@ function GamePage() {
     setSelection({ ...selection, selecting: "none" });
 
     if (turnState === "Discard")
-      gameApi.setNextTurn(game.id, { ...game.turn, state: "playing" });
+      gameApi.setNextTurn(game.id, {
+        ...game.turn,
+        state: TURN_STATES.playing,
+      });
 
     if (drawingJoker.isDrawing) setDrawingJoker({ drawing: false });
   };
 
+  // maybe some awaits need to happen here
+  // todo: add log event
   const handleDrawJokerYes = () => {
+    if (timer > 0) return;
+
     const cardId = parseInt(drawingJoker.card, 10);
 
     const newCardsOnTable = tools.removeCardFromCardsLaidWithId(
@@ -462,7 +542,7 @@ function GamePage() {
       cardId,
       drawingJoker.association
     );
-    console.log("drawingJoker: ", drawingJoker);
+
     playerApi.setPlayerCardsOnTable(
       drawingJoker.association.location,
       game.id,
@@ -483,6 +563,8 @@ function GamePage() {
       gameEvent: GAME_EVENTS.drewJoker,
       opponent: players[drawingJoker.association.location].name,
     });
+
+    baseApi.performBuy(game, player, players, discard[discard.length - 1].id);
 
     setDrawingJoker({ isDrawing: false });
     baseApi.nextTurn(game);
@@ -536,20 +618,21 @@ function GamePage() {
               players[player] ? parseInt(players[player].buys, 10) : 0
             }
             drawingJoker={drawingJoker}
+            timer={timer}
             onPlayerCardClicked={handlePlayerCardClicked}
-            onDragStart={onDragStart}
-            onDragOver={onDragOver}
-            onDrop={onDrop}
+            onDragStart={handleDragStart}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
             onDrawClicked={handleDrawClicked}
             onCardHovered={handleCardHovered}
             onDiscardClicked={handleDiscardClicked}
-            onTurnButtonClicked={handleTurnButtonClicked}
             onSelectionButtonClicked={handleSelectionButtonClicked}
             onPlaySelectedYes={handlePlaySelectedYes}
             onPlaySelectedNo={handlePlaySelectedNo}
             onDrawJokerYes={handleDrawJokerYes}
             onDrawJokerNo={handleDrawJokerNo}
             onBuyClicked={handleBuyClicked}
+            onDropDiscard={handleDropDiscard}
           />
         </Col>
 
@@ -563,8 +646,8 @@ function GamePage() {
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}
             lastLogMessage={logEntries[logEntries.length - 1] || {}}
-            onDragStart={onDragStart}
-            onDrop={onDropCardsOnTable}
+            onDragStart={handleDragStart}
+            onDrop={handleDropCardsOnTable}
             onCardClicked={handleCardOnTableClicked}
             onCardHovered={handleCardHovered}
             onDropdownClicked={handleDropdownClicked}

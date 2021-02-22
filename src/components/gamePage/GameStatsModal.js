@@ -1,30 +1,46 @@
 import React from "react";
 import { Table, Modal } from "react-bootstrap";
 
-function ScoreRow({ player }) {
-  return (
-    <tr>
-      <td>{player.name}</td>
-      <td>{player.oldScore || 0}</td>
-      <td>{player.score || 0}</td>
-    </tr>
-  );
-}
-
 function ScoreTable({ players }) {
+  const playerOneScore = Object.values(players)[0].score;
+  const playerArray = Object.values(players);
+
   return (
-    <Table style={{ color: "#282c34" }}>
+    <Table
+      className="table table-sm table-striped table-bordered"
+      style={{ color: "#282c34" }}
+    >
       <thead>
         <tr>
-          <th>name</th>
-          <th>old score</th>
-          <th>new score</th>
+          <th scope="col">Round</th>
+          {playerArray.map((player) => (
+            <th scope="col">{player.name}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
-        {Object.values(players).map((player, index) => (
-          <ScoreRow player={player} key={player.name} />
-        ))}
+        {playerOneScore ? (
+          playerOneScore.map((_, index) => {
+            return (
+              <tr>
+                <th scope="row">{index}</th>
+                {playerArray.map((player) => (
+                  <td>{player.score[index]}</td>
+                ))}
+              </tr>
+            );
+          })
+        ) : (
+          <></>
+        )}
+        <tr>
+          <th scope="row">Totals</th>
+          {playerArray.map((player) => (
+            <td>
+              <strong>{player.scoreTotal || 0}</strong>
+            </td>
+          ))}
+        </tr>
       </tbody>
     </Table>
   );
@@ -60,7 +76,6 @@ function GameStatsModal({
         <h5>Room Code</h5>
         <p>{gameId}</p>
         <h5>Scores</h5>
-        <p>Hand, score, who went out, maybe the cards on the table</p>
         <ScoreTable players={players} />
         <h5>Comments</h5>
         <p>

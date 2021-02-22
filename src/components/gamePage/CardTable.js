@@ -20,6 +20,7 @@ function CardTable({
   cardsOnTable,
   selection,
   drawingJoker,
+  timer,
   onCardHovered,
   onPlayerCardClicked,
   onDragStart,
@@ -27,13 +28,13 @@ function CardTable({
   onDrop,
   onDrawClicked,
   onDiscardClicked,
-  onTurnButtonClicked,
   onSelectionButtonClicked,
   onPlaySelectedYes,
   onPlaySelectedNo,
   onDrawJokerYes,
   onDrawJokerNo,
   onBuyClicked,
+  onDropDiscard,
 }) {
   return (
     <div className="CardTable sticky-top">
@@ -59,6 +60,7 @@ function CardTable({
             highlightedCard={highlightedCard}
             onCardHovered={onCardHovered}
             onCardClicked={onDiscardClicked}
+            onDrop={onDropDiscard}
           />
         </Col>
         <Col className="justify-content-center align-self-center">
@@ -84,6 +86,7 @@ function CardTable({
           turnState={turnState}
           selection={selection}
           drawingJoker={drawingJoker}
+          timer={timer}
           onPlaySelectedYes={onPlaySelectedYes}
           onPlaySelectedNo={onPlaySelectedNo}
           onDrawJokerYes={onDrawJokerYes}

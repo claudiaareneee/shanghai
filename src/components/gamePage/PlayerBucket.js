@@ -7,7 +7,7 @@ import { Row, Col, Container } from "react-bootstrap";
 import "./PlayerBucket.css";
 
 function CardsPlayed({
-  cards = [],
+  cards,
   player,
   highlightedCard,
   onCardClicked,
@@ -28,7 +28,17 @@ function CardsPlayed({
     marginBottom: "1rem",
   };
 
-  return cards.length === 0 ? (
+  const selections = !cards
+    ? []
+    : cards.books && cards.runs
+    ? [...cards.books, ...cards.runs]
+    : cards.books
+    ? cards.books
+    : cards.runs
+    ? cards.runs
+    : [];
+
+  return selections.length === 0 ? (
     <div className="cards">
       <div style={style}>
         <PlayingCard id={0} source={"placeholder"} />
@@ -37,7 +47,7 @@ function CardsPlayed({
     </div>
   ) : (
     <div className="cards">
-      {Object.values(cards).map((set, index) => {
+      {Object.values(selections).map((set, index) => {
         return (
           <CardSlide
             key={index}
@@ -90,7 +100,7 @@ function PlayerBucket({
             </h5>
           )}
           <div className="playerInfo" style={{ textAlign: "left" }}>
-            <p>Score: {player.score || 0}</p>
+            <p>Score: {player.scoreTotal || 0}</p>
             <p>Cards left: {player.numberOfRemainingCards}</p>
             <p>Buys left: {player.buys}</p>
             {cards.length > 0 ? (

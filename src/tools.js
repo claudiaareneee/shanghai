@@ -1,3 +1,5 @@
+import * as constants from "./components/common/Constants";
+
 export const snapshotToArray = (snapshot) =>
   Object.entries(snapshot).map((e) => e[1]);
 
@@ -42,7 +44,6 @@ export function dealCards(opponents, numberOfDecks) {
 
   deal.discard = deck.splice(0, 1);
   deal.draw = [...deck];
-  console.log(deal);
   return deal;
 }
 
@@ -53,13 +54,15 @@ export const nextTurn = (opponents, endOfHand, turn = {}, round = 1) => {
 
   if (endOfHand) return { player: "End of Hand", state: "endOfHand" };
 
-  if (turn.state === "drawing") state = "playing";
-  else if (turn.state === "playing") state = "discarding";
-  else if (turn.state === "discarding") {
-    state = "drawing";
+  if (turn.state === constants.TURN_STATES.drawing)
+    state = constants.TURN_STATES.playing;
+  else if (turn.state === constants.TURN_STATES.playing)
+    state = constants.TURN_STATES.discarding;
+  else if (turn.state === constants.TURN_STATES.discarding) {
+    state = constants.TURN_STATES.drawing;
     player = opponents[(playerIndex + 1) % opponents.length];
   } else {
-    state = "drawing";
+    state = constants.TURN_STATES.drawing;
     player = opponents[(round - 1) % opponents.length];
   }
 
@@ -80,7 +83,17 @@ export const getLongCardNameFromId = (card) => {
   return getCardNumber(id) + getSuit(id);
 };
 
-export const getSuit = (card) => {
+export const getSuitAsInt = (id) => {
+  const card = id % 54;
+  if (card < 13) return 0;
+  else if (card < 26) return 1;
+  else if (card < 39) return 2;
+  else if (card < 52) return 3;
+  else return 4;
+};
+
+export const getSuit = (id) => {
+  const card = id % 54;
   if (card < 13) return "♣";
   else if (card < 26) return "♥️";
   else if (card < 39) return "♠";
@@ -88,7 +101,8 @@ export const getSuit = (card) => {
   else return "Joker";
 };
 
-export const getSuitLong = (card) => {
+export const getSuitLong = (id) => {
+  const card = id % 54;
   if (card < 13) return " of Clubs";
   else if (card < 26) return " of Hearts";
   else if (card < 39) return " of Spades";
@@ -136,34 +150,75 @@ export const selectBuyer = (currentPlayer, buyers, opponents) => {
   return null;
 };
 
-export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
+export const removeCardFromSetWithIndex = (cards, index, association) => {
   return cards.map((set, i) => {
     if (i === association.index) {
       const newSet = [...set].filter((_, j) => j !== index);
-      console.log("newset", newSet);
       return newSet;
     }
-    console.log("newset", set);
+    return set;
+  });
+};
+
+export const removeCardFromCardsLaidWithIndex = (cards, index, association) => {
+  const numberOfBooks = cards.books ? cards.books.length : 0;
+  let newBooks = [];
+  let newRuns = [];
+
+  if (association.index < numberOfBooks) {
+    newBooks = removeCardFromSetWithIndex(cards.books, index, association);
+    newRuns = cards.runs || [];
+    return { books: newBooks, runs: newRuns };
+  } else {
+    const adjustedAssociation = {
+      ...association,
+      index: association.index - numberOfBooks,
+    };
+
+    newRuns = removeCardFromSetWithIndex(
+      cards.runs,
+      index,
+      adjustedAssociation
+    );
+    newBooks = cards.books || [];
+
+    return { books: newBooks, runs: newRuns };
+  }
+};
+
+export const removeCardFromSetWithId = (cards, id, association) => {
+  return cards.map((set, i) => {
+    if (i === association.index) {
+      const newSet = [...set].filter((card) => card !== id);
+      return newSet;
+    }
     return set;
   });
 };
 
 export const removeCardFromCardsLaidWithId = (cards, id, association) => {
-  return cards.map((set, i) => {
-    if (i === association.index) {
-      const newSet = [...set].filter((card) => {
-        console.log("card", card, "id", id);
-        return card !== id;
-      });
-      // console.log("newset", newSet);
-      return newSet;
-    }
-    // console.log("newset", set);
-    return set;
-  });
+  const numberOfBooks = cards.books ? cards.books.length : 0;
+  let newBooks = [];
+  let newRuns = [];
+
+  if (association.index < numberOfBooks) {
+    newBooks = removeCardFromSetWithId(cards.books, id, association);
+    newRuns = cards.runs || [];
+    return { books: newBooks, runs: newRuns };
+  } else {
+    const adjustedAssociation = {
+      ...association,
+      index: association.index - numberOfBooks,
+    };
+
+    newRuns = removeCardFromSetWithId(cards.runs, id, adjustedAssociation);
+    newBooks = cards.books || [];
+
+    return { books: newBooks, runs: newRuns };
+  }
 };
 
-export const addCardToCardsLaid = (cards, index, association, card) => {
+export const addCardsToSet = (cards, index, association, card) => {
   return cards.map((set, i) => {
     if (i === association.index) {
       const newSet = [...set];
@@ -176,4 +231,170 @@ export const addCardToCardsLaid = (cards, index, association, card) => {
     }
     return set;
   });
+};
+
+export const addCardToCardsLaid = (cards, index, association, card) => {
+  const numberOfBooks = cards.books ? cards.books.length : 0;
+  let newBooks = [];
+  let newRuns = [];
+
+  if (association.index < numberOfBooks) {
+    newBooks = addCardsToSet(cards.books, index, association, card);
+    newRuns = cards.runs || [];
+    return { books: newBooks, runs: newRuns };
+  } else {
+    const adjustedAssociation = {
+      ...association,
+      index: association.index - numberOfBooks,
+    };
+
+    newRuns = addCardsToSet(cards.runs, index, adjustedAssociation, card);
+    newBooks = cards.books || [];
+
+    return { books: newBooks, runs: newRuns };
+  }
+};
+
+export const printCards = (cards) => {
+  let cardString = "";
+  cards.forEach((card) => {
+    cardString = cardString + getLongCardNameFromId(card) + " ";
+  });
+  console.log(cardString);
+};
+
+export const isBook = (cards) => {
+  if (cards.length < 3)
+    throw new Error("There needs to be at least three cards");
+
+  //check for jokers
+  const jokers = cards.filter((card) => card % 54 >= 52);
+  const regularCards = cards.filter((card) => card % 54 < 52);
+  // console.log("jokers", jokers, "regular", regularCards);
+
+  if (regularCards.length < 2)
+    throw new Error("There needs to be at least two natural (non-joker) cards");
+
+  const initialCardNumber = (regularCards[0] % 54) % 13;
+  regularCards.forEach((card) => {
+    // console.log((card % 54) % 13);
+    if ((card % 54) % 13 !== initialCardNumber)
+      throw new Error("Cards do not match");
+  });
+
+  return true;
+};
+
+export const isRun = (cards) => {
+  // cards need to be sorted low to high
+
+  if (cards.length < 4)
+    throw new Error("There needs to be at least four cards");
+
+  //check for jokers
+  const jokers = cards.filter((card) => getSuitAsInt(card) === 4);
+  const regularCards = cards.filter((card) => getSuitAsInt(card) !== 4);
+  // console.log("jokers", jokers, "regular", regularCards);
+
+  if (regularCards.length < 2)
+    throw new Error("There needs to be at least two natural (non-joker) cards");
+
+  const initialCardSuit = getSuitAsInt(regularCards[0]);
+
+  let previousCard = (regularCards[0] % 54) - 1;
+  let unusedJokers = jokers.length;
+
+  regularCards.forEach((card, index) => {
+    let cardNumber = card % 54;
+    const cardSuit = getSuitAsInt(cardNumber);
+    // console.log(getLongCardNameFromId(cardNumber));
+    if (cardSuit !== initialCardSuit)
+      throw new Error("Cards in run need to be the same suit");
+
+    if (getCardNumber(cardNumber) === "A") {
+      if (index === regularCards.length - 1) cardNumber = cardNumber + 13;
+      else if (index !== 0) throw new Error("Aces cannot wrap");
+    }
+
+    const difference = cardNumber - previousCard;
+    // console.log("diff", difference);
+    previousCard = cardNumber;
+
+    unusedJokers = unusedJokers - (difference - 1);
+    // console.log("unused jokers in seq", unusedJokers);
+
+    if (unusedJokers < 0) throw new Error("Missing cards in sequence");
+  });
+
+  // console.log("unused jokers", unusedJokers);
+
+  if (unusedJokers > 0)
+    throw new Error("Runs cannot start or end with a Joker");
+
+  return true;
+};
+
+export const sortCardsLowToHigh = (cards) => {
+  const aces = cards.filter((card) => getCardNumber(card % 54) === "A");
+
+  if (aces.length > 2)
+    // This isn't a run
+    return cards;
+
+  const jokers = cards.filter((card) => getSuitAsInt(card) === 4);
+  const remainingCards = cards.filter(
+    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card) !== 4
+  );
+
+  const sortedLowToHigh = remainingCards.sort((a, b) => (a % 54) - (b % 54));
+
+  if (aces.length === 0) return [...sortedLowToHigh, ...jokers];
+  else if (aces.length === 2)
+    return [aces[0], ...sortedLowToHigh, aces[1], ...jokers];
+  else {
+    try {
+      const lowAceRun = [aces[0], ...sortedLowToHigh, ...jokers];
+      isRun(lowAceRun);
+      return lowAceRun;
+    } catch {
+      return [...sortedLowToHigh, aces[0], ...jokers];
+    }
+  }
+};
+
+export const sortIsRun = (cards) => {
+  console.log("here");
+  // pull out aces
+  const aces = cards.filter((card) => getCardNumber(card % 54) === "A");
+
+  if (aces.length > 2)
+    // This isn't a run
+    return cards;
+
+  // pull out jokers
+  const jokers = cards.filter((card) => getSuitAsInt(card) === 4);
+  const remainingCards = cards.filter(
+    (card) => getCardNumber(card % 54) !== "A" && getSuitAsInt(card) !== 4
+  );
+
+  // sort remaining cards low to high
+  const sortedLowToHigh = remainingCards.sort((a, b) => (a % 54) - (b % 54));
+
+  // TODO: apply jokers on the inside of the run
+  // if there are leftovers, see which side they can be applied on to make run valid. IE check isRun [cards, ..remainingJokers, ace] or [ace, ...remainingJokers, ..cards]
+
+  if (aces.length === 0) return isRun([...sortedLowToHigh, ...jokers]);
+  else if (aces.length === 2)
+    // if there are two aces, apply them to each side
+    return isRun([aces[0], ...sortedLowToHigh, aces[1], ...jokers]);
+  else {
+    //if there is one ace check the isRun to see which side would make it valid
+    try {
+      isRun([aces[0], ...sortedLowToHigh, ...jokers]);
+    } catch (e) {
+      // if neither are valid, or is a book, just put them at the beginning
+      isRun([...sortedLowToHigh, aces[0], ...jokers]);
+    }
+  }
+  return true;
 };
