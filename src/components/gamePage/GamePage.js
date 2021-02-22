@@ -29,7 +29,7 @@ function GamePage() {
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [statsModalShow, setStatsModalShow] = React.useState(false);
   const [logModalShow, setLogModalShow] = React.useState(false);
-  const [showPlayers, setShowPlayers] = React.useState({});
+  const [hidePlayers, setHidePlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: "none",
     color: "",
@@ -121,8 +121,8 @@ function GamePage() {
   }, [logEntries]);
 
   function handleDropdownClicked(playerId) {
-    const showPlayer = showPlayers[playerId] ? false : true;
-    setShowPlayers({ ...showPlayers, [playerId]: showPlayer });
+    const hidePlayer = hidePlayers[playerId] ? false : true;
+    setHidePlayers({ ...hidePlayers, [playerId]: hidePlayer });
   }
 
   function handlePlayerCardClicked({ target }) {
@@ -643,7 +643,7 @@ function GamePage() {
             user={player}
             turn={game.turn}
             players={players}
-            showPlayers={showPlayers}
+            hidePlayers={hidePlayers}
             turnState={turnState}
             highlightedCard={highlightedCard}
             cardsOnTable={cardsOnTable}

@@ -8,7 +8,7 @@ import { Row, Col } from "react-bootstrap";
 function Sidebar({
   user,
   players,
-  showPlayers,
+  hidePlayers,
   cardsOnTable,
   turnState,
   turn,
@@ -74,7 +74,7 @@ function Sidebar({
           turn={turn}
           user={user}
           player={players[key]}
-          showPlayer={showPlayers[key]}
+          hidePlayer={hidePlayers[key]}
           cards={cardsOnTable[key]}
           highlightedCard={highlightedCard}
           onCardClicked={onCardClicked}
