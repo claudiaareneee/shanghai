@@ -97,11 +97,6 @@ function GamePage() {
   }, [room, game, player]);
 
   useEffect(() => {
-    // I could see this being problematic
-    if (turnState === "EndOfHand") {
-      setCardsOnTable([]);
-    }
-
     if (turnState === "Draw") {
       setTimer(15);
     } else {
@@ -109,14 +104,21 @@ function GamePage() {
     }
   }, [turnState]);
 
+  // todo: I might need to clear the remaining set timeouts when a person draws
   useEffect(() => {
     if (timer > 0) {
       setTimeout(() => {
         setTimer(timer - 1);
-        console.log("time left: ", timer);
       }, 1000);
     }
   }, [timer]);
+
+  useEffect(() => {
+    const lastLog = logEntries[logEntries.length - 1];
+    if (lastLog && lastLog.gameEvent === GAME_EVENTS.moveToNextHand) {
+      setCardsOnTable([]);
+    }
+  }, [logEntries]);
 
   function handleDropdownClicked(playerId) {
     const showPlayer = showPlayers[playerId] ? false : true;
@@ -137,8 +139,6 @@ function GamePage() {
         else return card;
       });
       setCardsInHand(newCardsInHand);
-
-      console.log(turnState);
 
       if (turnState === "Discard") {
         if (cardToDiscard !== target.id) setCardToDiscard(target.id);
@@ -474,7 +474,7 @@ function GamePage() {
           .map((card) => card.id)
       );
 
-      //todo this didn't work
+      // todo this didn't work
       let errors = verifySelection("book", booksSelected, tools.isBook);
       errors = errors + verifySelection("run", runsSelected, tools.sortIsRun);
 
@@ -574,14 +574,16 @@ function GamePage() {
     setDrawingJoker({ drawing: false });
   };
 
-  const handleNextHandClick = () => {
+  async function handleNextHandClick() {
     baseApi.setDeal(game);
+
+    await gameApi.clearLogs(game.id);
     gameApi.pushLogEntry(game.id, {
       player: players[player].name,
       gameEvent: GAME_EVENTS.moveToNextHand,
     });
     setCardsOnTable([]);
-  };
+  }
 
   const handleBuyClicked = () => {
     toast.info("ooo buy");

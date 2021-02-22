@@ -137,6 +137,10 @@ export const clearBuyer = (gameId, playerId) => {
     .remove();
 };
 
+export const clearLogs = (gameId) => {
+  return database.ref(logBaseUrl + gameId).remove();
+};
+
 export const pushLogEntry = (gameId, logEntry) => {
   database.ref(logBaseUrl + gameId).push(logEntry);
 };
