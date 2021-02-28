@@ -79,13 +79,16 @@ function StartPage({ history }) {
         let answer = window.confirm(
           "This player already exists. Would you like to join as this player?"
         );
+
+        console.log("answer", answer);
+
         if (answer) {
           history.push("/WaitingRoom");
           localStorage.setItem("uid", existingPlayer.id);
           localStorage.setItem("room", game.id);
           localStorage.setItem("name", form.name);
-          return;
         }
+        return;
       } else if (game.hand != null) {
         // Checking if game is in progress
         let answer = window.confirm(
