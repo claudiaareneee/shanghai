@@ -13,7 +13,7 @@ import ForkMeOnGithub from "fork-me-on-github";
 
 function WaitingRoomPage({ history }) {
   const [numberOfDecks, setNumberOfDecks] = useState("2");
-  const [game, setGame] = useState({});
+  const [game, setGame] = useState({ decks: numberOfDecks });
   const [players, setPlayers] = useState({});
   const [room] = useState(localStorage.getItem("room") || "");
   const [playerName, setPlayerName] = useState(
@@ -26,16 +26,14 @@ function WaitingRoomPage({ history }) {
   useEffect(() => {
     if (!game.id) {
       const room = localStorage.getItem("room");
-      gameApi.getGameById(room, (game) => {
-        setGame(game);
+      gameApi.getGameById(room, (_game) => {
+        setGame({ ...game, ..._game });
       });
 
       playerApi.getPlayers(room, (players) => {
         setPlayers(players);
       });
     } else {
-      if (!game.decks) setGame({ ...game, decks: numberOfDecks });
-
       setRedirectToPlayPage(game.turn ? true : false);
     }
     // TODO: re-enable this and figure out why it's not pushing
@@ -43,7 +41,7 @@ function WaitingRoomPage({ history }) {
     //   gameApi.cleanUpGetGameById(game.id);
     //   playerApi.cleanUpGetPlayers(game.id);
     // };
-  }, [room, game, numberOfDecks]);
+  }, [room, game]);
 
   function handleClick(event) {
     event.preventDefault();
@@ -61,6 +59,7 @@ function WaitingRoomPage({ history }) {
   function handleChange({ target }) {
     setNumberOfDecks(target.value);
     setGame({ ...game, decks: target.value });
+    console.log({ ...game, decks: target.value });
   }
 
   function handleClickChange() {
