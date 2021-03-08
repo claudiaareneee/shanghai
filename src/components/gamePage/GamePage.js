@@ -39,6 +39,7 @@ function GamePage() {
   const [drawingJoker, setDrawingJoker] = useState({ isDrawing: false });
   const [logEntries, setLogEntries] = useState([]);
   const [timer, setTimer] = useState(0);
+  const [buyTime, setBuyTime] = useState(15);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -47,6 +48,7 @@ function GamePage() {
       // Initialize listeners
       gameApi.getGameById(room, (game) => {
         setGame(game);
+        if (game.buyTime && game.buyTime !== buyTime) setBuyTime(game.buyTime);
       });
 
       playerApi.getPlayers(room, (players) => {
@@ -98,11 +100,11 @@ function GamePage() {
 
   useEffect(() => {
     if (turnState === "Draw") {
-      setTimer(15);
+      setTimer(buyTime);
     } else {
       setTimer(0);
     }
-  }, [turnState]);
+  }, [turnState, buyTime]);
 
   // todo: I might need to clear the remaining set timeouts when a person draws
   useEffect(() => {
