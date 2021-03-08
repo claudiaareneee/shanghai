@@ -13,7 +13,7 @@ const logBaseUrl = baseUrl + "gameLog/";
 
 export const createGame = (game) => {
   const newKey = database.ref().child(gameBaseUrl).push().key;
-  const newGame = { ...game, id: newKey };
+  const newGame = { ...game, id: newKey, buyTime: 15 };
 
   return database
     .ref(gameBaseUrl + newKey)
