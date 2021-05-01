@@ -61,6 +61,7 @@ function CardTable({
             onCardHovered={onCardHovered}
             onCardClicked={onDiscardClicked}
             onDrop={onDropDiscard}
+            onDragStart={onDragStart}
           />
         </Col>
         <Col className="justify-content-center align-self-center">
@@ -77,6 +78,7 @@ function CardTable({
             highlight={highlightedCard}
             onCardHovered={onCardHovered}
             onCardClicked={onDrawClicked}
+            onDragStart={onDragStart}
           />
         </Col>
       </Row>

@@ -6,10 +6,12 @@ import * as constants from "./Constants";
 function CardStack({
   numberOfCardsInDeck,
   numberOfCards,
+  association,
   source,
   highlight,
   onCardClicked,
   onCardHovered,
+  onDragStart,
 }) {
   const offset = -1 * Math.floor(numberOfCards / 2.0);
   const numberOfBottomCards = numberOfCards - 1;
@@ -36,6 +38,8 @@ function CardStack({
           xTranslation={constants.CARDSTACK_STRETCH_X * (index + offset)}
           yTranslation={constants.CARDSTACK_STRETCH_Y * index}
           source={source}
+          association={association}
+          onDragStart={onDragStart}
         />
       ))}
       <PlayingCard
@@ -49,6 +53,8 @@ function CardStack({
         onCardHovered={onCardHovered}
         onCardClicked={onCardClicked}
         highlight={highlight === numberOfCardsInDeck}
+        association={association}
+        onDragStart={onDragStart}
       />
     </div>
   ) : (
@@ -60,6 +66,8 @@ function CardStack({
         }
         yTranslation={constants.CARDSTACK_STRETCH_Y * numberOfBottomCards}
         source={"placeholder"}
+        association={association}
+        onDragStart={onDragStart}
       />
     </div>
   );
@@ -75,6 +83,7 @@ CardStack.defaultProps = {
   numberOfCards: PropTypes.number,
   onTopCardClicked: () => {},
   source: "front",
+  association: { location: "draw" },
 };
 
 export default CardStack;
