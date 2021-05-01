@@ -17,6 +17,7 @@ import GameStatsModal from "./GameStatsModal";
 import LogModal from "./LogModal";
 import * as tools from "./../../tools";
 import ForkMeOnGithub from "fork-me-on-github";
+import SettingsModal from "./SettingsModal";
 
 function GamePage() {
   const [game, setGame] = useState({});
@@ -29,6 +30,7 @@ function GamePage() {
   const [cardsOnTable, setCardsOnTable] = useState([]);
   const [statsModalShow, setStatsModalShow] = React.useState(false);
   const [logModalShow, setLogModalShow] = React.useState(false);
+  const [settingsModalShow, setSettingsModalShow] = React.useState(false);
   const [hidePlayers, setHidePlayers] = React.useState({});
   const [selection, setSelection] = useState({
     selecting: "none",
@@ -665,6 +667,7 @@ function GamePage() {
             onDropdownClicked={handleDropdownClicked}
             onScoreCardClicked={() => setStatsModalShow(true)}
             onLogClicked={() => setLogModalShow(true)}
+            onSettingsClicked={() => setSettingsModalShow(true)}
             onNextHandClick={handleNextHandClick}
           />
         </Col>
@@ -678,10 +681,16 @@ function GamePage() {
         onSubmitComment={handleSubmitComment}
         onCommentChange={handleCommentChanged}
       />
-      <LogModal
+      {/* <LogModal
         show={logModalShow}
         onHide={() => setLogModalShow(false)}
         logEntries={logEntries}
+      /> */}
+      <SettingsModal
+        show={settingsModalShow}
+        onHide={() => setSettingsModalShow(false)}
+        onSaveGroupSettings={() => {}}
+        onSaveLocalSettings={() => {}}
       />
       <ForkMeOnGithub
         repo="https://github.com/claudiaareneee/shanghai"
