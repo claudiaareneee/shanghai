@@ -150,3 +150,10 @@ export const getLogEntriesById = (gameId, onLogEntries) => {
     if (snapshot.val() != null) onLogEntries(snapshot.val());
   });
 };
+
+export const setBuyTime = (gameId, newBuyTime) => {
+  return database
+    .ref(gameBaseUrl + gameId)
+    .update({ buyTime: newBuyTime })
+    .catch(handleError);
+};

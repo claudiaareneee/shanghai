@@ -3,7 +3,6 @@ import "./Sidebar.css";
 import PropTypes from "prop-types";
 import PlayerBucket from "./PlayerBucket";
 import LogMessage from "../common/LogMessage";
-import { Row, Col } from "react-bootstrap";
 
 function Sidebar({
   user,
@@ -19,7 +18,7 @@ function Sidebar({
   onDragStart,
   onDrop,
   onScoreCardClicked,
-  onLogClicked,
+  onSettingsClicked,
   onNextHandClick,
   onCardHovered,
 }) {
@@ -53,10 +52,10 @@ function Sidebar({
           <button
             className="btn btn-info"
             style={{ float: "right", marginLeft: ".5rem" }}
-            onClick={onLogClicked}
-            title="Open game log"
+            onClick={onSettingsClicked}
+            title="Open settings"
           >
-            <i className="fas fa-book" aria-hidden="true"></i>
+            <i className="fas fa-cog" aria-hidden="true"></i>
           </button>
           <button
             className="btn btn-primary"
