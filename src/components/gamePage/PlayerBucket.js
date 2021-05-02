@@ -46,7 +46,7 @@ function CardsPlayed({
       <small>No cards played</small>
     </div>
   ) : (
-    <div className="cards">
+    <div className="cards d-flex flex-wrap justify-content-around">
       {Object.values(selections).map((set, index) => {
         return (
           <CardSlide

@@ -13,18 +13,21 @@ function CardSlide({
   onDrop,
   onCardHovered,
 }) {
-  const offset = -1 * Math.floor(cards.length / 2.0);
   const containerHeight = constants.CARD_HEIGHT;
+  const containerWidth =
+    constants.CARD_WIDTH + constants.CARDSLIDE_STRETCH_X * (cards.length - 1);
 
   const style = {
-    width: "100%",
+    width: `${containerWidth}rem`,
     height: `${containerHeight}rem`,
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "left",
     // overflow: "hidden",
     position: "relative",
     marginTop: "1rem",
     marginBottom: "1rem",
+    marginLeft: ".5rem",
+    marginRight: ".5rem",
   };
   return (
     <div
@@ -38,7 +41,7 @@ function CardSlide({
             key={card}
             id={parseInt(card, 10)}
             index={index}
-            xTranslation={constants.CARDSLIDE_STRETCH_X * (index + offset)}
+            xTranslation={constants.CARDSLIDE_STRETCH_X * index}
             source={source}
             association={association}
             highlight={parseInt(card, 10) === highlightedCard}
