@@ -42,7 +42,7 @@ function GamePage() {
   const [logEntries, setLogEntries] = useState([]);
   const [timer, setTimer] = useState(0);
   const [buyTime, setBuyTime] = useState(15);
-  const [isActive, setIsActive] = useState(false);
+  const [isActive, setIsActive] = useState(true);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -53,7 +53,6 @@ function GamePage() {
         setGame(game);
         if (game.buyTime && game.buyTime !== buyTime) {
           setBuyTime(game.buyTime);
-          setIsActive(false);
         }
       });
 
@@ -105,23 +104,27 @@ function GamePage() {
   }, [room, game, player, buyTime]);
 
   useEffect(() => {
+    console.log("gere");
     if (turnState === "Draw") {
       setTimer(parseInt(buyTime), 10);
       setIsActive(true);
     } else {
       setTimer(0);
+      setIsActive(false);
     }
   }, [turnState, buyTime]);
 
   // todo: I might need to clear the remaining set timeouts when a person draws
   useEffect(() => {
     let interval = null;
-    if (isActive && turnState === "Draw") {
+    if (isActive) {
       interval = setInterval(() => {
         setTimer((timer) => timer - 1);
       }, 1000);
-    } else if (!isActive && timer !== 0) {
+    }
+    if (timer === 0) {
       clearInterval(interval);
+      setIsActive(false);
     }
     return () => clearInterval(interval);
   }, [timer, isActive]);
@@ -192,7 +195,7 @@ function GamePage() {
   }
 
   function handleDrawClicked({ target }) {
-    if (turnState === "Draw" && isActive)
+    if (turnState === "Draw" && !isActive && timer === 0)
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
