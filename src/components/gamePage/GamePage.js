@@ -104,7 +104,6 @@ function GamePage() {
   }, [room, game, player, buyTime]);
 
   useEffect(() => {
-    console.log("gere");
     if (turnState === "Draw") {
       setTimer(parseInt(buyTime), 10);
       setIsActive(true);
