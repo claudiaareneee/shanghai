@@ -1,15 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
+import TextInput from "../common/TextInput";
 
 function SettingsModal({
-  onHide,
+  buyTime,
   show,
+  onHide,
   onSaveGroupSettings,
   onSaveLocalSettings,
 }) {
+  const [buyingTimeInput, setBuyingTimeInput] = useState(buyTime);
+
+  const handleBuyingTimeChanged = (event) => {
+    const value = event.target.value;
+
+    if (value === "" || (!isNaN(value) && value >= 0 && value <= 60)) {
+      setBuyingTimeInput(value);
+    }
+  };
+
   return (
     <Modal
       show={show}
+      onShow={() => setBuyingTimeInput(buyTime)}
       onHide={onHide}
       size="lg"
       dialogClassName="modal-90w"
@@ -24,9 +37,20 @@ function SettingsModal({
       <Modal.Body style={{ color: "#282c34" }}>
         <h5>Group Settings</h5>
         <p>This will change the settings for everyone</p>
+        <TextInput
+          id="buyingWaitTime"
+          name="buyingWaitTime"
+          label="Buying wait time"
+          inputType="number"
+          onChange={handleBuyingTimeChanged}
+          value={buyingTimeInput}
+          hint={
+            "Enter the number of seconds between 0 and 60 for the desired buying time"
+          }
+        />
         <button
           className="btn btn-info"
-          onClick={onSaveGroupSettings}
+          onClick={() => onSaveGroupSettings(buyingTimeInput)}
           style={{ marginBottom: "1rem" }}
         >
           Save Group Settings

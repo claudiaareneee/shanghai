@@ -42,6 +42,7 @@ function GamePage() {
   const [logEntries, setLogEntries] = useState([]);
   const [timer, setTimer] = useState(0);
   const [buyTime, setBuyTime] = useState(15);
+  const [isActive, setIsActive] = useState(false);
   const room = localStorage.getItem("room") || "";
   const player = localStorage.getItem("uid") || "";
 
@@ -50,7 +51,10 @@ function GamePage() {
       // Initialize listeners
       gameApi.getGameById(room, (game) => {
         setGame(game);
-        if (game.buyTime && game.buyTime !== buyTime) setBuyTime(game.buyTime);
+        if (game.buyTime && game.buyTime !== buyTime) {
+          setBuyTime(game.buyTime);
+          setIsActive(false);
+        }
       });
 
       playerApi.getPlayers(room, (players) => {
@@ -98,11 +102,12 @@ function GamePage() {
         }
       } else setTurnState("Wait");
     }
-  }, [room, game, player]);
+  }, [room, game, player, buyTime]);
 
   useEffect(() => {
     if (turnState === "Draw") {
-      setTimer(buyTime);
+      setTimer(parseInt(buyTime), 10);
+      setIsActive(true);
     } else {
       setTimer(0);
     }
@@ -110,12 +115,16 @@ function GamePage() {
 
   // todo: I might need to clear the remaining set timeouts when a person draws
   useEffect(() => {
-    if (timer > 0) {
-      setTimeout(() => {
-        setTimer(timer - 1);
+    let interval = null;
+    if (isActive && turnState === "Draw") {
+      interval = setInterval(() => {
+        setTimer((timer) => timer - 1);
       }, 1000);
+    } else if (!isActive && timer !== 0) {
+      clearInterval(interval);
     }
-  }, [timer]);
+    return () => clearInterval(interval);
+  }, [timer, isActive]);
 
   useEffect(() => {
     const lastLog = logEntries[logEntries.length - 1];
@@ -183,7 +192,7 @@ function GamePage() {
   }
 
   function handleDrawClicked({ target }) {
-    if (turnState === "Draw" && timer === 0)
+    if (turnState === "Draw" && isActive)
       gameApi.popDrawCard(game.id, game.numberOfDrawCards, (card) => {
         const newCards = [
           ...cardsInHand,
@@ -615,6 +624,12 @@ function GamePage() {
     }
   };
 
+  const handleSaveGroupSettings = (buyingTime) => {
+    if (!isNaN(buyingTime)) {
+      gameApi.setBuyTime(game.id, buyingTime);
+    }
+  };
+
   return (
     <div className="GamePage">
       <Row>
@@ -688,8 +703,9 @@ function GamePage() {
       /> */}
       <SettingsModal
         show={settingsModalShow}
+        buyTime={buyTime}
         onHide={() => setSettingsModalShow(false)}
-        onSaveGroupSettings={() => {}}
+        onSaveGroupSettings={handleSaveGroupSettings}
         onSaveLocalSettings={() => {}}
       />
       <ForkMeOnGithub

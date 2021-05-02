@@ -13,15 +13,16 @@ function TextInput(props) {
       <div className="field">
         <input
           id={props.id}
-          type="text"
+          type={props.inputType}
           name={props.name}
-          placeholder={props.name}
+          placeholder={props.label}
           onChange={props.onChange}
           className="form-control"
           value={props.value}
         />
       </div>
       {props.error && <div className="alert alert-danger">{props.error}</div>}
+      {props.hint && <small>{props.hint}</small>}
     </div>
   );
 }
@@ -33,10 +34,14 @@ TextInput.propTypes = {
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string,
   error: PropTypes.string,
+  hint: PropTypes.string,
+  inputType: PropTypes.string,
 };
 
 TextInput.defaultProps = {
   error: "",
+  hint: "",
+  inputType: "text",
 };
 
 export default TextInput;
