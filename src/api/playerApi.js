@@ -153,10 +153,9 @@ export const setScoreTotal = (gameId, playerId, score) => {
 export const calculateScores = (gameId, players, round) => {
   Object.keys(players).forEach((key) => {
     getPlayerCardsInHandByIdOnce(key, (cards) => {
-      const newScore = scorePlayer(
-        0,
-        cards.map((card) => parseInt(card, 10))
-      );
+      console.log(key, players, cards, typeof cards);
+      const cardArray = Object.values(cards).map((card) => card);
+      const newScore = scorePlayer(0, cardArray);
       pushScore(gameId, round, key, newScore);
       setScoreTotal(gameId, key, (players[key].scoreTotal || 0) + newScore);
     });
