@@ -52,6 +52,7 @@ function SettingsModal({
           className="btn btn-info"
           onClick={() => onSaveGroupSettings(buyingTimeInput)}
           style={{ marginBottom: "1rem" }}
+          disabled={buyingTimeInput === buyTime || buyingTimeInput === ""}
         >
           Save Group Settings
         </button>
@@ -61,6 +62,7 @@ function SettingsModal({
           className="btn btn-info"
           onClick={onSaveLocalSettings}
           style={{ marginBottom: "1rem" }}
+          disabled
         >
           Save Local Settings
         </button>
