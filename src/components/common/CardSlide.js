@@ -27,7 +27,11 @@ function CardSlide({
     marginBottom: "1rem",
   };
   return (
-    <div style={style} onDragOver={(e) => e.preventDefault()}>
+    <div
+      style={style}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={(e) => e.preventDefault()}
+    >
       {cards.length > 0 ? (
         cards.map((card, index) => (
           <PlayingCard
