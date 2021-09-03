@@ -12,7 +12,7 @@
     "express-favicon": "^2.0.1",
     "firebase": "^8.2.6",
     "fork-me-on-github": "^1.0.6",
-    "immer": "^8.0.1",
+    "immer": "^9.0.6",
     "node-sass": "^4.14.1",
     "path": "^0.12.7",
     "prop-types": "^15.7.2",
